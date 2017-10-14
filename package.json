@@ -7,16 +7,16 @@
     "scripts": {
         "start": "node dist/server/main.js",
         "lint": "tslint --force --project client/tsconfig.json && tslint --force --project server/tsconfig.json",
-        "develop": "npm run build:server && concurrently -k -s first \"npm run watch:server\" \"npm run watch:client\"",
         "build": "npm run lint && npm run build:client && npm run build:server",
         "build:client": "ng build --prod --env=prod --output-path=dist/client",
         "build:server": "tsc -p ./server",
-        "test": "npm run build && npm run test:server && concurrently -k -s first \"npm start\" \"npm run test:client\"",
-        "test:client": "protractor ./client/test/protractor.conf.js",
-        "test:server": "concurrently -k -s first \"mongod\" \"./node_modules/.bin/istanbul cover --report=none ./node_modules/.bin/cucumber-js -- ./server/test/features --require ./server/test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/html-report -t html\"",
+        "test": "npm run build && npm run test:server && npm run test:client",
+        "test:client": "concurrently -k -s first \"npm start\" \"protractor ./client/test/protractor.conf.js\"",
+        "test:server": "istanbul cover --report=none ./node_modules/.bin/cucumber-js -- ./server/test/features --require ./server/test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/html-report -t html",
+        "watch": "concurrently -k -s first \"npm run watch:server\" \"npm run watch:client\"",
         "watch:client": "ng build -w --output-path=dist/client",
         "watch:server": "concurrently -k -s first \"tsc -w -p ./server\" \"nodemon dist/server/main.js\"",
-        "postinstall": "./node_modules/.bin/webdriver-manager update --versions.chrome 2.31 --versions.standalone 3.4.0"
+        "postinstall": "webdriver-manager update --versions.chrome 2.31 --versions.standalone 3.4.0"
     },
     "dependencies": {
         "@angular/animations": "4.4.5",
