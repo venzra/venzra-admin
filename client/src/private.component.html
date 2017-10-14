@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" role="heading">
+    <span fxLayout="column"><img src="http://cdn.venzra.io/logo/white/venzra-logo-xs.png" title="Welcome to Venzra"></span>
+    <span fxFlex></span>
+    <mat-icon fxLayoutAlign="end">verified_user</mat-icon>
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav mode="side" opened="true">
+        <mat-nav-list dense>
+            <h3 matSubheader>Account</h3>
+            <a mat-list-item routerLink="/account" routerLinkActive="active">Manage Subscription</a>
+            <mat-divider></mat-divider>
+            <a mat-list-item routerLink="/auth/logout">Logout</a>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <div class="private-content">
+        <router-outlet></router-outlet>
+    </div>
+</mat-sidenav-container>
