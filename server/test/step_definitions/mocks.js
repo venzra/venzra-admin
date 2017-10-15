@@ -20,4 +20,5 @@ defineSupportCode(({ Given, When, Then }) => {
     Given(/^There is a "([^"]*)" consumer at "([^"]*)" that will return(?: "([^"]*)" with)? status (\d+)$/, function (type, uri, file, status) {
         return this.addMock(prepareMock(uri, type, status, file));
     });
+
 });

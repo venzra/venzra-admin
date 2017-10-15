@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction, Router } from 'express';
 
-import { NotFoundError } from '../middleware/error-handler';
 import { ISubscriptionModel, SubscriptionModel } from '../models/subscription';
 import { IAccountModel } from '../models/account';
+
 import { Authentication } from '../services/authentication';
 
 class SubscriptionController extends Authentication {
@@ -58,7 +58,7 @@ class SubscriptionController extends Authentication {
             return res.status(200).send({});
         }
 
-        account.populate('subscription').execPopulate()
+        account.populate({ path: 'subscription', select: 'domainName status strapline storeName' }).execPopulate()
             .then((populated: IAccountModel) => populated.subscription)
             .then((subscription) => res.status(200).send(subscription));
     }

@@ -55,7 +55,7 @@ export class Authentication {
         AccountModel.findOne({ identity: req.body.identity })
             .then((account: IAccountModel) => {
                 if (!account) {
-                    throw new AuthenticationError(account, 'Account not found');
+                    throw new AuthenticationError(req.body.identity, 'Account not found');
                 }
 
                 switch (account.status) {
@@ -63,12 +63,12 @@ export class Authentication {
                     case 'RECOVERY':
                         break;
                     case 'REGISTERED':
-                        throw new AuthenticationError(account, 'Account not activated');
+                        throw new AuthenticationError(account.identity, 'Account not activated');
                     case 'LOCKED':
                         // TODO: Allow for timeout on account lock for new attempts
-                        throw new AuthenticationError(account, 'Account locked');
+                        throw new AuthenticationError(account.identity, 'Account locked');
                     default:
-                        throw new AuthenticationError(account, `Account state is ${account.status}`);
+                        throw new AuthenticationError(account.identity, `Account state is ${account.status}`);
                 }
 
                 const password = pbkdf2Sync(req.body.password, account.password.salt, 10000, 256, 'sha512');
@@ -108,7 +108,7 @@ export class Authentication {
                         .update(changes)
                         .exec()
                         .then(() => {
-                            throw new AuthenticationError(account, 'Password incorrect');
+                            throw new AuthenticationError(account.identity, 'Password incorrect');
                         });
                 }
             })
@@ -130,15 +130,7 @@ export class Authentication {
 
     logout(req: Request, res: Response, next: NextFunction) {
         Promise.resolve()
-            .then(() => {
-                if (this.account) {
-                    const changes = {
-                        $unset: { access: 1 }
-                    };
-
-                    return this.account.update(changes).exec();
-                }
-            })
+            .then(() => this.account.update({ $unset: { access: 1 } }).exec())
             .then(() => {
                 res.clearCookie('jwt');
                 res.status(200).send();

@@ -3,6 +3,8 @@ import { createHash, pbkdf2Sync } from 'crypto';
 import { v4 } from 'uuid';
 import { encode, decode } from 'jwt-simple';
 
+import { AccountAccessError } from '../middleware/error-handler';
+
 import { AccountModel, IAccountModel, IAccountPassword } from '../models/account';
 
 import { Authentication } from '../services/authentication';
@@ -29,11 +31,11 @@ class IdentityController extends Authentication {
         AccountModel.findById(req.body._id)
             .then((account: IAccountModel) => {
                 if (!account) {
-                    throw new Error('Account not found');
+                    throw new AccountAccessError('Account not found');
                 } else if (!account.validation || req.body.token !== account.validation.key) {
-                    throw new Error('Validation key not valid');
-                } else if (Date.now() < account.validation.expires.getMilliseconds()) {
-                    throw new Error('Validation key expired');
+                    throw new AccountAccessError('Validation key not valid');
+                } else if (new Date() > new Date(account.validation.expires)) {
+                    throw new AccountAccessError('Validation key expired');
                 }
 
                 return account;

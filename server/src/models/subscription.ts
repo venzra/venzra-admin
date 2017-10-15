@@ -18,7 +18,6 @@ const SubscriptionSchema: Schema = new Schema({
     },
     domainName: {
         type: String,
-        required: true,
         lowercase: true
     },
     status: {
