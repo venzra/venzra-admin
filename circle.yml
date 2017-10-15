@@ -1,0 +1,27 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8-browsers
+      - image: circleci/mongo:3.4
+    environment:
+      - NODE_ENV: test
+    resource_class: medium
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ .Branch }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Build project
+          command: npm run build
+      - run:
+          name: Test server
+          command: npm run test:server
+      - save_cache:
+          key: dependency-cache-{{ .Branch }}
+          paths:
+            - node_modules
