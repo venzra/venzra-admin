@@ -56,12 +56,12 @@ class World {
                 const keyword = keywords ? keywords[1] : row[hash];
 
                 switch (keyword) {
-                    case'DATETIME':
+                    case 'DATETIME':
                         row[hash] = Date.now();
                         break;
-                    case'PASSWORD':
+                    case 'PASSWORD':
                         const salt = crypto.createHash('sha1').update(uuid.v4()).digest('hex');
-                        row[hash] = { salt: salt, secure: crypto.pbkdf2Sync(keywords[2], salt, 10000, 256, 'sha512').toString('base64'), created: Date.now() };
+                        row[hash] = { salt: salt, secure: crypto.pbkdf2Sync('VenzraTest$1', salt, 10000, 256, 'sha512').toString('base64'), created: Date.now() };
                         break;
                 }
 
@@ -84,7 +84,7 @@ class World {
     }
 
     performGet(endpoint, storage) {
-        let promise = new Promise((resolve) => {
+        return new Promise((resolve) => {
             let request = this.agent.get(endpoint);
 
             this.headers.forEach((header) => {
@@ -109,17 +109,17 @@ class World {
                     data.response = res.text || res.body;
                 }
 
-                this.history[storage] = data;
+                if (storage) {
+                    this.history[storage] = data;
+                }
             });
 
             request.end(resolve);
         });
-
-        return promise;
     }
 
     performPost(endpoint, data, storage) {
-        let promise = new Promise((resolve) => {
+        return new Promise((resolve) => {
             let request = this.agent.post(endpoint);
 
             this.headers.forEach((header) => {
@@ -146,13 +146,50 @@ class World {
                     data.response = res.text || res.body;
                 }
 
-                this.history[storage] = data;
+                if (storage) {
+                    this.history[storage] = data;
+                }
             });
 
             request.end(resolve);
         });
+    }
 
-        return promise;
+    performPatch(endpoint, data, storage) {
+        return new Promise((resolve) => {
+            let request = this.agent.patch(endpoint);
+
+            this.headers.forEach((header) => {
+                request.set(header.name, header.value);
+            });
+
+            request.send(data);
+
+            request.expect((res) => {
+                if (this.mocks.length > 0) {
+                    this.mocks.forEach((mock) => {
+                        mock.done();
+                    })
+                }
+
+                let data = {
+                    status: res.statusCode,
+                    headers: res.headers
+                };
+
+                try {
+                    data.response = JSON.parse(res.text);
+                } catch (ex) {
+                    data.response = res.text || res.body;
+                }
+
+                if (storage) {
+                    this.history[storage] = data;
+                }
+            });
+
+            request.end(resolve);
+        });
     }
 
 }

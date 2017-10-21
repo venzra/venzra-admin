@@ -1,0 +1,50 @@
+<h1>Create Subscription</h1>
+<p>This form allows you to create a new subscription or change an existing subscription, note that without a subscription active you will not be able to access your store.</p>
+
+<form fxLayout="column" (ngSubmit)="createSubscription()" [formGroup]="subscriptionForm">
+    <div fxLayout="row" fxLayoutGap="50px">
+        <div fxLayout="column" fxLayoutGap="20px" fxFlex>
+            <mat-form-field>
+                <input matInput required
+                       placeholder="Account holders name"
+                       formControlName="holder"
+                />
+                <mat-error *ngIf="subscriptionForm.controls['holder'].hasError('required')">This field is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput
+                       placeholder="Account email address"
+                       formControlName="email"
+                />
+                <mat-hint align="start">Primary email is managed via <a href="#">account credentials</a></mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="column" fxLayoutGap="20px" fxFlex>
+            <mat-form-field>
+                <input matInput required
+                       placeholder="Bank account number"
+                       formControlName="number"
+                />
+
+                <mat-hint align="start">We currently only support UK accounts paying in GBP</mat-hint>
+
+                <mat-error *ngIf="subscriptionForm.controls['number'].hasError('required')">This field is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput required
+                       placeholder="Sort code"
+                       formControlName="sortCode"
+                />
+
+                <mat-error *ngIf="subscriptionForm.controls['sortCode'].hasError('required')">This field is required.</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div fxLayoutAlign="end">
+        <button mat-raised-button color="primary" type="submit" [disabled]="subscriptionForm.pristine || subscriptionForm.invalid">Save changes</button>
+    </div>
+</form>

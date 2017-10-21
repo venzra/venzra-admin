@@ -1,13 +1,16 @@
 import { Request, Response, NextFunction, Router } from 'express';
+import * as Stripe from 'stripe';
 
-import { ISubscriptionModel, SubscriptionModel } from '../models/subscription';
-import { IAccountModel } from '../models/account';
+import { ThirdPartyError, ValidationError } from '../middleware/error-handler';
 
-import { Authentication } from '../services/authentication';
+import { AuthenticationController } from './authentication';
 
-class SubscriptionController extends Authentication {
+import { IRestOperation } from '../models/rest';
 
-    private subscription: ISubscriptionModel;
+import { environment } from '../config';
+const stripe = new Stripe(environment.stripe);
+
+class SubscriptionController extends AuthenticationController {
 
     constructor(private router: Router) {
         super();
@@ -15,52 +18,78 @@ class SubscriptionController extends Authentication {
     }
 
     registerRoutes() {
-        this.router.get('/subscription', this.validate.bind(this), this.retrieve.bind(this));
-        this.router.post('/subscription', this.validate.bind(this), this.subscribe.bind(this), this.retrieve.bind(this));
+        this.router.get('/subscription', this.validate.bind(this), this.getSubscription.bind(this));
+        this.router.post('/subscription', this.validate.bind(this), this.createSubscription.bind(this), this.getSubscription.bind(this));
+        this.router.patch('/subscription', this.validate.bind(this), this.updateSettings.bind(this), this.getSubscription.bind(this));
     }
 
-    subscribe(req: Request, res: Response, next: NextFunction) {
-        const storeName = req.body.storeName || '';
-        const strapline = req.body.strapline;
-        const account = this.getAccount();
-
-        let promise = null;
-
-        if (account.subscription) {
-            promise = account.populate('subscription').execPopulate()
-                .then((populated: IAccountModel) => {
-                    const subscription = populated.subscription;
-                    subscription.storeName = storeName;
-                    subscription.strapline = strapline;
-                    return subscription;
-                });
-        } else {
-            promise = Promise
-                .resolve(new SubscriptionModel({ storeName, strapline }));
+    createSubscription(req: Request, res: Response, next: NextFunction) {
+        if (!this.account.subscription || this.account.subscription.stripe) {
+            return next();
         }
 
-        promise.then((subscription) => subscription.save())
-            .then((subscription: ISubscriptionModel) => {
-                this.subscription = subscription;
-                if (!account.subscription) {
-                    account.subscription = subscription;
-                    return account.save();
-                }
+        let errors = [];
+
+        if (!req.body.email) {
+            errors.push({ path: 'email', kind: 'required' });
+        }
+
+        if (!req.body.token || !req.body.token.id) {
+            errors.push({ path: 'token', kind: 'required' });
+        }
+
+        if(errors.length) {
+            return next(new ValidationError(errors));
+        }
+
+        stripe.accounts
+            .create({
+                type: 'custom',
+                country: 'GB',
+                email: req.body.email,
+                external_account: req.body.token.id
+            })
+            .then((subscription) => {
+                this.account.subscription.stripe = {
+                    account: subscription.id,
+                    bank: subscription.external_accounts.data.map((account) => {
+                        return {
+                            name: account.bank_name,
+                            holder: account.account_holder_name,
+                            number: account.last4,
+                            sortCode: account.routing_number,
+                            created: new Date()
+                        };
+                    }),
+                    publicKey: subscription.keys.publishable,
+                    privateKey: subscription.keys.secret
+                };
+
+                return this.account.subscription.save();
             })
             .then(() => next())
-            .catch((error) => next(error));
+            .catch((err) => next(new ThirdPartyError(err.type, err.message)));
     }
 
-    retrieve(req: Request, res: Response, next: NextFunction) {
-        const account = this.getAccount();
-
-        if (!account.subscription) {
-            return res.status(200).send({});
+    updateSettings(req: Request, res: Response, next: NextFunction) {
+        if (req.body instanceof Array === false) {
+            return next();
         }
 
-        account.populate({ path: 'subscription', select: 'domainName status strapline storeName' }).execPopulate()
-            .then((populated: IAccountModel) => populated.subscription)
-            .then((subscription) => res.status(200).send(subscription));
+        (<Array<IRestOperation>>req.body).forEach((operation) => {
+            switch (operation.op) {
+                case 'replace':
+                    switch (operation.path) {
+                        case 'storeName':
+                        case 'strapline':
+                            this.account.subscription[operation.path] = operation.value;
+                    }
+            }
+        });
+
+        this.account.subscription.save()
+            .then(() => next())
+            .catch((error) => next(error));
     }
 
 }

@@ -19,30 +19,36 @@ defineSupportCode(({ Given, When, Then }) => {
                 case 'DATE_TIME':
                     expect(actual[key]).to.match(/^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/);
                     break;
+                case 'ARRAY':
+                    expect(actual[key]).to.be.an.instanceof(Array);
+                    break;
+                case 'OBJECT':
+                    expect(actual[key]).to.be.an('object');
+                    break;
                 default:
                     expect(actual[key]).to.deep.equal(expected[key]);
             }
         });
     };
 
-    Then(/^The response from the "([^"]*)" request should be(?: a)? (\d+)(?: error)?$/, function (historyName, statusCode) {
+    Then(/^the response from the "([^"]*)" request should be(?: a)? (\d+)(?: error)?$/, function (historyName, statusCode) {
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => expect(history.status).to.equal(statusCode));
     });
 
-    Then(/^The(?: "([^"]*)")? response from the "([^"]*)" request equals "([^"]*)"/, function (responseObject, historyName, expectedResponse) {
+    Then(/^the(?: "([^"]*)")? response from the "([^"]*)" request equals "([^"]*)"/, function (responseObject, historyName, expectedResponse) {
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => history.response)
             .then((response) => expect(expectedResponse).to.equal(response));
     });
 
-    Then(/^The response(?: path "([^"]*)")? from the "([^"]*)" request contains:/, function (responseObject, historyName, expectedData) {
+    Then(/^the response(?: path "([^"]*)")? from the "([^"]*)" request contains:/, function (responsePath, historyName, expectedData) {
         expectedData = this.getHashes(expectedData);
 
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => history.response)
             .then((response) => {
-                response = responseObject ? response[responseObject] : response;
+                response = responsePath ? responsePath.split('.').reduce((response, pathItem) => response[pathItem], response) : response;
                 if (response instanceof Array) {
                     return Promise.all(expectedData.map((expected, idx) => checkValues(expected, response[idx])));
                 } else {
@@ -51,7 +57,7 @@ defineSupportCode(({ Given, When, Then }) => {
             });
     });
 
-    Then(/^The response from the "([^"]*)" request should be(?: a (\d+) error that contains)?:$/, function (historyName, statusCode, expectedData) {
+    Then(/^the response from the "([^"]*)" request should be(?: a (\d+) error that contains)?:$/, function (historyName, statusCode, expectedData) {
         expectedData = this.getHashes(expectedData);
 
         return Promise.resolve(this.getHistory(historyName))
@@ -64,7 +70,7 @@ defineSupportCode(({ Given, When, Then }) => {
             });
     });
 
-    Then(/^There is a(?: (deleted))? cookie called "([^"]*)" in the "([^"]*)" response header$/, function (negative, cookieName, historyName) {
+    Then(/^there is a(?: (deleted))? cookie called "([^"]*)" in the "([^"]*)" response header$/, function (negative, cookieName, historyName) {
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => {
                 const targetCookie = history.headers['set-cookie']

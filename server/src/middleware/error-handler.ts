@@ -2,16 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 
 import * as winston from 'winston';
 
-import { IAccountModel } from '../models/account';
-
 interface IVenzraError {
     name: string;
     account?: string;
     message: string;
     reason?: string;
     errors?: any;
-
-    loggerMessage(): string;
 }
 
 class VenzraError extends Error {
@@ -25,19 +21,11 @@ export class AccountAccessError extends VenzraError implements IVenzraError {
     constructor(public reason: string) {
         super('Invalid account credentials');
     }
-
-    loggerMessage() {
-        return this.reason;
-    }
 }
 
 export class AccessDeniedError extends VenzraError implements IVenzraError {
     constructor(public reason: string) {
         super('Access Denied');
-    }
-
-    loggerMessage() {
-        return this.reason;
     }
 }
 
@@ -45,19 +33,23 @@ export class AuthenticationError extends VenzraError implements IVenzraError {
     constructor(public account: string, public reason: string) {
         super('Invalid user credentials');
     }
+}
 
-    loggerMessage() {
-        return `${this.reason} for ${this.account || 'unknown'}`;
+export class ValidationError extends VenzraError implements IVenzraError {
+    constructor(public errors: Array<any>) {
+        super('Validation failed');
     }
 }
 
 export class NotFoundError extends VenzraError implements IVenzraError {
     constructor() {
-        super('Page not found');
+        super('Resource not found');
     }
+}
 
-    loggerMessage() {
-        return this.message;
+export class ThirdPartyError extends VenzraError implements IVenzraError {
+    constructor(public name: string, public reason: string) {
+        super(`An external error has occurred - ${name}`);
     }
 }
 
@@ -73,7 +65,7 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
 
     switch (err.name) {
         case 'AccountAccessError':
-            logger.info(err.loggerMessage());
+            logger.info(err.reason);
             res.status(400).send({ message: err.message });
             break;
         case 'ValidationError':
@@ -85,13 +77,21 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             res.status(400).send({ message: 'Validation failed', detail: [...detail] });
             break;
         case 'AccessDeniedError':
+            logger.info(err.reason);
+            res.clearCookie('jwt');
+            res.status(401).send({ message: err.message });
+            break;
         case 'AuthenticationError':
-            logger.info(err.loggerMessage());
+            logger.info(`${err.reason} for ${err.account || 'unknown'}`);
             res.clearCookie('jwt');
             res.status(401).send({ message: err.message });
             break;
         case 'NotFoundError':
             res.status(404).send();
+            break;
+        case 'StripeInvalidRequestError':
+            logger.error(`${err.name} - ${err.reason}`);
+            res.status(502).send({ message: err.message });
             break;
         default:
             logger.info(`${err.name} - ${err.message}`);

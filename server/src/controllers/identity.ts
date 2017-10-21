@@ -5,11 +5,12 @@ import { encode, decode } from 'jwt-simple';
 
 import { AccountAccessError } from '../middleware/error-handler';
 
+import { AuthenticationController } from './authentication';
+
 import { AccountModel, IAccountModel, IAccountPassword } from '../models/account';
+import { SubscriptionModel } from '../models/subscription';
 
-import { Authentication } from '../services/authentication';
-
-class IdentityController extends Authentication {
+class IdentityController extends AuthenticationController {
 
     constructor(private router: Router) {
         super();
@@ -50,11 +51,19 @@ class IdentityController extends Authentication {
                     created: new Date()
                 };
 
-                return account.update({
-                    status: 'ACTIVE',
-                    password: authorisation,
-                    $unset: { validation: 1 }
-                });
+                if (!account.subscription) {
+                    const subscription = new SubscriptionModel({
+                        storeName: `Store ${v4().substr(0, 8)}`
+                    });
+                    account.subscription = subscription;
+                }
+
+                return account.subscription.save()
+                    .then(() => account.update({
+                        status: 'ACTIVE',
+                        password: authorisation,
+                        $unset: { validation: 1 }
+                    }));
             })
             .then(() => res.status(202).send())
             .catch((error) => next(error));

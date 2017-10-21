@@ -10,7 +10,7 @@ import { VenzraComponent } from './venzra.component';
 import { PrivateComponent } from './private.component';
 import { PublicComponent } from './public.component';
 
-import { LayoutService } from './layout.service';
+import { LayoutService } from './services/layout.service';
 
 @NgModule({
     declarations: [

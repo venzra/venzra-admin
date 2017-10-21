@@ -3,5 +3,6 @@ export const environment = {
     managementPortal: process.env.ADMIN_URL || 'http://localhost:8181',
     replyEmail: `Venzra <${process.env.REPLY_TO || 'noreply@venzra.io'}>`,
     secure: process.env.NODE_ENV === 'PRODUCTION',
-    secret: process.env.JWT_SECRET || 'venzra-development'
+    secret: process.env.JWT_SECRET || 'venzra-development',
+    stripe: process.env.STRIPE_KEY || ''
 };

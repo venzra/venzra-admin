@@ -1,15 +1,20 @@
 const { defineSupportCode } = require('cucumber');
 const nock = require('nock');
+const path = require('path');
 
 defineSupportCode(({ Given, When, Then }) => {
 
-    const prepareMock = (uri, type, status, file) => {
-        let mock =  nock(uri).filteringPath(/.*/, '*');
+    const prepareMock = (uri, target, type, status, file) => {
+        let mock = nock(uri);
 
-        mock = mock[type.toLowerCase()]('*');
+        if(!target) {
+            mock.filteringPath(/.*/, '*');
+        }
 
-        if(file) {
-            mock = mock.replyWithFile(status, file);
+        mock = mock[type.toLowerCase()](target ? target : '*');
+
+        if (file) {
+            mock = mock.replyWithFile(status, path.join(__dirname, '../mocks', file));
         } else {
             mock = mock.reply(status);
         }
@@ -17,8 +22,8 @@ defineSupportCode(({ Given, When, Then }) => {
         return mock;
     };
 
-    Given(/^There is a "([^"]*)" consumer at "([^"]*)" that will return(?: "([^"]*)" with)? status (\d+)$/, function (type, uri, file, status) {
-        return this.addMock(prepareMock(uri, type, status, file));
+    Given(/^there is a (POST|GET) consumer at "([^"]*)"(?: for "([^"]*)")? that will return(?: "([^"]*)" with)? status (\d+)$/, function (type, uri, target, file, status) {
+        return this.addMock(prepareMock(uri, target, type, status, file));
     });
 
 });

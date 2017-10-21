@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './common/guard.service';
+import { AuthGuard } from './services/guard.service';
 import { PrivateComponent } from './private.component';
 import { PublicComponent } from './public.component';
 
@@ -9,18 +9,18 @@ const routes: Routes = [
     {
         path: 'auth',
         component: PublicComponent,
-        loadChildren: './auth/auth.module#AuthModule'
+        loadChildren: './modules/auth/auth.module#AuthModule'
     },
     {
         path: 'account',
         component: PrivateComponent,
-        loadChildren: './account/account.module#AccountModule',
+        loadChildren: './modules/account/account.module#AccountModule',
         canLoad: [AuthGuard]
     },
     {
         path: 'errors',
         component: PublicComponent,
-        loadChildren: './errors/errors.module#ErrorsModule'
+        loadChildren: './modules/errors/errors.module#ErrorsModule'
     },
     {
         path: '',

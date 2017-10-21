@@ -9,6 +9,7 @@ import * as path from 'path';
 import { json } from 'body-parser';
 
 import { errorHandler } from './middleware/error-handler';
+import { AccountController } from './controllers/account';
 import { IdentityController } from './controllers/identity';
 import { SubscriptionController } from './controllers/subscription';
 
@@ -57,6 +58,7 @@ mongoose
 /*
  * Start controllers
  */
+const account = new AccountController(router);
 const identity = new IdentityController(router);
 const subscription = new SubscriptionController(router);
 

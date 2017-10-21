@@ -1,0 +1,68 @@
+<h1>Account Settings</h1>
+<p>Configure your account settings, allows for the management of store options and current subscription terms.</p>
+
+<section>
+    <h2>Store settings</h2>
+    <p>Specify details about your store, set logo, name, domain and template options here.</p>
+    <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
+        <mat-form-field>
+            <input matInput
+                   placeholder="Store name"
+                   formControlName="storeName"
+                   required="required"
+                   #storeName
+            />
+
+            <mat-icon matSuffix *ngIf="settingsForm.controls['storeName'].touched && settingsForm.controls['storeName'].valid" color="primary">check_circle</mat-icon>
+            <mat-icon matSuffix *ngIf="settingsForm.controls['storeName'].touched && settingsForm.controls['storeName'].invalid" color="warn">error</mat-icon>
+
+            <mat-hint *ngIf="settingsForm.controls['storeName'].valid" align="start"><strong>{{ getDomain() }}</strong></mat-hint>
+
+            <mat-error *ngIf="settingsForm.controls['storeName'].hasError('required')">This field is required.</mat-error>
+            <mat-error *ngIf="settingsForm.controls['storeName'].hasError('minlength')">Store name is too short.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput
+                   placeholder="Strapline"
+                   formControlName="strapline"
+            />
+        </mat-form-field>
+
+        <div fxLayoutAlign="end">
+            <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.pristine || settingsForm.invalid">Save changes</button>
+        </div>
+    </form>
+</section>
+
+<section *ngIf="subscription.stripe">
+    <h2>Current subscription</h2>
+    <p>Your subscription is currently in <strong>{{ subscription.status }}</strong> status.</p>
+
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutWrap>
+        <mat-card *ngFor="let bank of subscription.stripe.bank" fxFlex="30%">
+            <mat-card-content>
+                <h4>{{ bank.holder }}</h4>
+                <p>{{ bank.name }}<br />{{ 'xxxxxx' + bank.number }}<br />{{ bank.sortCode }}</p>
+                <div class="mat-caption">{{ bank.created | date: 'medium' }}</div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</section>
+
+<section *ngIf="!subscription.stripe">
+    <h2>Setup subscription</h2>
+    <p>Manage your subscription payment options from here, note that you must have an active subscription to ensure your store is available to customers.</p>
+
+    <p>Subscriptions are paid for on a monthly basis, every month your account will be debited and you will received credits to use on the features for the platform. The fee charged is based on your selected currency, however all credits within the platform are worth the same value.</p>
+
+    <p>Unused credits cannot be converted back to currency, cancellation of a subscription in any given period cannot be refunded.</p>
+
+    <p>The first month of your subscription is free of charge, this means on signing up you will not start to pay until the same day on the next calendar month, for example signing up on 14th April would mean your first payment is due on 14th May and would be for the period 14th May at 00:00 till 13th June at 23:59 inclusive.</p>
+
+    <p>The minimum monthly charge for an <em matTooltip="Disabled accounts are deleted after one year and can be re-activated free of charge">active</em> subscription is <strong>20 credits</strong>.</p>
+
+    <div fxLayoutAlign="center">
+        <button mat-raised-button color="primary" routerLink="/account/subscription">Setup subscription</button>
+    </div>
+</section>

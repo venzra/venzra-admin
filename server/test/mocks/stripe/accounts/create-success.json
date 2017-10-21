@@ -1,0 +1,76 @@
+{
+    "id": "acct_xxxxxxxxxx",
+    "object": "account",
+    "business_logo": null,
+    "business_name": "VENZRA",
+    "business_url": "http://www.venzra.com",
+    "charges_enabled": false,
+    "country": "GB",
+    "debit_negative_balances": true,
+    "decline_charge_on": {
+        "avs_failure": false,
+        "cvc_failure": false
+    },
+    "default_currency": "gbp",
+    "details_submitted": false,
+    "display_name": "VENZRA",
+    "email": "stripe@venzra-test.io",
+    "external_accounts": {
+        "object": "list",
+        "data": [
+            {
+                "id": "ba_xxxxxxxxxxxxxxxxxxxxxxxx",
+                "object": "bank_account",
+                "account": "acct_xxxxxxxxxx",
+                "account_holder_name": "Jane Austen",
+                "account_holder_type": "individual",
+                "bank_name": "STRIPE TEST BANK",
+                "country": "GB",
+                "currency": "gbp",
+                "default_for_currency": false,
+                "fingerprint": "acd3Ibpen0fIHEUE",
+                "last4": "6789",
+                "metadata": {
+                },
+                "routing_number": "108800",
+                "status": "new"
+            }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "/v1/accounts/acct_xxxxxxxxxx/external_accounts"
+    },
+    "metadata": {
+    },
+    "payout_schedule": {
+        "delay_days": 7,
+        "interval": "weekly",
+        "weekly_anchor": "friday"
+    },
+    "payout_statement_descriptor": null,
+    "payouts_enabled": false,
+    "product_description": "Testing",
+    "statement_descriptor": "VENZRA",
+    "support_email": "stripe@venzra-test.io",
+    "support_phone": "",
+    "support_url": "",
+    "timezone": "Etc/UTC",
+    "tos_acceptance": {
+        "date": null,
+        "ip": null,
+        "user_agent": null
+    },
+    "type": "custom",
+    "verification": {
+        "disabled_reason": "fields_needed",
+        "due_by": null,
+        "fields_needed": [
+            "tos_acceptance.date",
+            "tos_acceptance.ip"
+        ]
+    },
+    "keys": {
+        "secret": "sk_test_xxxxxxxxxxxxxxxxxxxxxxxx",
+        "publishable": "pk_test_xxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+}
