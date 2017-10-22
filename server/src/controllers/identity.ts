@@ -59,9 +59,11 @@ class IdentityController extends AuthenticationController {
                 }
 
                 return account.subscription.save()
-                    .then(() => account.update({
-                        status: 'ACTIVE',
+                    .then((subscription) => account.update({
                         password: authorisation,
+                        lock: { failures: 0 },
+                        status: 'ACTIVE',
+                        subscription: subscription,
                         $unset: { validation: 1 }
                     }));
             })

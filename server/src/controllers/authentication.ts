@@ -20,7 +20,7 @@ export class AuthenticationController {
     getAccount(req: Request, res: Response) {
         AccountModel
             .findById(this.account.id)
-            .select('identity status')
+            .select('identity subscription status')
             .then((account) => res.status(200).send(account));
     }
 
@@ -141,7 +141,7 @@ export class AuthenticationController {
         const encoded = encode(account, environment.secret, 'HS512');
 
         res.cookie('jwt', encoded, { httpOnly: true, secure: environment.secure });
-        res.status(200).send();
+        res.status(202).send();
     }
 
     logout(req: Request, res: Response, next: NextFunction) {
@@ -149,7 +149,7 @@ export class AuthenticationController {
             .then(() => this.account.update({ $unset: { access: 1 } }).exec())
             .then(() => {
                 res.clearCookie('jwt');
-                res.status(200).send();
+                res.status(202).send();
             });
     }
 }

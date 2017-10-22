@@ -76,13 +76,13 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             }
             res.status(400).send({ message: 'Validation failed', detail: [...detail] });
             break;
-        case 'AccessDeniedError':
-            logger.info(err.reason);
-            res.clearCookie('jwt');
-            res.status(401).send({ message: err.message });
-            break;
         case 'AuthenticationError':
             logger.info(`${err.reason} for ${err.account || 'unknown'}`);
+            res.clearCookie('jwt');
+            res.status(400).send({ message: err.message });
+            break;
+        case 'AccessDeniedError':
+            logger.info(err.reason);
             res.clearCookie('jwt');
             res.status(401).send({ message: err.message });
             break;
@@ -91,9 +91,10 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             break;
         case 'StripeInvalidRequestError':
             logger.error(`${err.name} - ${err.reason}`);
-            res.status(502).send({ message: err.message });
+            res.status(500).send({ message: err.message });
             break;
         default:
+            console.log(err);
             logger.info(`${err.name} - ${err.message}`);
             res.status(500).send();
     }

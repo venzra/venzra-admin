@@ -13,7 +13,7 @@ Feature: Creation of a new subscription
   Scenario: A missing email and stripe bank token will result in an error
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     When I make an empty POST request to the API endpoint "/api/v1/subscription" as "subscription"
-    Then the response from the "subscription" request should be a 400 error that contains:
+    Then the 400 error from the "subscription" request contains:
       | message           | detail                               |
       | Validation failed | ["email required", "token required"] |
 
@@ -23,7 +23,7 @@ Feature: Creation of a new subscription
     When I make a POST request to the API endpoint "/api/v1/subscription" as "subscription" using:
       | email                                      | token                       |
       | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } |
-    Then the response from the "subscription" request should be a 502 error that contains:
+    Then the 500 error from the "subscription" request contains:
       | message                                                    |
       | An external error has occurred - StripeInvalidRequestError |
 
@@ -33,7 +33,7 @@ Feature: Creation of a new subscription
     When I make a POST request to the API endpoint "/api/v1/subscription" as "subscription" using:
       | email                                      | token                       |
       | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } |
-    Then the response from the "subscription" request contains:
+    Then the 200 response from the "subscription" request contains:
       | _id       | domainName              | status | storeName               | stripe |
       | OBJECT_ID | subscription-create-one | TRIAL  | Subscription Create One | OBJECT |
     Then the response path "stripe" from the "subscription" request contains:
@@ -48,7 +48,7 @@ Feature: Creation of a new subscription
     When I make a POST request to the API endpoint "/api/v1/subscription" as "subscription" using:
       | email                                      | token                       |
       | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } |
-    Then the response from the "subscription" request contains:
+    Then the 200 response from the "subscription" request contains:
       | _id       | domainName              | status | storeName               | stripe |
       | OBJECT_ID | subscription-create-one | TRIAL  | Subscription Create One | OBJECT |
     Then the response path "stripe" from the "subscription" request contains:

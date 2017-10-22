@@ -85,7 +85,7 @@ class World {
 
     performGet(endpoint, storage) {
         return new Promise((resolve) => {
-            let request = this.agent.get(endpoint);
+            let request = this.agent.get(this.parseTemplateString(endpoint));
 
             this.headers.forEach((header) => {
                 request.set(header.name, header.value);
@@ -120,7 +120,7 @@ class World {
 
     performPost(endpoint, data, storage) {
         return new Promise((resolve) => {
-            let request = this.agent.post(endpoint);
+            let request = this.agent.post(this.parseTemplateString(endpoint));
 
             this.headers.forEach((header) => {
                 request.set(header.name, header.value);
@@ -157,7 +157,7 @@ class World {
 
     performPatch(endpoint, data, storage) {
         return new Promise((resolve) => {
-            let request = this.agent.patch(endpoint);
+            let request = this.agent.patch(this.parseTemplateString(endpoint));
 
             this.headers.forEach((header) => {
                 request.set(header.name, header.value);
