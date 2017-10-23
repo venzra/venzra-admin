@@ -1,7 +1,7 @@
-<h1>Create Subscription</h1>
+<h1>Setup Subscription</h1>
 <p>This form allows you to create a new subscription or change an existing subscription, note that without a subscription active you will not be able to access your store.</p>
 
-<form fxLayout="column" (ngSubmit)="createSubscription()" [formGroup]="subscriptionForm">
+<form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="createSubscription()" [formGroup]="subscriptionForm">
     <div fxLayout="row" fxLayoutGap="50px">
         <div fxLayout="column" fxLayoutGap="20px" fxFlex>
             <mat-form-field>
@@ -44,7 +44,9 @@
         </div>
     </div>
 
-    <div fxLayoutAlign="end">
-        <button mat-raised-button color="primary" type="submit" [disabled]="subscriptionForm.pristine || subscriptionForm.invalid">Save changes</button>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-raised-button type="button" (click)="viewServiceAgreement()">View agreement terms</button>
+        <mat-checkbox required formControlName="acceptTerms">Accept agreement terms</mat-checkbox>
+        <button mat-raised-button color="primary" type="submit" [disabled]="subscriptionForm.pristine || subscriptionForm.invalid || saving">Create subscription</button>
     </div>
 </form>

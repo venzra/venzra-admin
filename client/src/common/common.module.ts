@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatListModule, MatSidenavModule, MatSnackBarModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatSidenavModule, MatSnackBarModule, MatToolbarModule } from '@angular/material';
 
 import { ErrorInterceptorModule } from './http.interceptor';
 
@@ -15,6 +15,8 @@ import { ErrorInterceptorModule } from './http.interceptor';
         FlexLayoutModule,
         MatButtonModule,
         MatCardModule,
+        MatCheckboxModule,
+        MatDialogModule,
         MatIconModule,
         MatInputModule,
         MatListModule,
@@ -29,6 +31,8 @@ import { ErrorInterceptorModule } from './http.interceptor';
         FlexLayoutModule,
         MatButtonModule,
         MatCardModule,
+        MatCheckboxModule,
+        MatDialogModule,
         MatIconModule,
         MatInputModule,
         MatListModule,

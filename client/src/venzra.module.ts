@@ -10,6 +10,7 @@ import { VenzraComponent } from './venzra.component';
 import { PrivateComponent } from './private.component';
 import { PublicComponent } from './public.component';
 
+import { AuthenticationService } from './services/authentication.service';
 import { LayoutService } from './services/layout.service';
 
 @NgModule({
@@ -25,6 +26,7 @@ import { LayoutService } from './services/layout.service';
         VenzraRoutingModule
     ],
     providers: [
+        AuthenticationService,
         LayoutService
     ],
     bootstrap: [VenzraComponent]

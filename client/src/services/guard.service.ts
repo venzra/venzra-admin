@@ -1,37 +1,48 @@
 import { Injectable } from '@angular/core';
-
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanLoad, Route, Router, RouterStateSnapshot } from '@angular/router';
+
+import { AuthenticationService } from './authentication.service';
+
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
+import 'rxjs/add/operator/first';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(
-        private router: Router
+        private router: Router,
+        private authenticationService: AuthenticationService
     ) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         const url: string = state.url;
 
         return this.checkLogin(url);
     }
 
-    canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
         return this.canActivate(childRoute, state);
     }
 
-    canLoad(route: Route): boolean {
+    canLoad(route: Route): Observable<boolean> {
         const url = `/${route.path}`;
 
         return this.checkLogin(url);
     }
 
-    private checkLogin(url: string) {
-        if (localStorage.getItem('authenticated') === '1') {
-            return true;
-        }
+    private checkLogin(url: string): Observable<boolean> {
+        let authenticated = this.authenticationService.isAuthenticated();
+        let subject = new Subject<boolean>();
 
-        localStorage.setItem('redirect', url);
+        authenticated.subscribe((res) => {
+            if(!res) {
+                localStorage.setItem('redirect', url);
+                this.router.navigate(['/auth'], { replaceUrl: true });
+            }
+            subject.next(res);
+        });
 
-        this.router.navigate(['/auth'], { replaceUrl: true });
-        return false;
+        return subject.asObservable().first();
     }
 }

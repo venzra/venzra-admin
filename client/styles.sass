@@ -16,11 +16,21 @@ app-venzra
     left: 0
     right: 0
 
+.public-content
+    margin: 0 0 4em
+    background: url(http://cdn.venzra.io/venzra-background.jpg)
+    background-size: cover
+    background-position: center center
+
+    h3
+        color: #fff
+
+    .hero
+        padding: 4em 0 2em
+        text-align: center
+
 .private-content
     width: 750px
-
-h3
-    color: #fff
 
 mat-sidenav
     width: 200px
@@ -28,6 +38,8 @@ mat-sidenav
 mat-card
     margin-bottom: 20px
 
+mat-divider.mat-divider
+    margin: 20px 0
 
 .mat-form-field
     width: 100%
@@ -35,25 +47,12 @@ mat-card
 .mat-nav-list .mat-list-item.active
     color: #673ab7
 
-.mat-sidenav-container
-    height: 100%
-
 .mat-drawer-content
     padding: 2em
     margin-left: 200px
 
-.mat-raised-button
+.mat-button, .mat-raised-button
     text-transform: uppercase
-
-.public
-    margin: 0 0 4em
-    background: url(http://cdn.venzra.io/venzra-background.jpg)
-    background-size: cover
-    background-position: center center
-
-.hero
-    padding: 4em 0 2em
-    text-align: center
 
 [mdTooltip]
     cursor: pointer

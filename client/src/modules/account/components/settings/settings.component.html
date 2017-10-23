@@ -4,6 +4,7 @@
 <section>
     <h2>Store settings</h2>
     <p>Specify details about your store, set logo, name, domain and template options here.</p>
+
     <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
         <mat-form-field>
             <input matInput
@@ -37,7 +38,7 @@
 
 <section *ngIf="subscription.stripe">
     <h2>Current subscription</h2>
-    <p>Your subscription is currently in <strong>{{ subscription.status }}</strong> status.</p>
+    <p>Your subscription is currently in <strong>{{ subscription.status }}</strong> status. Note that you must have an active subscription to ensure your store is available to customers.</p>
 
     <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutWrap>
         <mat-card *ngFor="let bank of subscription.stripe.bank" fxFlex="30%">
@@ -52,8 +53,6 @@
 
 <section *ngIf="!subscription.stripe">
     <h2>Setup subscription</h2>
-    <p>Manage your subscription payment options from here, note that you must have an active subscription to ensure your store is available to customers.</p>
-
     <p>Subscriptions are paid for on a monthly basis, every month your account will be debited and you will received credits to use on the features for the platform. The fee charged is based on your selected currency, however all credits within the platform are worth the same value.</p>
 
     <p>Unused credits cannot be converted back to currency, cancellation of a subscription in any given period cannot be refunded.</p>

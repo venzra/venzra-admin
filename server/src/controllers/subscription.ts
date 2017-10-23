@@ -34,6 +34,10 @@ class SubscriptionController extends AuthenticationController {
             errors.push({ path: 'email', kind: 'required' });
         }
 
+        if(!req.body.terms) {
+            errors.push({ path: 'terms', kind: 'required' });
+        }
+
         if (!req.body.token || !req.body.token.id) {
             errors.push({ path: 'token', kind: 'required' });
         }
@@ -47,7 +51,11 @@ class SubscriptionController extends AuthenticationController {
                 type: 'custom',
                 country: 'GB',
                 email: req.body.email,
-                external_account: req.body.token.id
+                external_account: req.body.token.id,
+                tos_acceptance: {
+                    date: Math.floor(Date.now() / 1000),
+                    ip: req.ip
+                }
             })
             .then((subscription) => {
                 this.account.subscription.stripe = {

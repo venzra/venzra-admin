@@ -1,7 +1,10 @@
 <mat-toolbar color="primary" role="heading">
-    <span fxLayout="column"><img src="http://cdn.venzra.io/logo/white/venzra-logo-xs.png" title="Welcome to Venzra"></span>
+    <div fxLayout="column"><img src="http://cdn.venzra.io/logo/white/venzra-logo-xs.png" title="Welcome to Venzra"></div>
     <span fxFlex></span>
-    <mat-icon fxLayoutAlign="end">verified_user</mat-icon>
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center center">
+        <span class="mat-body-1">{{ account.identity }}</span>
+        <mat-icon>verified_user</mat-icon>
+    </div>
 </mat-toolbar>
 
 <mat-sidenav-container>

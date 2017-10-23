@@ -14,15 +14,15 @@ Feature: Creation of a new subscription
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     When I make an empty POST request to the API endpoint "/api/v1/subscription" as "subscription"
     Then the 400 error from the "subscription" request contains:
-      | message           | detail                               |
-      | Validation failed | ["email required", "token required"] |
+      | message           | detail                                                 |
+      | Validation failed | ["email required", "terms required", "token required"] |
 
   Scenario: Handle a rejection from stripe occurring when attempting to create a subscription
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     And there is a POST consumer at "https://api.stripe.com" for "/v1/accounts" that will return "stripe/accounts/create-invalid.json" with status 400
     When I make a POST request to the API endpoint "/api/v1/subscription" as "subscription" using:
-      | email                                      | token                       |
-      | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } |
+      | email                                      | token                       | terms |
+      | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } | true  |
     Then the 500 error from the "subscription" request contains:
       | message                                                    |
       | An external error has occurred - StripeInvalidRequestError |
@@ -31,8 +31,8 @@ Feature: Creation of a new subscription
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     And there is a POST consumer at "https://api.stripe.com" for "/v1/accounts" that will return "stripe/accounts/create-success.json" with status 200
     When I make a POST request to the API endpoint "/api/v1/subscription" as "subscription" using:
-      | email                                      | token                       |
-      | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } |
+      | email                                      | token                       | terms |
+      | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } | true  |
     Then the 200 response from the "subscription" request contains:
       | _id       | domainName              | status | storeName               | stripe |
       | OBJECT_ID | subscription-create-one | TRIAL  | Subscription Create One | OBJECT |
@@ -46,8 +46,8 @@ Feature: Creation of a new subscription
   Scenario: Sending a second request will not call to stripe or change / overwrite subscription information
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     When I make a POST request to the API endpoint "/api/v1/subscription" as "subscription" using:
-      | email                                      | token                       |
-      | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } |
+      | email                                      | token                       | terms |
+      | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } | true  |
     Then the 200 response from the "subscription" request contains:
       | _id       | domainName              | status | storeName               | stripe |
       | OBJECT_ID | subscription-create-one | TRIAL  | Subscription Create One | OBJECT |
