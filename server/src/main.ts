@@ -11,6 +11,7 @@ import { json } from 'body-parser';
 import { errorHandler } from './middleware/error-handler';
 import { AccountController } from './controllers/account';
 import { IdentityController } from './controllers/identity';
+import { ProductsController } from './controllers/products';
 import { SubscriptionController } from './controllers/subscription';
 
 require('mongoose').Promise = global.Promise;
@@ -60,6 +61,7 @@ mongoose
  */
 const account = new AccountController(router);
 const identity = new IdentityController(router);
+const products = new ProductsController(router);
 const subscription = new SubscriptionController(router);
 
 app.use(errorHandler);

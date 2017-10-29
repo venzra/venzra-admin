@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -64,6 +64,7 @@ export class AuthenticationService {
         return this.http.post(this.logoutUri, null, { responseType: 'text' })
             .toPromise()
             .catch(() => null)
+            .then(() => delete this.userAccount)
             .then(() => localStorage.clear())
             .then(() => this.router.navigate(['/auth'], { replaceUrl: true }));
     }
@@ -74,7 +75,8 @@ export class AuthenticationService {
     }
 
     isAuthenticated(): Observable<boolean> {
-        let subject = new Subject<boolean>();
+        let subject = new BehaviorSubject<boolean>(true);
+
         if (this.userAccount) {
             subject.next(true);
         } else if (localStorage.getItem('authenticated') === '1') {

@@ -6,10 +6,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const routes: Routes = [
     {
-        path: '',
-        children: [
-            { path: '404', component: NotFoundComponent }
-        ]
+        path: '404',
+        component: NotFoundComponent
     }
 ];
 

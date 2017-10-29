@@ -18,6 +18,12 @@ const routes: Routes = [
         canLoad: [AuthGuard]
     },
     {
+        path: 'products',
+        component: PrivateComponent,
+        loadChildren: './modules/products/products.module#ProductsModule',
+        canLoad: [AuthGuard]
+    },
+    {
         path: 'errors',
         component: PublicComponent,
         loadChildren: './modules/errors/errors.module#ErrorsModule'

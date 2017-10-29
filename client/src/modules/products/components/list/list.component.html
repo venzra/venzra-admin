@@ -1,0 +1,47 @@
+<mat-toolbar>
+    <span class="mat-headline">Product List</span>
+    <span fxFlex></span>
+    <button mat-button color="primary" routerLink="/products/create">
+        <mat-icon>add_circle</mat-icon> Create New
+    </button>
+
+    <mat-toolbar-row>
+        <form class="mat-body-1" fxLayout="row" fxLayoutGap="20px" (ngSubmit)="performSearch()" [formGroup]="searchForm">
+            <mat-form-field floatPlaceholder="never">
+                <input matInput
+                       placeholder="Search products"
+                       formControlName="searchQuery"
+                />
+            </mat-form-field>
+            <button mat-icon-button type="submit"><mat-icon>search</mat-icon></button>
+        </form>
+        <span fxFlex></span>
+        <button mat-icon-button matTooltip="Filter by status">
+            <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Filter by label">
+            <mat-icon>label</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Sort by....">
+            <mat-icon>sort</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-card>
+    <div *ngIf="products.total">
+        <mat-list>
+            <mat-list-item *ngFor="let product of products.list">
+                <h3 matLine>{{ product.name }} <span class="mat-caption">{{ '( ' + product.code + ' )' }}</span></h3>
+                <p matLine>{{ '&pound; ' + product.price }}</p>
+            </mat-list-item>
+        </mat-list>
+
+        <mat-paginator [length]="products.total"
+                       [pageSize]="products.limit"
+                       [pageSizeOptions]="[10,25,100]">
+        </mat-paginator>
+    </div>
+
+    <div fxLayoutAlign="center" *ngIf="!products.total">You currently have no products added, please create your first product</div>
+</mat-card>

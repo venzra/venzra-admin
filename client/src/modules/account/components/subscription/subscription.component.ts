@@ -76,8 +76,6 @@ export class SubscriptionComponent implements OnInit {
 
         this.subscriptionService
             .createSubscription(subscription, bankAccount)
-            .then((subscription) => this.subscriptionForm.reset(subscription))
-            .then(() => this.subscriptionForm.markAsPristine())
             .catch((error) => this.snackbar.open(error.message || 'Creation failed', 'OK', { duration: 5000 }))
             .then(() => this.saving = false);
     }

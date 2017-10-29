@@ -12,6 +12,14 @@ defineSupportCode(({ Given, When, Then }) => {
         expect(actualKeys, 'Response keys do not match expectation').to.have.members(expectedKeys);
 
         expectedKeys.map((key) => {
+            let check;
+            if(typeof expected[key] === 'string') {
+                check = expected[key].match(/\[(\d+)\]/) || expected[key];
+                if (check instanceof Array) {
+                    expected[key] = expected[key].replace(check[0], '');
+                }
+            }
+
             switch (expected[key]) {
                 case 'OBJECT_ID':
                     expect(actual[key]).to.match(/^[0-9A-F]{24}$/i);
@@ -21,6 +29,7 @@ defineSupportCode(({ Given, When, Then }) => {
                     break;
                 case 'ARRAY':
                     expect(actual[key]).to.be.an.instanceof(Array);
+                    expect(actual[key]).to.have.length(check[1]);
                     break;
                 case 'OBJECT':
                     expect(actual[key]).to.be.an('object');
@@ -41,13 +50,13 @@ defineSupportCode(({ Given, When, Then }) => {
             .then((history) => expect(history.status).to.equal(parseInt(statusCode)));
     });
 
-    Then(/^the (200|400|500) (?:response|error) from the "([^"]*)" request contains:$/, function (statusCode, historyName, expectedData) {
+    Then(/^(?:there should be a (200|400|500) (?:response|error) from )?the "([^"]*)" request that(?: has a list and row (\d+))? contains:$/, function (statusCode, historyName, expectedRecord, expectedData) {
         expectedData = this.getHashes(expectedData);
 
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => Promise.all([
-                    expect(history.status).to.equal(parseInt(statusCode)),
-                    checkValues(expectedData[0], history.response)
+                    statusCode ? expect(history.status).to.equal(parseInt(statusCode)) : true,
+                    checkValues(expectedData[0], expectedRecord ? history.response.list[expectedRecord - 1] : history.response)
                 ])
             );
     });

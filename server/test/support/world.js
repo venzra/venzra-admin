@@ -4,7 +4,6 @@ const crypto = require('crypto');
 const supertest = require('supertest');
 const uuid = require('uuid');
 
-
 let history = {};
 
 class World {

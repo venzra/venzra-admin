@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatSidenavModule, MatSnackBarModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatPaginatorModule, MatSidenavModule, MatSnackBarModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 
 import { ErrorInterceptorModule } from './http.interceptor';
 
@@ -20,9 +20,11 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatIconModule,
         MatInputModule,
         MatListModule,
+        MatPaginatorModule,
         MatSidenavModule,
         MatSnackBarModule,
         MatToolbarModule,
+        MatTooltipModule,
         ErrorInterceptorModule
     ],
     exports: [
@@ -36,9 +38,11 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatIconModule,
         MatInputModule,
         MatListModule,
+        MatPaginatorModule,
         MatSidenavModule,
         MatSnackBarModule,
         MatToolbarModule,
+        MatTooltipModule,
         ErrorInterceptorModule
     ]
 })

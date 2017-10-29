@@ -1,0 +1,43 @@
+<mat-toolbar>
+    <span class="mat-headline">Product Create</span>
+</mat-toolbar>
+
+<mat-card>
+    <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="createProduct()" [formGroup]="productForm">
+        <div fxLayout="row" fxLayoutGap="50px">
+            <mat-form-field>
+                <input matInput
+                       placeholder="Product code"
+                       formControlName="code"
+                       required="required"
+                />
+                <mat-error *ngIf="productForm.controls['code'].hasError('required')">This field is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <span matPrefix>&pound; &nbsp;</span>
+                <input matInput
+                       placeholder="Store sale price"
+                       formControlName="price"
+                       required="required"
+                />
+                <mat-error *ngIf="productForm.controls['price'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="productForm.controls['price'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field>
+            <input matInput
+                   placeholder="Display name"
+                   formControlName="name"
+                   required="required"
+            />
+            <mat-error *ngIf="productForm.controls['name'].hasError('required')">This field is required.</mat-error>
+        </mat-form-field>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" routerLink="/products">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="productForm.pristine || productForm.invalid">Save changes</button>
+        </div>
+    </form>
+</mat-card>

@@ -8,15 +8,10 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { RecoveryComponent } from './components/recovery/recovery.component';
 
 const routes: Routes = [
-    {
-        path: '',
-        children: [
-            { path: 'activate/:account', component: ActivationComponent },
-            { path: 'recovery', component: RecoveryComponent },
-            { path: 'logout', component: LogoutComponent },
-            { path: '', component: LoginComponent }
-        ]
-    }
+    { path: 'activate/:account', component: ActivationComponent },
+    { path: 'recovery', component: RecoveryComponent },
+    { path: 'logout', component: LogoutComponent },
+    { path: '', component: LoginComponent }
 ];
 
 @NgModule({

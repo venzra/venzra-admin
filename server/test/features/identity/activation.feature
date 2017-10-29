@@ -12,7 +12,7 @@ Feature: Activation of a registered users account
     Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
       | _id                      | password     | token            |
       | 000000000000000000000000 | VenzraTest$1 | aaaabbbbccccdddd |
-    Then the 400 error from the "activation" request contains:
+    Then there should be a 400 error from the "activation" request that contains:
       | message                     |
       | Invalid account credentials |
 
@@ -20,7 +20,7 @@ Feature: Activation of a registered users account
     Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
       | _id                   | password     | token            |
       | {{ accounts[2]._id }} | VenzraTest$1 | aaaabbbbccccdddd |
-    Then the 400 error from the "activation" request contains:
+    Then there should be a 400 error from the "activation" request that contains:
       | message                     |
       | Invalid account credentials |
 
@@ -28,7 +28,7 @@ Feature: Activation of a registered users account
     Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
       | _id                   | password     | token            |
       | {{ accounts[1]._id }} | VenzraTest$1 | ddddccccbbbbaaaa |
-    Then the 400 error from the "activation" request contains:
+    Then there should be a 400 error from the "activation" request that contains:
       | message                     |
       | Invalid account credentials |
 
@@ -39,6 +39,6 @@ Feature: Activation of a registered users account
     Then the status of the "activation" request should be 202
     When I am logged in with the "identity-activation-one@venzra-test.io" account
     And I make a GET request to the API endpoint "/api/v1/account" as "account"
-    Then the 200 response from the "account" request contains:
+    Then there should be a 200 response from the "account" request that contains:
       | _id       | identity                               | status | subscription |
       | OBJECT_ID | identity-activation-one@venzra-test.io | ACTIVE | OBJECT_ID    |

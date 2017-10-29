@@ -9,18 +9,35 @@ $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $cand
 
 @include angular-material-theme($candy-app-theme)
 
-app-venzra
+app-public
     position: absolute
     top: 0
     bottom: 0
     left: 0
     right: 0
 
-.public-content
-    margin: 0 0 4em
+app-private
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    display: flex
+    flex-direction: column
+
+.public-background
+    position: fixed
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
     background: url(http://cdn.venzra.io/venzra-background.jpg)
     background-size: cover
     background-position: center center
+    z-index: -1
+
+.public-content
+    margin: 0 0 4em
 
     h3
         color: #fff
@@ -31,9 +48,13 @@ app-venzra
 
 .private-content
     width: 750px
+    margin-bottom: 4em
 
 mat-sidenav
     width: 200px
+
+    mat-nav-list
+        margin-bottom: 2em
 
 mat-card
     margin-bottom: 20px
@@ -41,11 +62,17 @@ mat-card
 mat-divider.mat-divider
     margin: 20px 0
 
+.mat-toolbar
+    background-color: inherit
+
 .mat-form-field
     width: 100%
 
 .mat-nav-list .mat-list-item.active
     color: #673ab7
+
+.mat-drawer-container
+    width: 100%
 
 .mat-drawer-content
     padding: 2em

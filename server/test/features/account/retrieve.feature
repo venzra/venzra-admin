@@ -17,6 +17,6 @@ Feature: Retrieve currently logged in account information
   Scenario: Retrieve account profile information
     Given I am logged in with the "account-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/v1/account" as "account"
-    Then the 200 response from the "account" request contains:
-      | _id       | identity                            | subscription | status |
-      | OBJECT_ID | account-retrieve-one@venzra-test.io | OBJECT_ID    | ACTIVE |
+    Then there should be a 200 response from the "account" request that contains:
+      | _id       | identity                            | status | subscription |
+      | OBJECT_ID | account-retrieve-one@venzra-test.io | ACTIVE | OBJECT_ID    |

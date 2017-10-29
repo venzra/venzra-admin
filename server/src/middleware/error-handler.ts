@@ -4,6 +4,7 @@ import * as winston from 'winston';
 
 interface IVenzraError {
     name: string;
+    code?: number;
     account?: string;
     message: string;
     reason?: string;
@@ -89,13 +90,25 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
         case 'NotFoundError':
             res.status(404).send();
             break;
+        case 'MongoError':
+            switch (err.code) {
+                case 11000:
+                    logger.info(err.message);
+                    res.status(400).send({ message: 'Record already exists' });
+                    break;
+                default:
+                    console.log(err);
+                    logger.error(`Unhandled Mongo Error - ${err.code} - ${err.message}`);
+                    res.status(500).send();
+            }
+            break;
         case 'StripeInvalidRequestError':
             logger.error(`${err.name} - ${err.reason}`);
             res.status(500).send({ message: err.message });
             break;
         default:
             console.log(err);
-            logger.info(`${err.name} - ${err.message}`);
+            logger.error(`${err.name} - ${err.message}`);
             res.status(500).send();
     }
 

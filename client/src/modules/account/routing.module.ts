@@ -10,16 +10,14 @@ import { SubscriptionRetrieveResolve } from '../../services/subscription.service
 const routes: Routes = [
     {
         path: '',
-        children: [
-            {
-                path: '',
-                component: SettingsComponent,
-                resolve: {
-                    subscription: SubscriptionRetrieveResolve
-                }
-            },
-            { path: 'subscription', component: SubscriptionComponent }
-        ]
+        component: SettingsComponent,
+        resolve: {
+            subscription: SubscriptionRetrieveResolve
+        }
+    },
+    {
+        path: 'subscription',
+        component: SubscriptionComponent
     }
 ];
 

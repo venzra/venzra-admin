@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanLoad, Route, 
 import { AuthenticationService } from './authentication.service';
 
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 import 'rxjs/add/operator/first';
 
@@ -33,10 +33,10 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
     private checkLogin(url: string): Observable<boolean> {
         let authenticated = this.authenticationService.isAuthenticated();
-        let subject = new Subject<boolean>();
+        let subject = new ReplaySubject<boolean>();
 
         authenticated.subscribe((res) => {
-            if(!res) {
+            if (!res) {
                 localStorage.setItem('redirect', url);
                 this.router.navigate(['/auth'], { replaceUrl: true });
             }

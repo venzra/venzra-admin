@@ -1,0 +1,60 @@
+@Products @ProductsCreate
+Feature: Creation of a new product entry
+
+  @Seed
+  Scenario: Setup test data seed for feature
+    Given there are the following "subscriptions" records in the database
+      | storeName           | status |
+      | Products Create One | ACTIVE |
+      | Products Create Two | ACTIVE |
+    And there are the following "accounts" records in the database
+      | identity                           | password | status | subscription               |
+      | products-create-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
+      | products-create-two@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
+    And there are the following "products" records in the database
+      | subscription               | code       | name             | price | status    |
+      | {{ subscriptions[1]._id }} | CREATE-001 | Product Create A | 999   | AVAILABLE |
+
+  Scenario: An empty request to create a product fails validation
+    Given I am logged in with the "products-create-one@venzra-test.io" account
+    When I make an empty POST request to the API endpoint "/api/v1/products" as "product"
+    Then there should be a 400 error from the "product" request that contains:
+      | message           | detail                                               |
+      | Validation failed | ["name required", "code required", "price required"] |
+
+  Scenario: If the product already exists then the request should be rejected (based on product code)
+    Given I am logged in with the "products-create-one@venzra-test.io" account
+    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+      | code                   | name               | price |
+      | {{ products[1].code }} | Product Create AAA | 99    |
+    Then there should be a 400 response from the "product" request that contains:
+      | message               |
+      | Record already exists |
+
+  Scenario: If the product already exists then the request should be rejected (based on product name)
+    Given I am logged in with the "products-create-one@venzra-test.io" account
+    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+      | code       | name                   | price |
+      | CREATE-999 | {{ products[1].name }} | 99    |
+    Then there should be a 400 response from the "product" request that contains:
+      | message               |
+      | Record already exists |
+
+  Scenario: A valid request to create a new product record is successful (also strips any decimal places on price)
+    Given I am logged in with the "products-create-one@venzra-test.io" account
+    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+      | code       | name             | price |
+      | CREATE-002 | Product Create B | 99.99 |
+    Then there should be a 200 response from the "product" request that contains:
+      | _id       | slug             | code       | name             | price | status |
+      | OBJECT_ID | product-create-b | CREATE-002 | Product Create B | 99    | DRAFT  |
+
+  Scenario: An account linked to another subscription can use the same product code and name already used by a different subscription
+    Given I am logged in with the "products-create-two@venzra-test.io" account
+    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+      | code                   | name                   | price |
+      | {{ products[1].code }} | {{ products[1].name }} | 99.49 |
+    Then there should be a 200 response from the "product" request that contains:
+      | _id       | slug             | code       | name             | price | status |
+      | OBJECT_ID | product-create-a | CREATE-001 | Product Create A | 99    | DRAFT  |
+

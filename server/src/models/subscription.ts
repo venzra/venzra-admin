@@ -98,7 +98,7 @@ SubscriptionSchema.index({ storeName: 1 }, { unique: true });
 SubscriptionSchema.index({ domainName: 1 }, { unique: true });
 
 SubscriptionSchema.pre('validate', function (next) {
-    this.domainName = this.storeName.replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
+    this.domainName = (this.storeName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
     next();
 });
 

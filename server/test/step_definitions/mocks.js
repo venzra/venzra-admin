@@ -26,4 +26,8 @@ defineSupportCode(({ Given, When, Then }) => {
         return this.addMock(prepareMock(uri, target, type, status, file));
     });
 
+    Given(/^I show the available history$/, function() {
+        console.log(this.history);
+    })
+
 });

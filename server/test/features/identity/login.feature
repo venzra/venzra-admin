@@ -14,7 +14,7 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       |  |
       |  |
-    Then the 400 error from the "login" request contains:
+    Then there should be a 400 error from the "login" request that contains:
       | message                  |
       | Invalid user credentials |
 
@@ -22,7 +22,7 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       | identity                       | password     |
       | unknown-account@venzra-test.io | VenzraTest$1 |
-    Then the 400 error from the "login" request contains:
+    Then there should be a 400 error from the "login" request that contains:
       | message                  |
       | Invalid user credentials |
 
@@ -30,7 +30,7 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       | identity                          | password     |
       | identity-login-one@venzra-test.io | VenzraTest$1 |
-    Then the 400 error from the "login" request contains:
+    Then there should be a 400 error from the "login" request that contains:
       | message                  |
       | Invalid user credentials |
 
@@ -45,7 +45,7 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       | identity                            | password          |
       | identity-login-three@venzra-test.io | IncorrectPassword |
-    Then the 400 error from the "login" request contains:
+    Then there should be a 400 error from the "login" request that contains:
       | message                  |
       | Invalid user credentials |
 
@@ -60,6 +60,6 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       | identity                           | password     |
       | identity-login-four@venzra-test.io | VenzraTest$1 |
-    Then the 400 error from the "login" request contains:
+    Then there should be a 400 error from the "login" request that contains:
       | message                  |
       | Invalid user credentials |

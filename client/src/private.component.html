@@ -7,17 +7,34 @@
     </div>
 </mat-toolbar>
 
-<mat-sidenav-container>
-    <mat-sidenav mode="side" opened="true">
-        <mat-nav-list dense>
-            <h3 matSubheader>Account</h3>
-            <a mat-list-item routerLink="/account" routerLinkActive="active">Manage Settings</a>
-            <mat-divider></mat-divider>
-            <a mat-list-item routerLink="/auth/logout">Logout</a>
-        </mat-nav-list>
-    </mat-sidenav>
+<div fxLayout="row" fxFlex>
+    <mat-sidenav-container>
+        <mat-sidenav mode="side" opened="true">
+            <mat-nav-list dense>
+                <h3 matSubheader>Construct</h3>
+                <a mat-list-item routerLink="/account" routerLinkActive="active">Setup</a>
 
-    <div class="private-content">
-        <router-outlet></router-outlet>
-    </div>
-</mat-sidenav-container>
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader>Compose</h3>
+                <a mat-list-item routerLink="/products" routerLinkActive="active">Products</a>
+
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader>Customer</h3>
+
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader>Control</h3>
+
+                <mat-divider></mat-divider>
+
+                <a mat-list-item routerLink="/auth/logout">Logout</a>
+            </mat-nav-list>
+        </mat-sidenav>
+
+        <div class="private-content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-container>
+</div>
