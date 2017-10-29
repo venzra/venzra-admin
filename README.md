@@ -2,6 +2,8 @@
 
 Venzra commerce solution - full end-to-end stack
 
+[![CircleCI](https://circleci.com/gh/sysen-limited/venzra-admin.svg?style=svg&circle-token=88674033483753709199eafab0031e9f7b3324e4)](https://circleci.com/gh/sysen-limited/venzra-admin)
+
 ### Administration Portal
 
 When running this project will be available locally on http://localhost:8181
