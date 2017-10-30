@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 
@@ -43,8 +43,10 @@ export class ProductService extends RestfulService {
             });
     }
 
-    getAllProducts(): Promise<ListModel<Product>> {
-        return this.http.get('api/v1/products')
+    getAllProducts(query): Promise<ListModel<Product>> {
+        const params = Object.keys(query).reduce((params, key) => params.set(key, query[key]), new HttpParams());
+
+        return this.http.get('api/v1/products', { params })
             .toPromise()
             .then((response: any) => response as ListModel<Product>)
             .then((products) => {
@@ -76,6 +78,6 @@ export class ProductListResolve implements Resolve<ListModel<Product>> {
     ) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<ListModel<Product>> {
-        return this.productService.getAllProducts();
+        return this.productService.getAllProducts(route.queryParams);
     }
 }

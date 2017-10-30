@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PageEvent } from '@angular/material';
+
+import 'rxjs/add/operator/debounceTime';
 
 import { LayoutService } from '../../../../services/layout.service';
 import { ListModel } from '../../../../services/restful.service';
-import { Product } from '../../../../services/product.service';
+import { Product, ProductService } from '../../../../services/product.service';
 
 @Component({
     selector: 'product-list',
@@ -17,7 +20,9 @@ export class ProductListComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private forms: FormBuilder,
+        private productService: ProductService,
         private layout: LayoutService
     ) { }
 
@@ -28,12 +33,31 @@ export class ProductListComponent implements OnInit {
             searchQuery: ['', []]
         });
 
+        this.searchForm.get('searchQuery').valueChanges.debounceTime(500).subscribe(() => this.performSearch());
+
         this.route.data.subscribe((data: { productData: ListModel<Product> }) => {
             this.products = data.productData;
         });
+
+        this.route.queryParams.subscribe((params) => {
+            this.productService.getAllProducts(params)
+                .then((products) => this.products = products);
+
+            this.searchForm.get('searchQuery').setValue(params.search);
+        });
+    }
+
+    updatePage(pageEvent: PageEvent) {
+        const skip = pageEvent.pageIndex * pageEvent.pageSize;
+        const limit = pageEvent.pageSize;
+
+        this.router.navigate(['/products'], { queryParams: { skip, limit }, queryParamsHandling: 'merge', replaceUrl: true });
     }
 
     performSearch() {
-        console.log('coming soon....');
+        const search = this.searchForm.get('searchQuery').value;
+        const skip = 0;
+
+        this.router.navigate(['/products'], { queryParams: { skip, search }, queryParamsHandling: 'merge', replaceUrl: true });
     }
 }

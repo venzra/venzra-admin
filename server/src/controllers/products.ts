@@ -43,9 +43,14 @@ class ProductsController extends AuthenticationController {
     }
 
     findAll(req: Request, res: Response, next: NextFunction) {
-        let searchParams = { subscription: this.account.subscription._id };
-        let skip = 0;
-        let limit = 25;
+        let searchParams: any = { subscription: this.account.subscription._id };
+        let skip = parseInt(req.query.skip) || 0;
+        let limit = parseInt(req.query.limit) || 25;
+        let order = { name: 1 };
+
+        if(req.query.search) {
+            searchParams.name = new RegExp(req.query.search, "i");
+        }
 
         ProductModel
             .count(searchParams).exec()
@@ -53,6 +58,7 @@ class ProductsController extends AuthenticationController {
                 ProductModel
                     .aggregate([
                         { $match: searchParams },
+                        { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
                         { $project: { slug: 1, code: 1, name: 1, price: 1, status: 1 } }

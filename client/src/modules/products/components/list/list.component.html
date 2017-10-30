@@ -9,11 +9,12 @@
         <form class="mat-body-1" fxLayout="row" fxLayoutGap="20px" (ngSubmit)="performSearch()" [formGroup]="searchForm">
             <mat-form-field floatPlaceholder="never">
                 <input matInput
+                       autocomplete="off"
                        placeholder="Search products"
                        formControlName="searchQuery"
                 />
+                <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
-            <button mat-icon-button type="submit"><mat-icon>search</mat-icon></button>
         </form>
         <span fxFlex></span>
         <button mat-icon-button matTooltip="Filter by status">
@@ -33,13 +34,15 @@
         <mat-list>
             <mat-list-item *ngFor="let product of products.list">
                 <h3 matLine>{{ product.name }} <span class="mat-caption">{{ '( ' + product.code + ' )' }}</span></h3>
-                <p matLine>{{ '&pound; ' + product.price }}</p>
+                <p matLine>{{ product.price | price }}</p>
             </mat-list-item>
         </mat-list>
 
         <mat-paginator [length]="products.total"
+                       [pageIndex]="products.skip / products.limit"
                        [pageSize]="products.limit"
-                       [pageSizeOptions]="[10,25,100]">
+                       [pageSizeOptions]="[10,25,50,100]"
+                       (page)="updatePage($event)">
         </mat-paginator>
     </div>
 

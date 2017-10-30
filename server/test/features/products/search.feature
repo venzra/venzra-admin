@@ -57,3 +57,23 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[0] | 0     | 0    | 25    |
+
+  Scenario: Requesting a list of products adheres to pagination values for skip and limit
+    Given I am logged in with the "products-search-one@venzra-test.io" account
+    When I make a GET request to the API endpoint "/api/v1/products?skip=2&limit=3" as "product"
+    Then there should be a 200 response from the "product" request that contains:
+      | list     | total | skip | limit |
+      | ARRAY[3] | 12    | 2    | 3     |
+    And the "product" request that has a list and row 1 contains:
+      | _id       | slug               | code          | name               | price | status    |
+      | OBJECT_ID | product-search-aaa | SEARCH-01-003 | Product Search AAA | 999   | AVAILABLE |
+
+  Scenario: Listing of products supports searching by name
+    Given I am logged in with the "products-search-one@venzra-test.io" account
+    When I make a GET request to the API endpoint "/api/v1/products?search=aa" as "product"
+    Then there should be a 200 response from the "product" request that contains:
+      | list     | total | skip | limit |
+      | ARRAY[2] | 2     | 0    | 25    |
+    And the "product" request that has a list and row 1 contains:
+      | _id       | slug              | code          | name              | price | status    |
+      | OBJECT_ID | product-search-aa | SEARCH-01-002 | Product Search AA | 99    | AVAILABLE |
