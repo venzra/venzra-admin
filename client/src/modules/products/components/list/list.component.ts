@@ -43,7 +43,7 @@ export class ProductListComponent implements OnInit {
             this.productService.getAllProducts(params)
                 .then((products) => this.products = products);
 
-            this.searchForm.get('searchQuery').setValue(params.search);
+            this.searchForm.get('searchQuery').setValue(params.search, { emitEvent: false });
         });
     }
 
