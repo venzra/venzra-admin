@@ -7,11 +7,10 @@ jobs:
       - image: circleci/mongo:3.4
     environment:
       - NODE_ENV: test
-    resource_class: medium
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ .Branch }}
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install dependencies
           command: npm install
@@ -22,6 +21,6 @@ jobs:
           name: Test server
           command: npm run test:server
       - save_cache:
-          key: dependency-cache-{{ .Branch }}
+          key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
