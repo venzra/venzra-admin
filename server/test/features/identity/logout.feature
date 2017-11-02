@@ -12,5 +12,5 @@ Feature: Perform a logout command that removes any account authentication token
     When I make a POST request to the API endpoint "/api/v1/identity/logout" as "logout" using:
       | logout |
       | true   |
-    Then the status of the "logout" request should be 202
+    Then the status returned from the "logout" request should be 202
     And there is a deleted cookie called "jwt" in the "logout" response header

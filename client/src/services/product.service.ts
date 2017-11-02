@@ -33,6 +33,16 @@ export class ProductService extends RestfulService {
             .then(() => this.router.navigate(['/products'], { replaceUrl: true }));
     }
 
+    changeStatus(productId: string, status: string): Promise<Product> {
+        return this.http.patch(`api/v1/products/${productId}`, [{ op: 'replace', path: 'status', value: status }])
+            .toPromise()
+            .then((response: any) => response as Product)
+            .then((product) => {
+                product.price /= 100;
+                return product;
+            });
+    }
+
     getProduct(productId: string): Promise<Product> {
         return this.http.get(`api/v1/products/${productId}`)
             .toPromise()

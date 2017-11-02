@@ -12,7 +12,7 @@ Feature: Retrieve currently logged in account information
 
   Scenario: When there is no logged in user there should be no response
     When I make a GET request to the API endpoint "/api/v1/account" as "account"
-    Then the status of the "account" request should be a 401 error
+    Then the status returned from the "account" request should be a 401 error
 
   Scenario: Retrieve account profile information
     Given I am logged in with the "account-retrieve-one@venzra-test.io" account

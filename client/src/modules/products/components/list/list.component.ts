@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PageEvent } from '@angular/material';
+import { MatSlideToggleChange, PageEvent } from '@angular/material';
 
 import 'rxjs/add/operator/debounceTime';
 
@@ -45,6 +45,10 @@ export class ProductListComponent implements OnInit {
 
             this.searchForm.get('searchQuery').setValue(params.search, { emitEvent: false });
         });
+    }
+
+    toggleActive(event: MatSlideToggleChange, product: Product) {
+        this.productService.changeStatus(product._id, event.checked ? 'ACTIVE' : 'INACTIVE');
     }
 
     updatePage(pageEvent: PageEvent) {

@@ -38,7 +38,7 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       | identity                          | password     |
       | identity-login-two@venzra-test.io | VenzraTest$1 |
-    Then the status of the "login" request should be 202
+    Then the status returned from the "login" request should be 202
     And there is a cookie called "jwt" in the "login" response header
 
   Scenario: Incorrect password with an ACTIVE account
@@ -53,7 +53,7 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       | identity                            | password     |
       | identity-login-three@venzra-test.io | VenzraTest$1 |
-    Then the status of the "login" request should be 202
+    Then the status returned from the "login" request should be 202
     And there is a cookie called "jwt" in the "login" response header
 
   Scenario: Login with a LOCKED account

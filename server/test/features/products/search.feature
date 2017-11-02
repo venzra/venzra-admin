@@ -14,22 +14,22 @@ Feature: Creation of a new product entry
       | products-search-two@venzra-test.io   | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
       | products-search-three@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[3]._id }} |
     And there are the following "products" records in the database
-      | subscription               | code          | name               | price | status    |
-      | {{ subscriptions[1]._id }} | SEARCH-01-001 | Product Search A   | 9     | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-002 | Product Search AA  | 99    | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-003 | Product Search AAA | 999   | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-004 | Product Search B   | 6     | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-005 | Product Search BB  | 66    | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-006 | Product Search C   | 0     | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-007 | Product Search D   | 1000  | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-008 | Product Search E   | 2000  | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-009 | Product Search F   | 3000  | DRAFT     |
-      | {{ subscriptions[1]._id }} | SEARCH-01-010 | Product Search G   | 5     | DRAFT     |
-      | {{ subscriptions[1]._id }} | SEARCH-01-011 | Product Search GG  | 50    | AVAILABLE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-012 | Product Search GGG | 500   | WITHDRAWN |
-      | {{ subscriptions[2]._id }} | SEARCH-02-001 | Product Search A   | 999   | AVAILABLE |
-      | {{ subscriptions[2]._id }} | SEARCH-02-002 | Product Search B   | 999   | AVAILABLE |
-      | {{ subscriptions[2]._id }} | SEARCH-02-003 | Product Search C   | 999   | AVAILABLE |
+      | subscription               | code          | name               | price | status   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-001 | Product Search A   | 9     | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-002 | Product Search AA  | 99    | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-003 | Product Search AAA | 999   | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-004 | Product Search B   | 6     | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-005 | Product Search BB  | 66    | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-006 | Product Search C   | 0     | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-007 | Product Search D   | 1000  | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-008 | Product Search E   | 2000  | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-009 | Product Search F   | 3000  | INACTIVE |
+      | {{ subscriptions[1]._id }} | SEARCH-01-010 | Product Search G   | 5     | INACTIVE |
+      | {{ subscriptions[1]._id }} | SEARCH-01-011 | Product Search GG  | 50    | INACTIVE |
+      | {{ subscriptions[1]._id }} | SEARCH-01-012 | Product Search GGG | 500   | ACTIVE   |
+      | {{ subscriptions[2]._id }} | SEARCH-02-001 | Product Search A   | 999   | ACTIVE   |
+      | {{ subscriptions[2]._id }} | SEARCH-02-002 | Product Search B   | 999   | ACTIVE   |
+      | {{ subscriptions[2]._id }} | SEARCH-02-003 | Product Search C   | 999   | ACTIVE   |
 
   Scenario: Requesting a list of products should return only records for that subscription (subscription one)
     Given I am logged in with the "products-search-one@venzra-test.io" account
@@ -37,9 +37,9 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list      | total | skip | limit |
       | ARRAY[12] | 12    | 0    | 25    |
-    And the "product" request that has a list and row 1 contains:
-      | _id       | slug             | code          | name             | price | status    |
-      | OBJECT_ID | product-search-a | SEARCH-01-001 | Product Search A | 9     | AVAILABLE |
+    And the "product" request that has a "list" field and row 1 contains:
+      | _id       | slug             | code          | name             | price | status |
+      | OBJECT_ID | product-search-a | SEARCH-01-001 | Product Search A | 9     | ACTIVE |
 
   Scenario: Requesting a list of products should return only records for that subscription (subscription two)
     Given I am logged in with the "products-search-two@venzra-test.io" account
@@ -47,9 +47,9 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 3     | 0    | 25    |
-    And the "product" request that has a list and row 1 contains:
-      | _id       | slug             | code          | name             | price | status    |
-      | OBJECT_ID | product-search-a | SEARCH-02-001 | Product Search A | 999   | AVAILABLE |
+    And the "product" request that has a "list" field and row 1 contains:
+      | _id       | slug             | code          | name             | price | status |
+      | OBJECT_ID | product-search-a | SEARCH-02-001 | Product Search A | 999   | ACTIVE |
 
   Scenario: Requesting a list of products should return no results when there are no products (subscription three)
     Given I am logged in with the "products-search-three@venzra-test.io" account
@@ -64,9 +64,9 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 12    | 2    | 3     |
-    And the "product" request that has a list and row 1 contains:
-      | _id       | slug               | code          | name               | price | status    |
-      | OBJECT_ID | product-search-aaa | SEARCH-01-003 | Product Search AAA | 999   | AVAILABLE |
+    And the "product" request that has a "list" field and row 1 contains:
+      | _id       | slug               | code          | name               | price | status |
+      | OBJECT_ID | product-search-aaa | SEARCH-01-003 | Product Search AAA | 999   | ACTIVE |
 
   Scenario: Listing of products supports searching by name
     Given I am logged in with the "products-search-one@venzra-test.io" account
@@ -74,6 +74,6 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[2] | 2     | 0    | 25    |
-    And the "product" request that has a list and row 1 contains:
-      | _id       | slug              | code          | name              | price | status    |
-      | OBJECT_ID | product-search-aa | SEARCH-01-002 | Product Search AA | 99    | AVAILABLE |
+    And the "product" request that has a "list" field and row 1 contains:
+      | _id       | slug              | code          | name              | price | status |
+      | OBJECT_ID | product-search-aa | SEARCH-01-002 | Product Search AA | 99    | ACTIVE |

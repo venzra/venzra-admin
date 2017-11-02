@@ -36,7 +36,7 @@ Feature: Activation of a registered users account
     Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
       | _id                   | password     | token            |
       | {{ accounts[1]._id }} | VenzraTest$1 | aaaabbbbccccdddd |
-    Then the status of the "activation" request should be 202
+    Then the status returned from the "activation" request should be 202
     When I am logged in with the "identity-activation-one@venzra-test.io" account
     And I make a GET request to the API endpoint "/api/v1/account" as "account"
     Then there should be a 200 response from the "account" request that contains:

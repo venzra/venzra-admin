@@ -7,8 +7,8 @@ Feature: Creation of a new subscription
       | storeName               | status |
       | Subscription Create One | TRIAL  |
     And there are the following "accounts" records in the database
-      | identity                               | password | status | subscription               |
-      | subscription-create-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
+      | identity                               | password | subscription               | status |
+      | subscription-create-one@venzra-test.io | PASSWORD | {{ subscriptions[1]._id }} | ACTIVE |
 
   Scenario: A missing email and stripe bank token will result in an error
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
@@ -34,8 +34,8 @@ Feature: Creation of a new subscription
       | email                                      | token                       | terms |
       | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } | true  |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | status | storeName               | stripe |
-      | OBJECT_ID | subscription-create-one | TRIAL  | Subscription Create One | OBJECT |
+      | _id       | domainName              | storeName               | stripe | status |
+      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT | TRIAL  |
     And the response path "stripe" from the "subscription" request contains:
       | account         | bank     |
       | acct_xxxxxxxxxx | ARRAY[1] |
@@ -49,8 +49,8 @@ Feature: Creation of a new subscription
       | email                                      | token                       | terms |
       | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } | true  |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | status | storeName               | stripe |
-      | OBJECT_ID | subscription-create-one | TRIAL  | Subscription Create One | OBJECT |
+      | _id       | domainName              | storeName               | stripe | status |
+      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT | TRIAL  |
     And the response path "stripe" from the "subscription" request contains:
       | account         | bank     |
       | acct_xxxxxxxxxx | ARRAY[1] |

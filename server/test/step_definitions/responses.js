@@ -40,23 +40,23 @@ defineSupportCode(({ Given, When, Then }) => {
         });
     };
 
-    Then(/^the status of the "([^"]*)" request should be (201|202)$/, function (historyName, statusCode) {
+    Then(/^the status returned from the "([^"]*)" request should be (201|202)$/, function (historyName, statusCode) {
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => expect(history.status).to.equal(parseInt(statusCode)));
     });
 
-    Then(/^the status of the "([^"]*)" request should be a (401|403|404) error$/, function (historyName, statusCode) {
+    Then(/^the status returned from the "([^"]*)" request should be a (401|403|404) error$/, function (historyName, statusCode) {
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => expect(history.status).to.equal(parseInt(statusCode)));
     });
 
-    Then(/^(?:there should be a (200|400|500) (?:response|error) from )?the "([^"]*)" request that(?: has a list and row (\d+))? contains:$/, function (statusCode, historyName, expectedRecord, expectedData) {
+    Then(/^(?:there should be a (200|400|500) (?:response|error) from )?the "([^"]*)" request that(?: has a "([^"]*)" field and row (\d+))? contains:$/, function (statusCode, historyName, expectedField, expectedRecord, expectedData) {
         expectedData = this.getHashes(expectedData);
 
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => Promise.all([
                     statusCode ? expect(history.status).to.equal(parseInt(statusCode)) : true,
-                    checkValues(expectedData[0], expectedRecord ? history.response.list[expectedRecord - 1] : history.response)
+                    checkValues(expectedData[0], expectedField && expectedRecord ? history.response[expectedField][expectedRecord - 1] : history.response)
                 ])
             );
     });

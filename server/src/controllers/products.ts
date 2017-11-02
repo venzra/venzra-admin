@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction, Router } from 'express';
 
 import { AuthenticationController } from './authentication';
+
 import { ProductModel } from '../models/products';
+import { IRestOperation } from '../models/rest';
+import { NotFoundError } from '../middleware/error-handler';
 
 class ProductsController extends AuthenticationController {
 
@@ -14,6 +17,7 @@ class ProductsController extends AuthenticationController {
         this.router.get('/products', this.validate.bind(this), this.findAll.bind(this));
         this.router.post('/products', this.validate.bind(this), this.createProduct.bind(this), this.findOne.bind(this));
         this.router.get('/products/:productId', this.validate.bind(this), this.findOne.bind(this));
+        this.router.patch('/products/:productId', this.validate.bind(this), this.updateProduct.bind(this), this.findOne.bind(this));
     }
 
     createProduct(req: Request, res: Response, next: NextFunction) {
@@ -32,13 +36,48 @@ class ProductsController extends AuthenticationController {
             .catch((productError) => next(productError));
     }
 
+    updateProduct(req: Request, res: Response, next: NextFunction) {
+        const _id = req.params.productId;
+        const subscription = this.account.subscription._id;
+
+        ProductModel
+            .findOne({ _id, subscription })
+            .then((product) => {
+                if (!product) {
+                    throw new NotFoundError();
+                }
+
+                if (req.body instanceof Array === false) {
+                    return;
+                }
+
+                (<Array<IRestOperation>>req.body).forEach((operation) => {
+                    switch (operation.op) {
+                        case 'replace':
+                            switch (operation.path) {
+                                case 'price':
+                                case 'status':
+                                    product.history.push({ account: this.account._id, field: operation.path, previous: product.get(operation.path), next: operation.value });
+                                    // falls-through
+                                case 'name':
+                                    product.set(operation.path, operation.value);
+                            }
+                    }
+                });
+
+                return product.save();
+            })
+            .then(() => next())
+            .catch((error) => next(error));
+    }
+
     findOne(req: Request, res: Response, next: NextFunction) {
         const _id = req.params.productId;
         const subscription = this.account.subscription._id;
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code name price status')
+            .select('slug code name price history status')
             .then((product) => res.status(200).send(product));
     }
 
@@ -48,8 +87,8 @@ class ProductsController extends AuthenticationController {
         let limit = parseInt(req.query.limit) || 25;
         let order = { name: 1 };
 
-        if(req.query.search) {
-            searchParams.name = new RegExp(req.query.search, "i");
+        if (req.query.search) {
+            searchParams.name = new RegExp(req.query.search, 'i');
         }
 
         ProductModel

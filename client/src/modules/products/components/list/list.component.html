@@ -35,6 +35,7 @@
             <mat-list-item *ngFor="let product of products.list">
                 <h3 matLine>{{ product.name }} <span class="mat-caption">{{ '( ' + product.code + ' )' }}</span></h3>
                 <p matLine>{{ product.price | price }}</p>
+                <mat-slide-toggle (change)="toggleActive($event, product)" [checked]="product.status === 'ACTIVE'"></mat-slide-toggle>
             </mat-list-item>
         </mat-list>
 
