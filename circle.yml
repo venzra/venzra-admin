@@ -24,3 +24,5 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
+      - store_artifacts:
+          path: coverage
