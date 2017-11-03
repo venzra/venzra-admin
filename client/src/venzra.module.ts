@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { VenzraCommonModule } from './common/common.module';
@@ -20,7 +20,7 @@ import { LayoutService } from './services/layout.service';
         PublicComponent
     ],
     imports: [
-        BrowserModule,
+        CommonModule,
         BrowserAnimationsModule,
         VenzraCommonModule,
         VenzraRoutingModule

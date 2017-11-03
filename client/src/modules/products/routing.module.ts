@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ProductListComponent } from './components/list/list.component';
 import { ProductCreateComponent } from './components/create/create.component';
+import { ProductListComponent } from './components/list/list.component';
+import { ProductViewComponent } from './components/view/view.component';
 
-import { ProductListResolve } from '../../services/product.service';
+import { ProductListResolve, ProductRetrieveResolve } from '../../services/product.service';
 
 const routes: Routes = [
     {
@@ -18,6 +19,13 @@ const routes: Routes = [
     {
         path: 'create',
         component: ProductCreateComponent
+    },
+    {
+        path: ':productId',
+        component: ProductViewComponent,
+        resolve: {
+            productData: ProductRetrieveResolve
+        }
     }
 ];
 

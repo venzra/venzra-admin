@@ -34,8 +34,12 @@
         <mat-list>
             <mat-list-item *ngFor="let product of products.list">
                 <h3 matLine>{{ product.name }} <span class="mat-caption">{{ '( ' + product.code + ' )' }}</span></h3>
-                <p matLine>{{ product.price | price }}</p>
-                <mat-slide-toggle (change)="toggleActive($event, product)" [checked]="product.status === 'ACTIVE'"></mat-slide-toggle>
+                <p matLine>{{ product.status }} &middot; {{ product.price | price }}</p>
+                <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+                    <button matTooltip="View / Edit" matTooltipPosition="left" mat-icon-button color="accent" routerLink="/products/{{ product._id }}">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
             </mat-list-item>
         </mat-list>
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSlideToggleChange, PageEvent } from '@angular/material';
+import { PageEvent } from '@angular/material';
 
 import 'rxjs/add/operator/debounceTime';
 
@@ -47,10 +47,6 @@ export class ProductListComponent implements OnInit {
         });
     }
 
-    toggleActive(event: MatSlideToggleChange, product: Product) {
-        this.productService.changeStatus(product._id, event.checked ? 'ACTIVE' : 'INACTIVE');
-    }
-
     updatePage(pageEvent: PageEvent) {
         const skip = pageEvent.pageIndex * pageEvent.pageSize;
         const limit = pageEvent.pageSize;
@@ -64,4 +60,5 @@ export class ProductListComponent implements OnInit {
 
         this.router.navigate(['/products'], { queryParams: { skip, search }, queryParamsHandling: 'merge', replaceUrl: true });
     }
+
 }

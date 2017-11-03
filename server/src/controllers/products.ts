@@ -57,7 +57,7 @@ class ProductsController extends AuthenticationController {
                             switch (operation.path) {
                                 case 'price':
                                 case 'status':
-                                    product.history.push({ account: this.account._id, field: operation.path, previous: product.get(operation.path), next: operation.value });
+                                    product.history.unshift({ account: this.account._id, field: operation.path, previous: product.get(operation.path), next: operation.value });
                                     // falls-through
                                 case 'name':
                                     product.set(operation.path, operation.value);
@@ -77,7 +77,11 @@ class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code name price history status')
+            .select('slug code name price history status created updated')
+            .populate({
+                path: 'history.account',
+                select: 'identity'
+            })
             .then((product) => res.status(200).send(product));
     }
 

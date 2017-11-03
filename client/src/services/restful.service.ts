@@ -8,6 +8,14 @@ export class ListModel<T> {
     total: number;
 }
 
+export class HistoryModel {
+    account: any;
+    field: string;
+    previous: string;
+    next: string;
+    updated: Date;
+}
+
 @Injectable()
 export class RestfulService {
 

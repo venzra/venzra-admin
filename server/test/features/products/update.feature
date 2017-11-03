@@ -22,8 +22,8 @@ Feature: Updating product information
     Given I am logged in with the "product-update-one@venzra-test.io" account
     When I make an empty PATCH request to the API endpoint "/api/v1/products/{{ products[1]._id }}" as "product"
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code                | history  | name             | price | status   |
-      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | ARRAY[0] | Product Update A | 9     | INACTIVE |
+      | _id       | slug             | code                | history  | name             | price | status   | created   | updated   |
+      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | ARRAY[0] | Product Update A | 9     | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Attempting to update a product that does not belong to the account subscription is rejected
     Given I am logged in with the "product-update-two@venzra-test.io" account
@@ -42,11 +42,11 @@ Feature: Updating product information
       | replace | status | ACTIVE               |
       | replace | slug   | updated-slug         |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | history  | name                 | price | status |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | ARRAY[2] | Product Update PATCH | 5     | ACTIVE |
+      | _id       | slug                 | code                | history  | name                 | price | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | ARRAY[2] | Product Update PATCH | 5     | ACTIVE | DATE_TIME | DATE_TIME |
     And the "product" request that has a "history" field and row 1 contains:
-      | _id       | account   | field | previous | next | updated   |
-      | OBJECT_ID | OBJECT_ID | price | "9"      | "5"  | DATE_TIME |
+      | _id       | account | field  | previous | next   | updated   |
+      | OBJECT_ID | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
     And the "product" request that has a "history" field and row 2 contains:
-      | _id       | account   | field  | previous | next   | updated   |
-      | OBJECT_ID | OBJECT_ID | status | INACTIVE | ACTIVE | DATE_TIME |
+      | _id       | account | field | previous | next | updated   |
+      | OBJECT_ID | OBJECT  | price | "9"      | "5"  | DATE_TIME |

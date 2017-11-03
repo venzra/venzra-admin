@@ -9,6 +9,8 @@ $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $cand
 
 @include angular-material-theme($candy-app-theme)
 
+// general layout
+
 app-public
     position: absolute
     top: 0
@@ -50,23 +52,13 @@ app-private
     width: 750px
     margin-bottom: 4em
 
+// navigational layout
+
 mat-sidenav
     width: 200px
 
     mat-nav-list
         margin-bottom: 2em
-
-mat-card
-    margin-bottom: 20px
-
-mat-divider.mat-divider
-    margin: 20px 0
-
-.mat-toolbar
-    background-color: inherit
-
-.mat-form-field
-    width: 100%
 
 .mat-nav-list .mat-list-item.active
     color: #673ab7
@@ -76,7 +68,20 @@ mat-divider.mat-divider
 
 .mat-drawer-content
     padding: 2em
-    margin-left: 200px
+
+//content items
+
+.mat-toolbar
+    background-color: inherit
+
+mat-card
+    margin-bottom: 20px
+
+mat-divider.mat-divider
+    margin: 20px 0
+
+.mat-form-field
+    width: 100%
 
 .mat-button, .mat-raised-button
     text-transform: uppercase

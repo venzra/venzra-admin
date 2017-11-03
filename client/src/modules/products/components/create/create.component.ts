@@ -43,4 +43,5 @@ export class ProductCreateComponent implements OnInit {
                 this.snackbar.open(error.message || 'Create failed', 'OK', { duration: 5000 })
             })
     }
+
 }

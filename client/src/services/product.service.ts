@@ -3,13 +3,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 
-import { RestfulService, ListModel } from './restful.service';
+import { RestfulService, ListModel, HistoryModel } from './restful.service';
 
 export class Product {
     _id?: string;
     name: string;
     code: string;
     price: number;
+    history: [HistoryModel];
+    selected?: boolean;
     status?: string;
     created?: Date;
     updated?: Date;
@@ -77,7 +79,7 @@ export class ProductRetrieveResolve implements Resolve<Product> {
     ) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Product> {
-        return this.productService.getProduct('');
+        return this.productService.getProduct(route.params.productId);
     }
 }
 
