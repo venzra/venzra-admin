@@ -11,8 +11,9 @@ interface IProductHistoryModel {
 interface IProductModel extends Document {
     subscription?: string;
     code: string;
-    name: string;
-    price: number;
+    displayName: string;
+    retailPrice: number;
+    storePrice: number;
     history?: [IProductHistoryModel];
     status?: string;
 }
@@ -28,7 +29,7 @@ const ProductSchema: Schema = new Schema({
         required: true,
         trim: true
     },
-    name: {
+    displayName: {
         type: String,
         required: true,
         trim: true
@@ -37,7 +38,12 @@ const ProductSchema: Schema = new Schema({
         type: String,
         lowercase: true
     },
-    price: {
+    retailPrice: {
+        type: Number,
+        min: 0,
+        default: 0
+    },
+    storePrice: {
         type: Number,
         required: true,
         min: 0
@@ -51,7 +57,7 @@ const ProductSchema: Schema = new Schema({
             },
             field: {
                 type: String,
-                enum: ['price', 'status'],
+                enum: ['retailPrice', 'storePrice', 'status'],
                 required: true
             },
             previous: {
@@ -91,8 +97,9 @@ ProductSchema.index({ subscription: 1, code: 1 }, { unique: true });
 ProductSchema.index({ subscription: 1, slug: 1 }, { unique: true });
 
 ProductSchema.pre('validate', function (next) {
-    this.slug = (this.name || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
-    this.price = this.price ? Math.floor(this.price) : this.price;
+    this.slug = (this.displayName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
+    this.retailPrice = this.retailPrice ? Math.floor(this.retailPrice) : this.retailPrice;
+    this.storePrice = this.storePrice ? Math.floor(this.storePrice) : this.storePrice;
     next();
 });
 

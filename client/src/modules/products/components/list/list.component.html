@@ -33,8 +33,8 @@
     <div *ngIf="products.total">
         <mat-list>
             <mat-list-item *ngFor="let product of products.list">
-                <h3 matLine>{{ product.name }} <span class="mat-caption">{{ '( ' + product.code + ' )' }}</span></h3>
-                <p matLine>{{ product.status }} &middot; {{ product.price | price }}</p>
+                <h3 matLine>{{ product.displayName }} <span class="mat-caption">{{ '( ' + product.code + ' )' }}</span></h3>
+                <p matLine>{{ product.status }} &middot; {{ product.storePrice | price }}</p>
                 <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
                     <button matTooltip="View / Edit" matTooltipPosition="left" mat-icon-button color="accent" routerLink="/products/{{ product._id }}">
                         <mat-icon>edit</mat-icon>

@@ -7,11 +7,11 @@ import { RestfulService, ListModel, HistoryModel } from './restful.service';
 
 export class Product {
     _id?: string;
-    name: string;
     code: string;
-    price: number;
+    displayName: string;
+    retailPrice: number;
+    storePrice: number;
     history: [HistoryModel];
-    selected?: boolean;
     status?: string;
     created?: Date;
     updated?: Date;
@@ -28,7 +28,8 @@ export class ProductService extends RestfulService {
     }
 
     createProduct(product: Product): Promise<boolean> {
-        product.price *= 100;
+        product.retailPrice *= 100;
+        product.storePrice *= 100;
 
         return this.http.post('api/v1/products', product)
             .toPromise()
@@ -40,7 +41,8 @@ export class ProductService extends RestfulService {
             .toPromise()
             .then((response: any) => response as Product)
             .then((product) => {
-                product.price /= 100;
+                product.retailPrice /= 100;
+                product.storePrice /= 100;
                 return product;
             });
     }
@@ -50,7 +52,8 @@ export class ProductService extends RestfulService {
             .toPromise()
             .then((response: any) => response as Product)
             .then((product) => {
-                product.price /= 100;
+                product.retailPrice /= 100;
+                product.storePrice /= 100;
                 return product;
             });
     }
@@ -63,7 +66,8 @@ export class ProductService extends RestfulService {
             .then((response: any) => response as ListModel<Product>)
             .then((products) => {
                 products.list.forEach((product) => {
-                    product.price /= 100;
+                    product.retailPrice /= 100;
+                    product.storePrice /= 100;
                     return product;
                 });
                 return products;

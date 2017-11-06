@@ -21,16 +21,17 @@ class ProductsController extends AuthenticationController {
     }
 
     createProduct(req: Request, res: Response, next: NextFunction) {
-        let product = new ProductModel({
+        const product = new ProductModel({
             subscription: this.account.subscription._id,
             code: req.body.code,
-            name: req.body.name,
-            price: req.body.price
+            displayName: req.body.displayName,
+            retailPrice: req.body.retailPrice,
+            storePrice: req.body.storePrice
         });
 
         product.save()
-            .then((product) => {
-                req.params.productId = product._id;
+            .then((result) => {
+                req.params.productId = result._id;
                 next();
             })
             .catch((productError) => next(productError));
@@ -55,11 +56,12 @@ class ProductsController extends AuthenticationController {
                     switch (operation.op) {
                         case 'replace':
                             switch (operation.path) {
-                                case 'price':
+                                case 'retailPrice':
+                                case 'storePrice':
                                 case 'status':
-                                    product.history.unshift({ account: this.account._id, field: operation.path, previous: product.get(operation.path), next: operation.value });
-                                    // falls-through
-                                case 'name':
+                                    product.history.unshift({ account: this.account._id, field: operation.path, previous: product.get(operation.path) || 'NIL', next: operation.value });
+                                // falls-through
+                                case 'displayName':
                                     product.set(operation.path, operation.value);
                             }
                     }
@@ -77,7 +79,7 @@ class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code name price history status created updated')
+            .select('slug code displayName retailPrice storePrice history status created updated')
             .populate({
                 path: 'history.account',
                 select: 'identity'
@@ -86,13 +88,13 @@ class ProductsController extends AuthenticationController {
     }
 
     findAll(req: Request, res: Response, next: NextFunction) {
-        let searchParams: any = { subscription: this.account.subscription._id };
-        let skip = parseInt(req.query.skip) || 0;
-        let limit = parseInt(req.query.limit) || 25;
-        let order = { name: 1 };
+        const searchParams: any = { subscription: this.account.subscription._id };
+        const skip = parseInt(req.query.skip, 10) || 0;
+        const limit = parseInt(req.query.limit, 10) || 25;
+        const order = { displayName: 1 };
 
         if (req.query.search) {
-            searchParams.name = new RegExp(req.query.search, 'i');
+            searchParams.displayName = new RegExp(req.query.search, 'i');
         }
 
         ProductModel
@@ -104,7 +106,7 @@ class ProductsController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        { $project: { slug: 1, code: 1, name: 1, price: 1, status: 1 } }
+                        { $project: { slug: 1, code: 1, displayName: 1, storePrice: 1, status: 1 } }
                     ])
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )

@@ -1,5 +1,5 @@
 <mat-toolbar>
-    <span class="mat-headline">{{ product.name }}</span>
+    <span class="mat-headline">{{ product.displayName }}</span>
     <span fxFlex></span>
     <mat-slide-toggle (change)="toggleActive($event)" [checked]="product.status === 'ACTIVE'"></mat-slide-toggle>
 </mat-toolbar>
@@ -17,8 +17,13 @@
         </div>
 
         <div fxLayout="row">
+            <span fxFlex>Retail price</span>
+            <span fxFlex="66%">{{ product.retailPrice | price }}</span>
+        </div>
+
+        <div fxLayout="row">
             <span fxFlex>Store price</span>
-            <span fxFlex="66%">{{ product.price | price }}</span>
+            <span fxFlex="66%">{{ product.storePrice | price }}</span>
         </div>
 
         <div fxLayout="row">

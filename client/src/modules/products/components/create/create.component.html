@@ -22,10 +22,10 @@
             <mat-form-field>
                 <input matInput
                        placeholder="Display name"
-                       formControlName="name"
+                       formControlName="displayName"
                        required="required"
                 />
-                <mat-error *ngIf="productForm.controls['name'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="productForm.controls['displayName'].hasError('required')">This field is required.</mat-error>
             </mat-form-field>
         </mat-card-content>
     </mat-card>
@@ -40,12 +40,29 @@
             <mat-form-field>
                 <span matPrefix>&pound; &nbsp;</span>
                 <input matInput
+                       placeholder="Recommended retail price"
+                       formControlName="retailPrice"
+                />
+
+                <mat-hint align="start">Providing this will allow customers to see the typical retail price provided.</mat-hint>
+
+                <mat-error *ngIf="productForm.controls['retailPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+            </mat-form-field>
+        </mat-card-content>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="20px">
+            <mat-form-field>
+                <span matPrefix>&pound; &nbsp;</span>
+                <input matInput
                        placeholder="Store sale price"
-                       formControlName="price"
+                       formControlName="storePrice"
                        required="required"
                 />
-                <mat-error *ngIf="productForm.controls['price'].hasError('required')">This field is required.</mat-error>
-                <mat-error *ngIf="productForm.controls['price'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+
+                <mat-hint align="start">This is the price customers will pay to purchase on the store.</mat-hint>
+
+                <mat-error *ngIf="productForm.controls['storePrice'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="productForm.controls['storePrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
             </mat-form-field>
         </mat-card-content>
     </mat-card>
