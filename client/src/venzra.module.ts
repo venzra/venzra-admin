@@ -25,6 +25,9 @@ import { LayoutService } from './services/layout.service';
         VenzraCommonModule,
         VenzraRoutingModule
     ],
+    exports: [
+        BrowserAnimationsModule
+    ],
     providers: [
         AuthenticationService,
         LayoutService

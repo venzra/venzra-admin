@@ -12,20 +12,20 @@
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-form-field>
                 <input matInput
-                       placeholder="Product code"
-                       formControlName="code"
-                       required="required"
-                />
-                <mat-error *ngIf="productForm.controls['code'].hasError('required')">This field is required.</mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-                <input matInput
                        placeholder="Display name"
                        formControlName="displayName"
                        required="required"
                 />
                 <mat-error *ngIf="productForm.controls['displayName'].hasError('required')">This field is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput
+                       placeholder="Product code"
+                       formControlName="code"
+                       required="required"
+                />
+                <mat-error *ngIf="productForm.controls['code'].hasError('required')">This field is required.</mat-error>
             </mat-form-field>
         </mat-card-content>
     </mat-card>

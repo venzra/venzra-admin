@@ -8,10 +8,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/toPromise';
 
 export class Account {
-    _id: string;
+    _id?: string;
     identity: string;
-    status: string;
-    subscription: string;
+    status?: string;
+    subscription?: string;
 }
 
 export class Activation {

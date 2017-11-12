@@ -27,8 +27,8 @@ export class ProductCreateComponent implements OnInit {
         this.layout.title = 'Products';
 
         this.productForm = this.forms.group({
-            code: ['', [Validators.required]],
             displayName: ['', [Validators.required]],
+            code: ['', [Validators.required]],
             retailPrice: ['', [Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
             storePrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]]
         });
