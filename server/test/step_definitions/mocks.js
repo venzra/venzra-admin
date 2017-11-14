@@ -7,7 +7,7 @@ defineSupportCode(({ Given, When, Then }) => {
     const prepareMock = (uri, target, type, status, file) => {
         let mock = nock(uri);
 
-        if(!target) {
+        if (!target) {
             mock.filteringPath(/.*/, '*');
         }
 
@@ -26,7 +26,7 @@ defineSupportCode(({ Given, When, Then }) => {
         return this.addMock(prepareMock(uri, target, type, status, file));
     });
 
-    Given(/^I show the available history$/, function() {
+    Given(/^I show the available history$/, function () {
         console.log(this.history);
     })
 

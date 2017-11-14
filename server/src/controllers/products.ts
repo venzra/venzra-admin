@@ -25,8 +25,8 @@ class ProductsController extends AuthenticationController {
             subscription: this.account.subscription._id,
             code: req.body.code,
             displayName: req.body.displayName,
-            retailPrice: req.body.retailPrice,
-            storePrice: req.body.storePrice
+            previousPrice: req.body.previousPrice,
+            currentPrice: req.body.currentPrice
         });
 
         product.save()
@@ -56,8 +56,8 @@ class ProductsController extends AuthenticationController {
                     switch (operation.op) {
                         case 'replace':
                             switch (operation.path) {
-                                case 'retailPrice':
-                                case 'storePrice':
+                                case 'previousPrice':
+                                case 'currentPrice':
                                 case 'status':
                                     product.history.unshift({ account: this.account._id, field: operation.path, previous: product.get(operation.path) || 'NIL', next: operation.value });
                                 // falls-through
@@ -79,7 +79,7 @@ class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code displayName retailPrice storePrice history status created updated')
+            .select('slug code displayName previousPrice currentPrice history status created updated')
             .populate({
                 path: 'history.account',
                 select: 'identity'
@@ -106,7 +106,7 @@ class ProductsController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        { $project: { slug: 1, code: 1, displayName: 1, storePrice: 1, status: 1 } }
+                        { $project: { slug: 1, code: 1, displayName: 1, currentPrice: 1, status: 1 } }
                     ])
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )

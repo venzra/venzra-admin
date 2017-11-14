@@ -2,13 +2,13 @@ const { defineSupportCode } = require('cucumber');
 
 defineSupportCode(({ Given, When, Then }) => {
 
-    Given(/^the request origin headers are set to "([^"]*)"$/, function(requestOrigin) {
+    Given(/^the request origin headers are set to "([^"]*)"$/, function (requestOrigin) {
         this.setHeader('Origin', `http://${requestOrigin}`);
         this.setHeader('Referer', `http://${requestOrigin}`);
         this.setHeader('Host', requestOrigin);
     });
 
-    Given(/^I am logged in with the "([^"]*)" account$/, function(userIdentity) {
+    Given(/^I am logged in with the "([^"]*)" account$/, function (userIdentity) {
         return Promise.resolve(this.performPost('/api/v1/identity/login', { identity: userIdentity, password: 'VenzraTest$1' }));
     });
 

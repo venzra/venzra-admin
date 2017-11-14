@@ -12,8 +12,8 @@ interface IProductModel extends Document {
     subscription?: string;
     code: string;
     displayName: string;
-    retailPrice: number;
-    storePrice: number;
+    previousPrice: number;
+    currentPrice: number;
     history?: [IProductHistoryModel];
     status?: string;
 }
@@ -38,12 +38,12 @@ const ProductSchema: Schema = new Schema({
         type: String,
         lowercase: true
     },
-    retailPrice: {
+    previousPrice: {
         type: Number,
         min: 0,
         default: 0
     },
-    storePrice: {
+    currentPrice: {
         type: Number,
         required: true,
         min: 0
@@ -57,7 +57,7 @@ const ProductSchema: Schema = new Schema({
             },
             field: {
                 type: String,
-                enum: ['retailPrice', 'storePrice', 'status'],
+                enum: ['previousPrice', 'currentPrice', 'status'],
                 required: true
             },
             previous: {
@@ -98,8 +98,8 @@ ProductSchema.index({ subscription: 1, slug: 1 }, { unique: true });
 
 ProductSchema.pre('validate', function (next) {
     this.slug = (this.displayName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
-    this.retailPrice = this.retailPrice ? Math.floor(this.retailPrice) : this.retailPrice;
-    this.storePrice = this.storePrice ? Math.floor(this.storePrice) : this.storePrice;
+    this.previousPrice = this.previousPrice ? Math.floor(this.previousPrice) : this.previousPrice;
+    this.currentPrice = this.currentPrice ? Math.floor(this.currentPrice) : this.currentPrice;
     next();
 });
 

@@ -13,7 +13,7 @@ defineSupportCode(({ Given, When, Then }) => {
 
         expectedKeys.map((key) => {
             let check;
-            if(typeof expected[key] === 'string') {
+            if (typeof expected[key] === 'string') {
                 check = expected[key].match(/\[(\d+)\]/) || expected[key];
                 if (check instanceof Array) {
                     expected[key] = expected[key].replace(check[0], '');
