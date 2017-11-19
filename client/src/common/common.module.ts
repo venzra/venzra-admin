@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatPaginatorModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 
+import { AccountComponent } from './components/account/account.component';
+
 import { PricePipe } from './filters/price.pipe';
 
 import { ErrorInterceptorModule } from './http.interceptor';
@@ -13,6 +15,7 @@ import { ErrorInterceptorModule } from './http.interceptor';
 @NgModule({
     declarations: [
         PricePipe,
+        AccountComponent
     ],
     imports: [
         HttpClientModule,
@@ -51,7 +54,8 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatToolbarModule,
         MatTooltipModule,
         ErrorInterceptorModule,
-        PricePipe
+        PricePipe,
+        AccountComponent
     ]
 })
 export class VenzraCommonModule {

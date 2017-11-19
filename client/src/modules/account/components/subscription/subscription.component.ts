@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 
-import { Account, AuthenticationService } from '../../../../services/authentication.service';
+import { Account, AccountService } from '../../../../services/account.service';
 import { Subscription, BankAccount, SubscriptionService } from '../../../../services/subscription.service';
 import { LayoutService } from '../../../../services/layout.service';
 
@@ -35,12 +35,10 @@ export class SubscriptionComponent implements OnInit {
         private forms: FormBuilder,
         private dialog: MatDialog,
         private snackbar: MatSnackBar,
-        private authenticationService: AuthenticationService,
+        private accountService: AccountService,
         private subscriptionService: SubscriptionService,
         private layout: LayoutService
-    ) {
-        this.account = authenticationService.userAccount;
-    }
+    ) { }
 
     ngOnInit(): void {
         this.layout.title = 'Subscription';
@@ -52,10 +50,12 @@ export class SubscriptionComponent implements OnInit {
             sortCode: ['', [Validators.required]],
             acceptTerms: ['', [Validators.required]]
         });
+
+        this.accountService.getAccount().subscribe((account) => this.account = account);
     }
 
     viewServiceAgreement() {
-        this.dialog.open(ServiceTermsDialog, { width: '640px' })
+        this.dialog.open(ServiceTermsDialog, { width: '640px' });
     }
 
     createSubscription() {

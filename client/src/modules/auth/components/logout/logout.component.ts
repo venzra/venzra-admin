@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthenticationService } from '../../../../services/authentication.service';
+import { AccountService } from '../../../../services/account.service';
 
 @Component({
     template: `
@@ -10,10 +10,10 @@ import { AuthenticationService } from '../../../../services/authentication.servi
 })
 export class LogoutComponent implements OnInit {
     constructor(
-        private authenticationService: AuthenticationService
+        private accountService: AccountService
     ) { }
 
     ngOnInit(): void {
-        this.authenticationService.performLogout();
+        this.accountService.performLogout();
     }
 }

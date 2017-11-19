@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
-import { Activation, AuthenticationService } from '../../../../services/authentication.service';
+import { Activation, AccountService } from '../../../../services/account.service';
 import { LayoutService } from '../../../../services/layout.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class ActivationComponent {
         private route: ActivatedRoute,
         private router: Router,
         private snackbar: MatSnackBar,
-        private authenticationService: AuthenticationService,
+        private accountService: AccountService,
         private layout: LayoutService
     ) {
         this.layout.title = 'Activation';
@@ -57,7 +57,7 @@ export class ActivationComponent {
             token: this.route.snapshot.queryParams.token as string
         };
 
-        this.authenticationService
+        this.accountService
             .activateAccount(this.account)
             .then(() => this.snackbar.open('Account activated, please login', 'OK', { duration: 5000 }))
             .then(() => this.router.navigate(['/auth'], { replaceUrl: true }))

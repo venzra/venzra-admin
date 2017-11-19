@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, CanLoad, Route, Router, RouterStateSnapshot } from '@angular/router';
 
-import { AuthenticationService } from './authentication.service';
+import { AccountService } from './account.service';
 
 import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import 'rxjs/add/operator/first';
 
@@ -12,7 +12,7 @@ import 'rxjs/add/operator/first';
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     constructor(
         private router: Router,
-        private authenticationService: AuthenticationService
+        private accountService: AccountService
     ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -32,8 +32,8 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     }
 
     private checkLogin(url: string): Observable<boolean> {
-        let authenticated = this.authenticationService.isAuthenticated();
-        let subject = new ReplaySubject<boolean>();
+        let authenticated = this.accountService.isAuthenticated();
+        let subject = new BehaviorSubject<boolean>(false);
 
         authenticated.subscribe((res) => {
             if (!res) {

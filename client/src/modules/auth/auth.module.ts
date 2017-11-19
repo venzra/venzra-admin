@@ -9,7 +9,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { RecoveryComponent } from './components/recovery/recovery.component';
 
-import { AuthenticationService } from '../../services/authentication.service';
+import { AccountService } from '../../services/account.service';
 
 @NgModule({
     declarations: [
@@ -23,7 +23,9 @@ import { AuthenticationService } from '../../services/authentication.service';
         VenzraCommonModule,
         AuthRoutingModule
     ],
-    providers: [AuthenticationService]
+    providers: [
+        AccountService
+    ]
 })
 export class AuthModule {
 }

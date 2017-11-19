@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
-import { Recovery, AuthenticationService } from '../../../../services/authentication.service';
+import { Recovery, AccountService } from '../../../../services/account.service';
 import { LayoutService } from '../../../../services/layout.service';
 
 const EMAIL_REGEX = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
@@ -20,7 +20,7 @@ export class RecoveryComponent {
     constructor(
         private forms: FormBuilder,
         private snackbar: MatSnackBar,
-        private authenticationService: AuthenticationService,
+        private accountService: AccountService,
         private layout: LayoutService
     ) {
         this.layout.title = 'Recovery';
@@ -42,7 +42,7 @@ export class RecoveryComponent {
             identity: recoveryData.emailAddress as string
         };
 
-        this.authenticationService
+        this.accountService
             .performRecovery(this.account)
             .catch(() => this.snackbar.open('Recovery failed, please try again', 'OK'))
             .then(() => this.saving = false);

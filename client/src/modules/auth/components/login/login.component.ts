@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material';
 
-import { Authentication, AuthenticationService } from '../../../../services/authentication.service';
+import { AccountCredentials, AccountService } from '../../../../services/account.service';
 import { LayoutService } from '../../../../services/layout.service';
 
 const EMAIL_REGEX = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
@@ -14,14 +14,14 @@ const EMAIL_REGEX = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9]
 })
 export class LoginComponent {
 
-    account: Authentication;
-    accountForm: FormGroup;
+    credentials: AccountCredentials;
+    authenticationForm: FormGroup;
     saving: Boolean = false;
 
     constructor(
         private forms: FormBuilder,
         private snackbar: MatSnackBar,
-        private authenticationService: AuthenticationService,
+        private accountService: AccountService,
         private layout: LayoutService
     ) {
         this.layout.title = 'Login';
@@ -29,7 +29,7 @@ export class LoginComponent {
     }
 
     createForm(): void {
-        this.accountForm = this.forms.group({
+        this.authenticationForm = this.forms.group({
             emailAddress: ['', [Validators.required, Validators.pattern(EMAIL_REGEX)]],
             password: ['', [Validators.required]]
         });
@@ -38,15 +38,15 @@ export class LoginComponent {
     login(): void {
         this.saving = true;
 
-        const accountData = this.accountForm.getRawValue();
+        const credentialData = this.authenticationForm.getRawValue();
 
-        this.account = {
-            identity: accountData.emailAddress as string,
-            password: accountData.password as string
+        this.credentials = {
+            identity: credentialData.emailAddress as string,
+            password: credentialData.password as string
         };
 
-        this.authenticationService
-            .performLogin(this.account)
+        this.accountService
+            .performLogin(this.credentials)
             .catch(() => this.snackbar.open('Login failed, please try again', 'OK', { duration: 5000 }))
             .then(() => this.saving = false);
     }

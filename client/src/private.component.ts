@@ -1,18 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { Account, AuthenticationService } from './services/authentication.service';
+import { Account, AccountService } from './services/account.service';
 
 @Component({
     selector: 'app-private',
     templateUrl: './private.component.html'
 })
-export class PrivateComponent {
+export class PrivateComponent implements OnInit {
 
     public account: Account;
 
     constructor(
-        private authenticationService: AuthenticationService
+        private accountService: AccountService
     ) {
-        this.account = authenticationService.userAccount;
     }
+
+    ngOnInit(): void {
+        this.accountService.getAccount().subscribe((account) => this.account = account);
+    }
+
 }

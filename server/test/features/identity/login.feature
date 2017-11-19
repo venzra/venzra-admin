@@ -11,9 +11,7 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
       | identity-login-four@venzra-test.io  | PASSWORD | {"failures":5} | LOCKED     |
 
   Scenario: Login without credentials
-    Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
-      |  |
-      |  |
+    Given I make an empty POST request to the API endpoint "/api/v1/identity/login" as "login"
     Then there should be a 400 error from the "login" request that contains:
       | message                  |
       | Invalid user credentials |
@@ -49,10 +47,17 @@ Feature: Ability for a user to authenticate and gain a login token to use the AP
       | message                  |
       | Invalid user credentials |
 
-  Scenario: Login with an ACTIVE account
+  Scenario: Login with an ACTIVE account (lowercase)
     Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
       | identity                            | password     |
       | identity-login-three@venzra-test.io | VenzraTest$1 |
+    Then the status returned from the "login" request should be 202
+    And there is a cookie called "jwt" in the "login" response header
+
+  Scenario: Login with an ACTIVE account (uppercase)
+    Given I make a POST request to the API endpoint "/api/v1/identity/login" as "login" using:
+      | identity                            | password     |
+      | IDENTITY-LOGIN-THREE@VENZRA-TEST.IO | VenzraTest$1 |
     Then the status returned from the "login" request should be 202
     And there is a cookie called "jwt" in the "login" response header
 

@@ -68,10 +68,12 @@ export class AuthenticationController {
             return next(new AuthenticationError(null, `Missing ${req.body.identity ? 'identity' : 'password'} credential`));
         }
 
-        AccountModel.findOne({ identity: req.body.identity })
+        const identity = (req.body.identity || '').toLowerCase();
+
+        AccountModel.findOne({ identity })
             .then((account: IAccountModel) => {
                 if (!account) {
-                    throw new AuthenticationError(req.body.identity, 'Account not found');
+                    throw new AuthenticationError(identity, 'Account not found');
                 }
 
                 switch (account.status) {

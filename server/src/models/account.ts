@@ -86,8 +86,7 @@ const AccountSchema: Schema = new Schema({
         type: {
             failures: {
                 type: Number,
-                required: true,
-                default: 0
+                required: true
             },
             ip: {
                 type: String
@@ -95,7 +94,8 @@ const AccountSchema: Schema = new Schema({
             updated: {
                 type: Date
             }
-        }
+        },
+        default: { failures: 0 }
     },
     validation: {
         type: {
