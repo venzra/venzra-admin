@@ -1,56 +1,26 @@
-<mat-toolbar>
-    <span class="mat-headline">Account Subscription</span>
-</mat-toolbar>
-
 <mat-card>
-    <p>This form allows you to create a new subscription or change an existing subscription, note that without a subscription active you will not be able to access your store.</p>
-    <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="createSubscription()" [formGroup]="subscriptionForm">
-        <div fxLayout="row" fxLayoutGap="50px">
-            <div fxLayout="column" fxLayoutGap="20px" fxFlex>
-                <mat-form-field>
-                    <input matInput required
-                           placeholder="Account holders name"
-                           formControlName="holder"
-                    />
-                    <mat-error *ngIf="subscriptionForm.controls['holder'].hasError('required')">This field is required.</mat-error>
-                </mat-form-field>
 
-                <mat-form-field>
-                    <input matInput
-                           placeholder="Account email address"
-                           formControlName="email"
-                    />
-                    <mat-hint align="start">Primary email is managed via <a href="#">account credentials</a></mat-hint>
-                </mat-form-field>
-            </div>
+    <section *ngIf="subscription.agreement">
+        <h2>Manage subscription</h2>
+        <p>Your subscription is currently in <strong>{{ subscription.status }}</strong> status. Note that you must have an active subscription to ensure your store is available to customers.</p>
 
-            <div fxLayout="column" fxLayoutGap="20px" fxFlex>
-                <mat-form-field>
-                    <input matInput required
-                           placeholder="Bank account number"
-                           formControlName="number"
-                    />
+        <p>Your current monthly charge is <strong>20 credits</strong>. The next payment of <strong>&pound;10</strong> is due on dd/mm/yyyy.</p>
+    </section>
 
-                    <mat-hint align="start">We currently only support UK accounts paying in GBP</mat-hint>
+    <section *ngIf="!subscription.agreement">
+        <h2>Setup subscription</h2>
+        <p>Subscriptions are paid for on a monthly basis, every month your account will be debited and you will received credits to use on the features for the platform. The fee charged is based on your selected currency, however all credits within the platform are worth the same value.</p>
 
-                    <mat-error *ngIf="subscriptionForm.controls['number'].hasError('required')">This field is required.</mat-error>
-                </mat-form-field>
+        <p>Unused credits cannot be converted back to currency, cancellation of a subscription in any given period cannot be refunded.</p>
 
-                <mat-form-field>
-                    <input matInput required
-                           placeholder="Sort code"
-                           formControlName="sortCode"
-                    />
+        <p>The first month of your subscription is free of charge, this means on signing up you will not start to pay until the same day on the next calendar month, for example signing up on 14th April would mean your first payment is due on 14th May and would be for the period 14th May at 00:00 till 13th June at 23:59 inclusive.</p>
 
-                    <mat-error *ngIf="subscriptionForm.controls['sortCode'].hasError('required')">This field is required.</mat-error>
-                </mat-form-field>
-            </div>
-        </div>
+        <p>The minimum monthly charge for an <em matTooltip="Disabled accounts are deleted after one year and can be re-activated free of charge before this time">active</em> subscription is <strong>20 credits</strong>.</p>
 
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayoutGap="20px" fxLayoutAlign="center">
             <button mat-raised-button type="button" (click)="viewServiceAgreement()">View agreement terms</button>
-            <mat-checkbox required formControlName="acceptTerms">Accept agreement terms</mat-checkbox>
-            <button mat-raised-button color="primary" type="submit" [disabled]="subscriptionForm.pristine || subscriptionForm.invalid || saving">Create subscription</button>
+            <button mat-raised-button color="primary" routerLink="/account">Setup subscription</button>
         </div>
-    </form>
+    </section>
+
 </mat-card>

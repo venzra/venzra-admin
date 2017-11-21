@@ -1,82 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material';
 
-import { Account, AccountService } from '../../../../services/account.service';
-import { Subscription, BankAccount, SubscriptionService } from '../../../../services/subscription.service';
-import { LayoutService } from '../../../../services/layout.service';
+import { ServiceTermsComponent } from '../service-terms/service-terms.component';
 
-@Component({
-    templateUrl: './service-terms.dialog.html'
-})
-export class ServiceTermsDialog {
-    constructor(
-        private dialogRef: MatDialogRef<ServiceTermsDialog>
-    ) { }
-
-    confirm(): void {
-        this.dialogRef.close();
-    }
-}
+import { AccountService } from '../../../../services/account.service';
+import { Subscription } from '../../../../services/subscription.service';
 
 @Component({
-    selector: 'app-subscription',
+    selector: 'account-subscription',
     templateUrl: './subscription.component.html'
 })
 export class SubscriptionComponent implements OnInit {
 
-    public saving = false;
-
-    public account: Account;
     public subscription: Subscription;
-    public subscriptionForm: FormGroup;
 
     constructor(
-        private forms: FormBuilder,
-        private dialog: MatDialog,
-        private snackbar: MatSnackBar,
+        private route: ActivatedRoute,
         private accountService: AccountService,
-        private subscriptionService: SubscriptionService,
-        private layout: LayoutService
+        private dialog: MatDialog
     ) { }
 
     ngOnInit(): void {
-        this.layout.title = 'Subscription';
+        this.route.data.subscribe((data: { subscription: Subscription }) => this.subscription = data.subscription);
 
-        this.subscriptionForm = this.forms.group({
-            holder: ['', [Validators.required]],
-            email: [{ value: this.account.identity, disabled: true }, []],
-            number: ['', [Validators.required]],
-            sortCode: ['', [Validators.required]],
-            acceptTerms: ['', [Validators.required]]
-        });
-
-        this.accountService.getAccount().subscribe((account) => this.account = account);
+        this.accountService.getAccount().subscribe((account) => console.log(account));
     }
 
     viewServiceAgreement() {
-        this.dialog.open(ServiceTermsDialog, { width: '640px' });
-    }
-
-    createSubscription() {
-        this.saving = true;
-
-        const subscriptionData = this.subscriptionForm.getRawValue();
-
-        const subscription = {
-            email: subscriptionData.email as string,
-            terms: subscriptionData.acceptTerms as boolean
-        };
-
-        const bankAccount: BankAccount = {
-            holder: subscriptionData.holder as string,
-            number: subscriptionData.number as number,
-            sortCode: subscriptionData.sortCode as string
-        };
-
-        this.subscriptionService
-            .createSubscription(subscription, bankAccount)
-            .catch((error) => this.snackbar.open(error.message || 'Creation failed', 'OK', { duration: 5000 }))
-            .then(() => this.saving = false);
+        this.dialog.open(ServiceTermsComponent, { width: '640px' });
     }
 }

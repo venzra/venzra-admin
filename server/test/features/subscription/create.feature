@@ -34,12 +34,12 @@ Feature: Creation of a new subscription
       | email                                      | token                       | terms |
       | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } | true  |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | stripe | status |
-      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT | TRIAL  |
-    And the response path "stripe" from the "subscription" request contains:
+      | _id       | domainName              | storeName               | gateway | status |
+      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | TRIAL  |
+    And the response path "gateway" from the "subscription" request contains:
       | account         | bank     |
       | acct_xxxxxxxxxx | ARRAY[1] |
-    And the response path "stripe.bank" from the "subscription" request contains:
+    And the response path "gateway.bank" from the "subscription" request contains:
       | name             | holder      | number | sortCode | created   |
       | STRIPE TEST BANK | Jane Austen | "6789" | "108800" | DATE_TIME |
 
@@ -49,8 +49,8 @@ Feature: Creation of a new subscription
       | email                                      | token                       | terms |
       | subscription-create-success@venzra-test.io | { "id": "btok_xxxxxxxxxx" } | true  |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | stripe | status |
-      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT | TRIAL  |
-    And the response path "stripe" from the "subscription" request contains:
+      | _id       | domainName              | storeName               | gateway | status |
+      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | TRIAL  |
+    And the response path "gateway" from the "subscription" request contains:
       | account         | bank     |
       | acct_xxxxxxxxxx | ARRAY[1] |

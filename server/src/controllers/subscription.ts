@@ -24,7 +24,7 @@ class SubscriptionController extends AuthenticationController {
     }
 
     createSubscription(req: Request, res: Response, next: NextFunction) {
-        if (!this.account.subscription || this.account.subscription.stripe) {
+        if (!this.account.subscription || this.account.subscription.gateway) {
             return next();
         }
 
@@ -58,7 +58,7 @@ class SubscriptionController extends AuthenticationController {
                 }
             })
             .then((subscription) => {
-                this.account.subscription.stripe = {
+                this.account.subscription.gateway = {
                     account: subscription.id,
                     bank: subscription.external_accounts.data.map((account) => {
                         return {

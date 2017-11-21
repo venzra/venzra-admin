@@ -1,6 +1,6 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
-interface IStripeBank {
+interface IGatewayBank {
     name: string;
     holder: string;
     number: string;
@@ -8,9 +8,9 @@ interface IStripeBank {
     created: Date;
 }
 
-interface IStripeModel {
+interface IGatewayModel {
     account: string;
-    bank: [IStripeBank];
+    bank: IGatewayBank[];
     publicKey: string;
     privateKey: string;
 }
@@ -18,7 +18,7 @@ interface IStripeModel {
 interface ISubscriptionModel extends Document {
     storeName?: string;
     strapline?: string;
-    stripe?: IStripeModel;
+    gateway?: IGatewayModel;
     status?: string;
 }
 
@@ -36,7 +36,7 @@ const SubscriptionSchema: Schema = new Schema({
         type: String,
         lowercase: true
     },
-    stripe: {
+    gateway: {
         type: {
             account: {
                 type: String,

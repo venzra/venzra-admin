@@ -27,7 +27,7 @@ export class AuthenticationController {
     getSubscription(req: Request, res: Response) {
         SubscriptionModel
             .findById(this.account.subscription._id)
-            .select('storeName domainName strapline stripe.account stripe.bank status')
+            .select('storeName domainName strapline gateway.account gateway.bank status')
             .then((subscription) => res.status(200).send(subscription));
     }
 

@@ -14,7 +14,7 @@ interface IProductModel extends Document {
     displayName: string;
     previousPrice: number;
     currentPrice: number;
-    history?: [IProductHistoryModel];
+    history?: IProductHistoryModel[];
     status?: string;
 }
 
