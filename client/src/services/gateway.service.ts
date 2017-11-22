@@ -24,7 +24,6 @@ export class BankAccount {
 
 @Injectable()
 export class GatewayService {
-    private subscriptionUri = 'api/v1/subscription';
 
     constructor(
         private http: HttpClient,
@@ -45,7 +44,7 @@ export class GatewayService {
                 if (token.error) {
                     throw new Error(token.error.message);
                 }
-                return this.http.post(this.subscriptionUri, { ...subscriptionData, ...token })
+                return this.http.post('api/v1/gateway', { ...subscriptionData, ...token })
                     .toPromise()
                     .catch(() => {
                         throw new Error('Unable to create subscription, please contact us or try again later');
@@ -53,4 +52,5 @@ export class GatewayService {
             })
             .then((subscription) => subscription as Subscription);
     }
+
 }

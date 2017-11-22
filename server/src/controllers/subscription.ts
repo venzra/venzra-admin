@@ -19,11 +19,11 @@ class SubscriptionController extends AuthenticationController {
 
     registerRoutes() {
         this.router.get('/subscription', this.validate.bind(this), this.getSubscription.bind(this));
-        this.router.post('/subscription', this.validate.bind(this), this.createSubscription.bind(this), this.getSubscription.bind(this));
         this.router.patch('/subscription', this.validate.bind(this), this.updateSettings.bind(this), this.getSubscription.bind(this));
+        this.router.post('/gateway', this.validate.bind(this), this.attachGateway.bind(this), this.getSubscription.bind(this));
     }
 
-    createSubscription(req: Request, res: Response, next: NextFunction) {
+    attachGateway(req: Request, res: Response, next: NextFunction) {
         if (!this.account.subscription || this.account.subscription.gateway) {
             return next();
         }
