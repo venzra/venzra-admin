@@ -30,8 +30,7 @@ export class GatewayComponent implements OnInit {
             holder: ['', [Validators.required]],
             email: [{ value: '', disabled: true }, []],
             number: ['', [Validators.required]],
-            sortCode: ['', [Validators.required]],
-            acceptTerms: ['', [Validators.required]]
+            sortCode: ['', [Validators.required]]
         });
 
         this.route.data.subscribe((data: { subscription: Subscription }) => this.subscription = data.subscription);
@@ -45,8 +44,7 @@ export class GatewayComponent implements OnInit {
         const gatewayData = this.gatewayForm.getRawValue();
 
         const gateway = {
-            email: gatewayData.email as string,
-            terms: gatewayData.acceptTerms as boolean
+            email: gatewayData.email as string
         };
 
         const bankAccount: BankAccount = {

@@ -2,7 +2,8 @@
 
     <section *ngIf="subscription.gateway">
         <h2>Payment gateway and bank payouts</h2>
-        <p>Purchases made on your store are enabled. Funds are transferred to the attached bank account every 7 days, and are for the previous week of store purchases.</p>
+
+        <p>Purchases made on your store are <strong>enabled</strong>. Funds are transferred to the attached bank account every 7 days, and are for the previous week of store purchases.</p>
 
         <div fxLayout="row" fxLayoutGap="20px" fxLayoutWrap>
             <div *ngFor="let bank of subscription.gateway.bank" fxFlex="30%">
@@ -14,10 +15,15 @@
     </section>
 
     <section *ngIf="!subscription.gateway">
-        <h2>Setup payment gateway and payout bank</h2>
-        <p>The payment gateway connection allows you to take payments on your store and transfer funds into your bank account, this also activates the checkout section of your store.</p>
+        <div fxLayout="row">
+            <h2>Setup payment gateway and payout bank</h2>
+            <span fxFlex></span>
+            <mat-icon color="warn" matTooltip="To enable customers to purchase items you need to setup your bank account information" matTooltipPosition="left">warning</mat-icon>
+        </div>
 
-        <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="allocateGateway()" [formGroup]="gatewayForm">
+        <form fxLayout="column" fxLayoutGap="25px" (ngSubmit)="allocateGateway()" [formGroup]="gatewayForm">
+            <p>The payment gateway connection allows you to take payments on your store and transfer funds into your bank account, this also activates the checkout section of your store.</p>
+
             <div fxLayout="row" fxLayoutGap="50px">
                 <div fxLayout="column" fxLayoutGap="20px" fxFlex>
                     <mat-form-field>
@@ -60,9 +66,10 @@
                 </div>
             </div>
 
-            <div fxLayout="row" fxLayoutAlign="end end">
+            <div fxLayout="row" fxLayoutAlign="end center">
                 <button mat-raised-button color="primary" type="submit" [disabled]="gatewayForm.pristine || gatewayForm.invalid || saving">Attach gateway</button>
             </div>
+
         </form>
     </section>
 

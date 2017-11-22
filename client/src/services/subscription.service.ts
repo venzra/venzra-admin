@@ -13,6 +13,7 @@ export class Subscription {
     storeName: string;
     strapline: string;
     gateway: Gateway;
+    agreement: boolean;
     status: string;
     created: Date;
     updated: Date;

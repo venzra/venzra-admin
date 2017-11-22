@@ -16,16 +16,12 @@ import { SubscriptionRetrieveResolve, SubscriptionService } from '../../services
     declarations: [
         SettingsComponent,
         SubscriptionComponent,
-        GatewayComponent,
-        ServiceTermsComponent
+        GatewayComponent
     ],
     imports: [
         CommonModule,
         VenzraCommonModule,
         AccountRoutingModule
-    ],
-    entryComponents: [
-        ServiceTermsComponent
     ],
     providers: [
         GatewayService,

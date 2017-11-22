@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" role="heading">
+<mat-toolbar class="mat-elevation-z6 private-header" color="primary" role="heading">
     <div fxLayout="column"><img src="http://cdn.venzra.io/logo/white/venzra-logo-xs.png" title="Welcome to Venzra"></div>
     <span fxFlex></span>
     <admin-account></admin-account>
@@ -6,7 +6,7 @@
 
 <div fxLayout="row" fxFlex>
     <mat-sidenav-container>
-        <mat-sidenav mode="side" opened="true">
+        <mat-sidenav class="mat-elevation-z4" mode="side" opened="true">
             <mat-nav-list dense>
                 <h3 matSubheader>Construct</h3>
                 <a mat-list-item routerLink="/account" routerLinkActive="active">Setup</a>
@@ -30,8 +30,16 @@
             </mat-nav-list>
         </mat-sidenav>
 
-        <div class="private-content">
-            <router-outlet></router-outlet>
+        <div fxLayout="column" class="private-container">
+            <div fxFlex="grow" class="private-content">
+                <div>
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+            <mat-toolbar color="primary" role="note">
+                <span fxFlex></span>
+                <button mat-button href="javascript:void(0)" (click)="viewServiceAgreement()">Agreement terms</button>
+            </mat-toolbar>
         </div>
     </mat-sidenav-container>
 </div>

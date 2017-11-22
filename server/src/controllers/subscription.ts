@@ -34,10 +34,6 @@ class SubscriptionController extends AuthenticationController {
             errors.push({ path: 'email', kind: 'required' });
         }
 
-        if(!req.body.terms) {
-            errors.push({ path: 'terms', kind: 'required' });
-        }
-
         if (!req.body.token || !req.body.token.id) {
             errors.push({ path: 'token', kind: 'required' });
         }
