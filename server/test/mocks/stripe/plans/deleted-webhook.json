@@ -1,0 +1,27 @@
+{
+    "created": 1600436220,
+    "livemode": false,
+    "id": "evt_xxxxxxxxxxxxxx",
+    "type": "plan.deleted",
+    "object": "event",
+    "request": null,
+    "pending_webhooks": 1,
+    "api_version": "2017-08-15",
+    "data": {
+        "object": {
+            "id": "WebhooksStripePlansDelete",
+            "object": "plan",
+            "amount": 100,
+            "created": 1600436220,
+            "currency": "gbp",
+            "interval": "month",
+            "interval_count": 1,
+            "livemode": false,
+            "metadata": {
+            },
+            "name": "TEST",
+            "statement_descriptor": "TEST",
+            "trial_period_days": null
+        }
+    }
+}

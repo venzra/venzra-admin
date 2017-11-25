@@ -1,25 +1,170 @@
 <mat-card>
 
-    <section>
+    <section *ngIf="subscription.payment">
         <h2>Manage subscription</h2>
-        <p>Your subscription is currently in <strong>{{ subscription.status }}</strong> status. Note that you must have an active subscription to ensure your store is available to customers.</p>
 
-        <p>Your current monthly charge is <strong>20 credits</strong>. The next payment of <strong>&pound;10</strong> is due on dd/mm/yyyy.</p>
+        <p>You have an <strong>{{ subscription.status }}</strong> subscription on our <strong>{{ subscription.payment.package }}</strong> plan.</p>
+
+        <p>Your current monthly charge is <strong>{{ subscription.payment.price.quantity }} credits</strong>.</p>
+
+        <p>The next payment of <strong>{{ (subscription.payment.price.quantity * subscription.payment.price.value) | price: subscription.payment.price.currency }}</strong> is due on dd/mm/yyyy.</p>
     </section>
 
-    <section>
+    <section *ngIf="!subscription.payment">
         <h2>Setup subscription</h2>
-        <p>Subscriptions are paid for on a monthly basis, every month your account will be debited and you will received credits to use on the features for the platform. The fee charged is based on your selected currency, however all credits within the platform are worth the same value.</p>
 
-        <p>Unused credits cannot be converted back to currency, cancellation of a subscription in any given period cannot be refunded.</p>
 
-        <p>The first month of your subscription is free of charge, this means on signing up you will not start to pay until the same day on the next calendar month, for example signing up on 14th April would mean your first payment is due on 14th May and would be for the period 14th May at 00:00 till 13th June at 23:59 inclusive.</p>
+        <mat-horizontal-stepper linear>
+            <mat-step label="Overview">
+                <h3>Overview</h3>
 
-        <p>The minimum monthly charge for an <em matTooltip="Disabled accounts are deleted after one year and can be re-activated free of charge before this time">active</em> subscription is <strong>20 credits</strong>.</p>
+                <p>Subscriptions are paid for on a monthly basis, every month your account will be debited and you will received credits to use on the features for the platform. The fee charged is based on your selected currency, however all credits within the platform are worth the same value.</p>
+                <p>To make things simpler for our past and future user plans, we base our subscriptions on a credits system. Every credit is then translated to a charge based on your selected plan. For example a plan that costs $1.50 per credit would mean that 10 credits equals $15. We will always inform you how much your monthly costs are in your chosen currency however when selecting your subscription options we will reference a cost in credits.</p>
+                <p>Unused credits cannot be converted back to currency, cancellation of a subscription in any given period cannot be refunded.</p>
+                <p *ngIf="subscription.status === 'TRIAL'">As a trial account, <strong>the first month of your subscription is free of charge</strong>, this means on signing up you will not start to pay until the same day on the next calendar month, for example signing up on 14th April would mean your first payment is due on 14th May and would be for the period 14th May at 00:00 till 13th June at 23:59 inclusive.</p>
+                <p>The minimum monthly charge for an <em matTooltip="An active account is one which has a valid, up to date, subscription payment in place and is not in arrears" matTooltipPosition="above">active</em> subscription is <strong>20 credits</strong>.</p>
 
-        <div fxLayoutGap="20px" fxLayoutAlign="center">
-            <button mat-raised-button color="primary" routerLink="/account">Setup subscription</button>
-        </div>
+                <div fxLayoutGap="20px" fxLayoutAlign="center">
+                    <button mat-raised-button color="primary" matStepperNext>Setup subscription</button>
+                </div>
+            </mat-step>
+
+            <mat-step [stepControl]="subscriptionForm" label="Subscription">
+                <form [formGroup]="subscriptionForm">
+                    <h3>Select payment plan</h3>
+                    <p>The following plans are shown based on the minimum rate of 20 credits to use all core platform functionality.</p>
+
+                    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+                        <mat-card *ngFor="let plan of plans" fxFlex="30%">
+                            <h4>{{ plan.name }}</h4>
+                            <p>{{ plan.price * 20 | price: plan.currency }}</p>
+                            <p>Every {{ plan.interval }} {{ plan.frequency + (plan.interval === 1 ? '' : 's') }}</p>
+                            <div fxLayoutAlign="center center">
+                                <button mat-raised-button mat-icon-button (click)="selectPlan(plan.reference)" [color]="plan.reference === subscriptionForm.controls['plan'].value ? 'primary' : 'accent'">
+                                    <mat-icon>{{ plan.reference === subscriptionForm.controls['plan'].value ? 'check' : '' }}</mat-icon>
+                                </button>
+                            </div>
+                        </mat-card>
+                    </div>
+
+                    <div fxLayoutGap="20px" fxLayoutAlign="end center">
+                        <button mat-button type="button" matStepperPrevious>Back</button>
+                        <button mat-raised-button color="primary" matStepperNext [disabled]="subscriptionForm.invalid">Continue</button>
+                    </div>
+                </form>
+            </mat-step>
+
+            <mat-step [stepControl]="addressForm" label="Address">
+                <form [formGroup]="addressForm">
+                    <h3>Card holder address</h3>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Card holders name"
+                               formControlName="cardHolder"
+                        />
+                        <mat-error *ngIf="addressForm.controls['cardHolder'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Building name / number"
+                               formControlName="building"
+                        />
+                        <mat-error *ngIf="addressForm.controls['building'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Street"
+                               formControlName="street"
+                        />
+                        <mat-error *ngIf="addressForm.controls['street'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="City"
+                               formControlName="city"
+                        />
+                        <mat-error *ngIf="addressForm.controls['city'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="County"
+                               formControlName="county"
+                        />
+                        <mat-error *ngIf="addressForm.controls['county'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Postal code"
+                               formControlName="postalCode"
+                        />
+                        <mat-error *ngIf="addressForm.controls['postalCode'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <div fxLayoutGap="20px" fxLayoutAlign="end center">
+                        <button mat-button type="button" matStepperPrevious>Back</button>
+                        <button mat-raised-button color="primary" matStepperNext [disabled]="addressForm.pristine || addressForm.invalid">Continue</button>
+                    </div>
+                </form>
+            </mat-step>
+
+            <mat-step [stepControl]="paymentForm" label="Payment">
+                <form [formGroup]="paymentForm" (submit)="createSubscription()">
+                    <h3>Card payment details</h3>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Card number"
+                               formControlName="cardNumber"
+                        />
+                        <mat-error *ngIf="paymentForm.controls['cardNumber'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Sort code"
+                               formControlName="sortCode"
+                        />
+                        <mat-error *ngIf="paymentForm.controls['sortCode'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Expiry month (mm)"
+                               formControlName="expiryMonth"
+                        />
+                        <mat-error *ngIf="paymentForm.controls['expiryMonth'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Expiry year (yyyy)"
+                               formControlName="expiryYear"
+                        />
+                        <mat-error *ngIf="paymentForm.controls['expiryYear'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required
+                               placeholder="Card verification code (CVC)"
+                               formControlName="cardVerificationCheck"
+                        />
+                        <mat-error *ngIf="paymentForm.controls['cardVerificationCheck'].hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                    <div fxLayoutGap="20px" fxLayoutAlign="end center">
+                        <button mat-button type="button" matStepperPrevious>Back</button>
+                        <button mat-raised-button color="primary" matStepperNext [disabled]="paymentForm.pristine || paymentForm.invalid || saving">Subscribe</button>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-horizontal-stepper>
+
     </section>
 
 </mat-card>

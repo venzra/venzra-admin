@@ -8,12 +8,25 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 import { Gateway } from './gateway.service';
 import { RestfulService } from './restful.service';
 
+export class Pricing {
+    currency: string;
+    quantity: number;
+    value: number;
+}
+
+export class Payment {
+    package: string;
+    customer: string;
+    subscription: string;
+    price: Pricing;
+}
+
 export class Subscription {
     _id: string;
     storeName: string;
     strapline: string;
     gateway: Gateway;
-    agreement: boolean;
+    payment: Payment;
     status: string;
     created: Date;
     updated: Date;
@@ -35,13 +48,21 @@ export class SubscriptionService extends RestfulService {
 
         return this.http.patch(this.subscriptionUri, subscriptionData)
             .toPromise()
-            .then((response) => response as Subscription);
+            .then((response) => response as Subscription)
+            .then((subscription) => {
+                subscription.payment.price.value /= 100;
+                return subscription;
+            });
     }
 
     getSubscription(): Promise<Subscription> {
         return this.http.get(this.subscriptionUri)
             .toPromise()
-            .then((response) => response as Subscription);
+            .then((response) => response as Subscription)
+            .then((subscription) => {
+                subscription.payment.price.value /= 100;
+                return subscription;
+            });
     }
 }
 

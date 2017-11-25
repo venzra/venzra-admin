@@ -7,10 +7,11 @@ import { AccountRoutingModule } from './routing.module';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SubscriptionComponent } from './components/subscription/subscription.component';
 import { GatewayComponent } from './components/gateway/gateway.component';
-import { ServiceTermsComponent } from './components/service-terms/service-terms.component';
 
+import { PaymentService } from '../../services/payment.service';
 import { GatewayService } from '../../services/gateway.service';
 import { SubscriptionRetrieveResolve, SubscriptionService } from '../../services/subscription.service';
+import { PlanListResolve, PlanService } from '../../services/plan.service';
 
 @NgModule({
     declarations: [
@@ -24,9 +25,12 @@ import { SubscriptionRetrieveResolve, SubscriptionService } from '../../services
         AccountRoutingModule
     ],
     providers: [
+        PaymentService,
         GatewayService,
         SubscriptionService,
-        SubscriptionRetrieveResolve
+        SubscriptionRetrieveResolve,
+        PlanService,
+        PlanListResolve
     ]
 })
 export class AccountModule {

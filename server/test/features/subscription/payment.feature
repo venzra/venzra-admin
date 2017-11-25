@@ -1,0 +1,44 @@
+@Subscription @SubscriptionPayment
+Feature: Creation of a new subscription payment
+
+  @Seed
+  Scenario: Setup test data seed for feature
+    Given there are the following "subscriptions" records in the database
+      | storeName                | status |
+      | Subscription Payment One | TRIAL  |
+    And there are the following "accounts" records in the database
+      | identity                                | password | subscription               | status |
+      | subscription-payment-one@venzra-test.io | PASSWORD | {{ subscriptions[1]._id }} | ACTIVE |
+
+  Scenario: A missing email and stripe bank token will result in an error
+    Given I am logged in with the "subscription-payment-one@venzra-test.io" account
+    When I make an empty POST request to the API endpoint "/api/v1/payment" as "payment"
+    Then there should be a 400 error from the "payment" request that contains:
+      | message           | detail                                                |
+      | Validation failed | ["email required", "plan required", "token required"] |
+
+  Scenario: Handle a rejection from stripe occurring when attempting to create a subscription
+    Given I am logged in with the "subscription-payment-one@venzra-test.io" account
+    And there is a POST consumer at "https://api.stripe.com" for "/v1/customers" that will return "stripe/subscriptions/create-invalid.json" with status 400
+    When I make a POST request to the API endpoint "/api/v1/payment" as "payment" using:
+      | email                                       | plan | token                                    |
+      | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
+    Then there should be a 500 error from the "payment" request that contains:
+      | message                                                    |
+      | An external error has occurred - StripeInvalidRequestError |
+
+  Scenario: Sending a valid request will create a subscription
+    Given I am logged in with the "subscription-payment-one@venzra-test.io" account
+    And there is a POST consumer at "https://api.stripe.com" for "/v1/customers" that will return "stripe/subscriptions/create-success.json" with status 200
+    When I make a POST request to the API endpoint "/api/v1/payment" as "payment" using:
+      | email                                       | plan | token                                    |
+      | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
+    Then there should be a 200 response from the "payment" request that contains:
+      | _id       | domainName               | storeName                | payment | status |
+      | OBJECT_ID | subscription-payment-one | Subscription Payment One | OBJECT  | ACTIVE |
+    And the response path "payment" from the "payment" request contains:
+      | customer           | subscription       | package | price  |
+      | cus_xxxxxxxxxxxxxx | sub_xxxxxxxxxxxxxx | TEST    | OBJECT |
+    And the response path "payment.price" from the "payment" request contains:
+      | currency | quantity | value |
+      | usd      | 20       | 125   |

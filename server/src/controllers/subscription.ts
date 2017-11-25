@@ -8,6 +8,8 @@ import { AuthenticationController } from './authentication';
 import { IRestOperation } from '../models/rest';
 
 import { environment } from '../config';
+import { PlanModel } from '../models/plans';
+
 const stripe = new Stripe(environment.stripe);
 
 class SubscriptionController extends AuthenticationController {
@@ -18,9 +20,76 @@ class SubscriptionController extends AuthenticationController {
     }
 
     registerRoutes() {
+        this.router.get('/plans', this.validate.bind(this), this.getPlans.bind(this));
         this.router.get('/subscription', this.validate.bind(this), this.getSubscription.bind(this));
         this.router.patch('/subscription', this.validate.bind(this), this.updateSettings.bind(this), this.getSubscription.bind(this));
+        this.router.post('/payment', this.validate.bind(this), this.attachPayment.bind(this), this.getSubscription.bind(this));
         this.router.post('/gateway', this.validate.bind(this), this.attachGateway.bind(this), this.getSubscription.bind(this));
+    }
+
+    getPlans(req: Request, res: Response, next: NextFunction) {
+        const order = { name: 1 };
+
+        PlanModel.count(null).exec()
+            .then((total) =>
+                PlanModel
+                    .aggregate([
+                        { $sort: order },
+                        { $project: { reference: 1, name: 1, currency: 1, price: 1, interval: 1, frequency: 1 } }
+                    ])
+                    .then((list) => res.status(200).send({ list, total }))
+            )
+            .catch((planError) => next(planError));
+    }
+
+    attachPayment(req: Request, res: Response, next: NextFunction) {
+        if (!this.account.subscription || this.account.subscription.payment) {
+            return next();
+        }
+
+        let errors = [];
+
+        if (!req.body.email) {
+            errors.push({ path: 'email', kind: 'required' });
+        }
+
+        if (!req.body.plan) {
+            errors.push({ path: 'plan', kind: 'required' });
+        }
+
+        if (!req.body.token || !req.body.token.id) {
+            errors.push({ path: 'token', kind: 'required' });
+        }
+
+        if (errors.length) {
+            return next(new ValidationError(errors));
+        }
+
+        stripe.customers
+            .create({
+                email: req.body.email,
+                card: req.body.token.id,
+                plan: req.body.plan,
+                quantity: 20
+            })
+            .then((customer) => {
+                this.account.subscription.status = 'ACTIVE';
+
+                this.account.subscription.payment = {
+                    customer: customer.id,
+                    subscription: customer.subscriptions.data[0].id,
+                    package: customer.subscriptions.data[0].plan.id,
+                    price: {
+                        currency: customer.subscriptions.data[0].plan.currency,
+                        quantity: customer.subscriptions.data[0].quantity,
+                        value: customer.subscriptions.data[0].plan.amount
+                    }
+                };
+
+                return this.account.subscription.save();
+            })
+            .then(() => next())
+            .catch((err) => next(new ThirdPartyError(err.type, err.message)));
     }
 
     attachGateway(req: Request, res: Response, next: NextFunction) {
@@ -38,7 +107,7 @@ class SubscriptionController extends AuthenticationController {
             errors.push({ path: 'token', kind: 'required' });
         }
 
-        if(errors.length) {
+        if (errors.length) {
             return next(new ValidationError(errors));
         }
 

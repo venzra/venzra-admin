@@ -4,5 +4,6 @@ export const environment = {
     replyEmail: `Venzra <${process.env.REPLY_TO || 'noreply@venzra.io'}>`,
     secure: process.env.NODE_ENV === 'PRODUCTION',
     secret: process.env.JWT_SECRET || 'venzra-development',
-    stripe: process.env.STRIPE_KEY || ''
+    stripe: process.env.STRIPE_KEY || '',
+    stripeWebhooks: process.env.STRIPE_WEBHOOK_KEY || ''
 };

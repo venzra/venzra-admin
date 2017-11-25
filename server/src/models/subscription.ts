@@ -15,9 +15,23 @@ interface IGatewayModel {
     privateKey: string;
 }
 
+interface IChargesModel {
+    currency: string;
+    quantity: number;
+    value: number;
+}
+
+interface IPaymentModel {
+    package: string;
+    customer: string;
+    subscription: string;
+    price: IChargesModel;
+}
+
 interface ISubscriptionModel extends Document {
     storeName?: string;
     strapline?: string;
+    payment?: IPaymentModel;
     gateway?: IGatewayModel;
     status?: string;
 }
@@ -35,6 +49,29 @@ const SubscriptionSchema: Schema = new Schema({
     domainName: {
         type: String,
         lowercase: true
+    },
+    payment: {
+        type: {
+            package: {
+                type: String,
+                required: true
+            },
+            customer: {
+                type: String,
+                required: true
+            },
+            subscription: {
+                type: String,
+                required: true
+            },
+            price: {
+                type: {
+                    currency: String,
+                    quantity: Number,
+                    value: Number
+                }
+            }
+        }
     },
     gateway: {
         type: {
@@ -96,6 +133,7 @@ const SubscriptionSchema: Schema = new Schema({
 
 SubscriptionSchema.index({ storeName: 1 }, { unique: true });
 SubscriptionSchema.index({ domainName: 1 }, { unique: true });
+SubscriptionSchema.index({ 'payment.customer': 1 }, { unique: true, sparse: true });
 
 SubscriptionSchema.pre('validate', function (next) {
     this.domainName = (this.storeName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');

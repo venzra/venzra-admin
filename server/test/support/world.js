@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const { defineSupportCode } = require('cucumber');
 
 const crypto = require('crypto');
@@ -25,6 +27,11 @@ class World {
 
     clearMocks() {
         this.mocks = [];
+    }
+
+    readMock(file) {
+        const filePath = path.join(__dirname, '../mocks', file);
+        return JSON.parse(fs.readFileSync(filePath));
     }
 
     parseTemplateString(string) {

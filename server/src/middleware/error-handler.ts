@@ -87,6 +87,10 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             res.clearCookie('jwt');
             res.status(401).send({ message: err.message });
             break;
+        case 'StripeSignatureVerificationError':
+            logger.error(`${err.name} - ${err.reason}`);
+            res.status(403).send({ message: err.message });
+            break;
         case 'NotFoundError':
             res.status(404).send();
             break;

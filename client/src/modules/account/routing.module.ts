@@ -6,13 +6,15 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { GatewayComponent } from './components/gateway/gateway.component';
 
 import { SubscriptionRetrieveResolve } from '../../services/subscription.service';
+import { PlanListResolve } from '../../services/plan.service';
 
 const routes: Routes = [
     {
         path: '',
         component: SettingsComponent,
         resolve: {
-            subscription: SubscriptionRetrieveResolve
+            subscription: SubscriptionRetrieveResolve,
+            plans: PlanListResolve
         }
     },
     {
