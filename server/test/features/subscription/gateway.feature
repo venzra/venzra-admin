@@ -40,8 +40,8 @@ Feature: Creation of a new subscription gateway
       | account         | bank     |
       | acct_xxxxxxxxxx | ARRAY[1] |
     And the response path "gateway.bank" from the "gateway" request contains:
-      | name             | holder      | number | sortCode | created   |
-      | STRIPE TEST BANK | Jane Austen | "6789" | "108800" | DATE_TIME |
+      | name             | holder      | number | sortCode   | created   |
+      | STRIPE TEST BANK | Jane Austen | "2345" | "10-88-00" | DATE_TIME |
 
   Scenario: Sending a second request will not call to stripe or change / overwrite subscription information
     Given I am logged in with the "subscription-create-one@venzra-test.io" account

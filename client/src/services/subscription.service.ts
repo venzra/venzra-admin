@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 import 'rxjs/add/operator/toPromise';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 
 import { Gateway } from './gateway.service';
 import { RestfulService } from './restful.service';
@@ -34,11 +34,9 @@ export class Subscription {
 
 @Injectable()
 export class SubscriptionService extends RestfulService {
-    private subscriptionUri = 'api/v1/subscription';
 
     constructor(
-        private http: HttpClient,
-        private router: Router
+        private http: HttpClient
     ) {
         super();
     }
@@ -46,21 +44,25 @@ export class SubscriptionService extends RestfulService {
     updateSettings(formData: {[key: string]: AbstractControl}): Promise<Subscription> {
         const subscriptionData = this.preparePatch(formData);
 
-        return this.http.patch(this.subscriptionUri, subscriptionData)
+        return this.http.patch('api/v1/subscription', subscriptionData)
             .toPromise()
             .then((response) => response as Subscription)
             .then((subscription) => {
-                subscription.payment.price.value /= 100;
+                if(subscription.payment) {
+                    subscription.payment.price.value /= 100;
+                }
                 return subscription;
             });
     }
 
     getSubscription(): Promise<Subscription> {
-        return this.http.get(this.subscriptionUri)
+        return this.http.get('api/v1/subscription')
             .toPromise()
             .then((response) => response as Subscription)
             .then((subscription) => {
-                subscription.payment.price.value /= 100;
+                if(subscription.payment) {
+                    subscription.payment.price.value /= 100;
+                }
                 return subscription;
             });
     }

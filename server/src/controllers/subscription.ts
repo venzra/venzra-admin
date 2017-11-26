@@ -113,10 +113,16 @@ class SubscriptionController extends AuthenticationController {
 
         stripe.accounts
             .create({
+                business_name: this.account.subscription.storeName,
                 type: 'custom',
                 country: 'GB',
                 email: req.body.email,
                 external_account: req.body.token.id,
+                payout_schedule: {
+                    delay_days: 7,
+                    interval: 'weekly',
+                    weekly_anchor: 'friday'
+                },
                 tos_acceptance: {
                     date: Math.floor(Date.now() / 1000),
                     ip: req.ip
