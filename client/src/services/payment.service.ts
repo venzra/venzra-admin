@@ -53,8 +53,7 @@ export class PaymentService {
                             resolve(response);
                             break;
                         default:
-                            console.log(response);
-                            reject(response);
+                            reject(new Error(response.error.message));
                     }
                 })
             )))

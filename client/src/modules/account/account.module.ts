@@ -8,6 +8,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { SubscriptionComponent } from './components/subscription/subscription.component';
 import { GatewayComponent } from './components/gateway/gateway.component';
 
+import { SetupPage } from './pages/setup/setup.page';
+
 import { PaymentService } from '../../services/payment.service';
 import { GatewayService } from '../../services/gateway.service';
 import { SubscriptionRetrieveResolve, SubscriptionService } from '../../services/subscription.service';
@@ -17,7 +19,8 @@ import { PlanListResolve, PlanService } from '../../services/plan.service';
     declarations: [
         SettingsComponent,
         SubscriptionComponent,
-        GatewayComponent
+        GatewayComponent,
+        SetupPage
     ],
     imports: [
         CommonModule,

@@ -32,24 +32,35 @@ export class GatewayService {
 
     createConnection(subscriptionData: object, bankData: BankAccount): Promise<Subscription> {
         return Promise
-            .resolve((<any>window).Stripe(environment.stripe))
-            .then((stripe) => stripe.createToken('bank_account', {
-                country: 'GB',
-                currency: 'gbp',
-                account_holder_name: bankData.holder,
-                account_number: bankData.number,
-                routing_number: bankData.sortCode
-            }))
-            .then((token) => {
-                if (token.error) {
-                    throw new Error(token.error.message);
-                }
-                return this.http.post('api/v1/gateway', { ...subscriptionData, ...token })
-                    .toPromise()
-                    .catch(() => {
-                        throw new Error('Unable to create subscription, please contact us or try again later');
-                    });
+            .resolve((<any>window).Stripe)
+            .then((stripe) => {
+                stripe.setPublishableKey(environment.stripe);
+                return stripe;
             })
+            .then((stripe) => new Promise((resolve, reject) => stripe.bankAccount.createToken({
+                    country: 'GB',
+                    currency: 'gbp',
+                    account_holder_name: bankData.holder,
+                    account_number: bankData.number,
+                    routing_number: bankData.sortCode
+                }, ((status, response) => {
+                    switch (status) {
+                        case 200:
+                            resolve(response);
+                            break;
+                        default:
+                            reject(new Error(response.error.message));
+                    }
+                })
+            )))
+            .then((token) =>
+                this.http.post('api/v1/gateway', { token, ...subscriptionData })
+                    .toPromise()
+                    .catch((error) => {
+                        console.log(error);
+                        throw new Error('Unable to attach gateway, please contact us or try again later');
+                    })
+            )
             .then((subscription) => subscription as Subscription);
     }
 

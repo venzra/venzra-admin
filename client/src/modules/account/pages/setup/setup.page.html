@@ -1,0 +1,21 @@
+<mat-toolbar>
+    <span class="mat-headline">Account Setup</span>
+</mat-toolbar>
+
+<mat-card *ngIf="subscription.status !== 'ACTIVE'">
+
+    <div fxLayout="row">
+        <h2>Notice</h2>
+        <span fxFlex></span>
+        <mat-icon color="warn">warning</mat-icon>
+    </div>
+    <p>Your subscription is currently in <strong>{{ subscription.status }}</strong> status.</p>
+
+    <p>Note that you must have an active subscription to ensure your store is available to customers. To activate your account please setup a subscription using the forms below.</p>
+</mat-card>
+
+<account-settings></account-settings>
+
+<account-subscription></account-subscription>
+
+<payment-gateway *ngIf="subscription.status === 'ACTIVE'"></payment-gateway>
