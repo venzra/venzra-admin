@@ -47,7 +47,6 @@ export class SubscriptionComponent implements OnInit {
 
         this.paymentForm = this.forms.group({
             cardNumber: ['', [Validators.required]],
-            sortCode: ['', [Validators.required]],
             expiryMonth: ['', [Validators.required]],
             expiryYear: ['', [Validators.required]],
             cardVerificationCheck: ['', [Validators.required]]

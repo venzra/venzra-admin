@@ -112,7 +112,7 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             break;
         default:
             console.log(err);
-            logger.error(`${err.name} - ${err.message}`);
+            logger.error(`${err.message} -- ${JSON.stringify(req.body)}`);
             res.status(500).send();
     }
 

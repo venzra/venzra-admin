@@ -56,6 +56,11 @@ class World {
 
         for (let row of rows) {
             for (let hash in row) {
+                if (!row[hash] || row[hash] === '') {
+                    delete row[hash];
+                    break;
+                }
+
                 row[hash] = this.parseTemplateString(row[hash]);
 
                 const keywords = row[hash].match(/^(\S*)\((\S*)\)$/);
