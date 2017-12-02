@@ -6,9 +6,9 @@ import { Subscription } from '../../../../services/subscription.service';
 import { LayoutService } from '../../../../services/layout.service';
 
 @Component({
-    templateUrl: './setup.page.html'
+    templateUrl: './payments.page.html'
 })
-export class SetupPage implements OnInit {
+export class PaymentPage implements OnInit {
 
     subscription: Subscription;
 
@@ -18,7 +18,7 @@ export class SetupPage implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.layout.title = 'Setup';
+        this.layout.title = 'Manage payents';
 
         this.route.data.subscribe((data: { subscription: Subscription }) => {
             this.subscription = data.subscription;

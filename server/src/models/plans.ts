@@ -32,7 +32,7 @@ const PlanSchema: Schema = new Schema({
     },
     frequency: {
         type: String,
-        enum: ['day', 'week', 'month'],
+        enum: ['day', 'week', 'month', 'year'],
         required: true
     },
     created: {

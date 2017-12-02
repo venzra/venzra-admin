@@ -24,8 +24,8 @@ Feature: Creation of a new subscription payment
       | email                                       | plan | token                                    |
       | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
     Then there should be a 500 error from the "payment" request that contains:
-      | message                                                    |
-      | An external error has occurred - StripeInvalidRequestError |
+      | message                                     |
+      | No such token: tok_xxxxxxxxxxxxxxxxxxxxxxxx |
 
   Scenario: Sending a valid request will create a subscription
     Given I am logged in with the "subscription-payment-one@venzra-test.io" account
@@ -35,10 +35,10 @@ Feature: Creation of a new subscription payment
       | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
     Then there should be a 200 response from the "payment" request that contains:
       | _id       | domainName               | storeName                | payment | status |
-      | OBJECT_ID | subscription-payment-one | Subscription Payment One | OBJECT  | ACTIVE |
+      | OBJECT_ID | subscription-payment-one | Subscription Payment One | OBJECT  | TRIAL  |
     And the response path "payment" from the "payment" request contains:
-      | customer           | subscription       | package | price  |
-      | cus_xxxxxxxxxxxxxx | sub_xxxxxxxxxxxxxx | TEST    | OBJECT |
+      | customer           | subscription       | package | price  | term      | status |
+      | cus_xxxxxxxxxxxxxx | sub_xxxxxxxxxxxxxx | TEST    | OBJECT | DATE_TIME | ACTIVE |
     And the response path "payment.price" from the "payment" request contains:
       | currency | quantity | value |
       | usd      | 20       | 125   |

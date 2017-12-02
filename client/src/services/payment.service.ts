@@ -46,7 +46,7 @@ export class PaymentService {
                     address_line2: paymentData.street,
                     address_city: paymentData.city,
                     address_state: paymentData.county,
-                    address_zip: paymentData.postalCode
+                    address_zip: paymentData.postalCode.replace(/\s+/g, '').toUpperCase()
                 }, ((status, response) => {
                     switch (status) {
                         case 200:

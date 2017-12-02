@@ -2,24 +2,32 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { SetupPage } from './pages/setup/setup.page';
-import { GatewayComponent } from './components/gateway/gateway.component';
+import { StorePage } from './pages/store/store.page';
+import { PaymentPage } from './pages/payments/payments.page';
 
 import { SubscriptionRetrieveResolve } from '../../services/subscription.service';
 import { PlanListResolve } from '../../services/plan.service';
 
 const routes: Routes = [
     {
-        path: '',
-        component: SetupPage,
+        path: 'store',
+        component: StorePage,
+        resolve: {
+            subscription: SubscriptionRetrieveResolve
+        }
+    },
+    {
+        path: 'payments',
+        component: PaymentPage,
         resolve: {
             subscription: SubscriptionRetrieveResolve,
             plans: PlanListResolve
         }
     },
     {
-        path: 'gateway',
-        component: GatewayComponent
+        path: '',
+        redirectTo: '/account/payments',
+        pathMatch: 'full'
     }
 ];
 

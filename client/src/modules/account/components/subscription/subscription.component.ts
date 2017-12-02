@@ -8,6 +8,7 @@ import { AccountService } from '../../../../services/account.service';
 import { Subscription } from '../../../../services/subscription.service';
 import { Plan } from '../../../../services/plan.service';
 import { Payment, PaymentService } from '../../../../services/payment.service';
+import { CalendarService } from '../../../../services/calendar.service';
 
 @Component({
     selector: 'account-subscription',
@@ -21,14 +22,20 @@ export class SubscriptionComponent implements OnInit {
     public subscriptionForm: FormGroup;
     public addressForm: FormGroup;
     public paymentForm: FormGroup;
+    public months = [];
+    public years = [];
 
     constructor(
         private route: ActivatedRoute,
         private forms: FormBuilder,
         private snackbar: MatSnackBar,
         private accountService: AccountService,
-        private paymentService: PaymentService
-    ) { }
+        private paymentService: PaymentService,
+        private calendarService: CalendarService
+    ) {
+        this.months = this.calendarService.getMonths();
+        this.years = this.calendarService.generateYears(20, 20);
+    }
 
     ngOnInit(): void {
         this.subscriptionForm = this.forms.group({
@@ -38,9 +45,9 @@ export class SubscriptionComponent implements OnInit {
         this.addressForm = this.forms.group({
             cardHolder: ['', [Validators.required]],
             email: [{ value: '', disabled: true }, []],
-            building: ['', [Validators.required]],
             street: ['', [Validators.required]],
-            city: ['', [Validators.required]],
+            building: ['', []],
+            city: ['', []],
             county: ['', [Validators.required]],
             postalCode: ['', [Validators.required]]
         });
@@ -55,6 +62,10 @@ export class SubscriptionComponent implements OnInit {
         this.route.data.subscribe((data: { subscription: Subscription, plans: ListModel<Plan> }) => {
             this.subscription = data.subscription;
             this.plans = data.plans.list;
+
+            if(this.subscription.payment) {
+                this.subscription.plan = this.plans.find((plan) => plan.reference === this.subscription.payment.package);
+            }
         });
 
         this.accountService.getAccount().subscribe((account) => this.addressForm.get('email').setValue(account.identity));

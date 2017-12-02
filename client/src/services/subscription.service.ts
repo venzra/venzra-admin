@@ -19,6 +19,7 @@ export class Payment {
     customer: string;
     subscription: string;
     price: Pricing;
+    term: Date;
 }
 
 export class Subscription {
@@ -27,6 +28,7 @@ export class Subscription {
     strapline: string;
     gateway: Gateway;
     payment: Payment;
+    plan?: any;
     status: string;
     created: Date;
     updated: Date;

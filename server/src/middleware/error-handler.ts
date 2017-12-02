@@ -107,8 +107,8 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             }
             break;
         case 'StripeInvalidRequestError':
-            logger.error(`${err.name} - ${err.reason}`);
-            res.status(500).send({ message: err.message });
+            logger.error(`${err.message}`);
+            res.status(500).send({ message: err.reason });
             break;
         default:
             console.log(err);

@@ -46,11 +46,11 @@ Feature: Updating product information
       | _id       | slug                 | code                | history  | displayName          | previousPrice | currentPrice | status | created   | updated   |
       | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | ARRAY[3] | Product Update PATCH | 8             | 5            | ACTIVE | DATE_TIME | DATE_TIME |
     And the "product" request that has a "history" field and row 1 contains:
-      | _id       | account | field  | previous | next   | updated   |
-      | OBJECT_ID | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
+      | account | field  | previous | next   | updated   |
+      | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
     And the "product" request that has a "history" field and row 2 contains:
-      | _id       | account | field        | previous | next | updated   |
-      | OBJECT_ID | OBJECT  | currentPrice | "9"      | "5"  | DATE_TIME |
+      | account | field        | previous | next | updated   |
+      | OBJECT  | currentPrice | "9"      | "5"  | DATE_TIME |
     And the "product" request that has a "history" field and row 3 contains:
-      | _id       | account | field         | previous | next | updated   |
-      | OBJECT_ID | OBJECT  | previousPrice | NIL      | "8"  | DATE_TIME |
+      | account | field         | previous | next | updated   |
+      | OBJECT  | previousPrice | NIL      | "8"  | DATE_TIME |

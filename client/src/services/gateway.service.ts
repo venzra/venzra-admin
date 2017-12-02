@@ -8,18 +8,37 @@ import { environment } from '../../environments/environment';
 
 import 'rxjs/add/operator/toPromise';
 
+interface LegalEntity {
+    forename: string;
+    surname: string;
+    email: string;
+    dob: Date;
+}
+
+interface Address {
+    company?: string;
+    building: string;
+    street: string;
+    city: string;
+    county: string;
+    postalCode: string;
+    country: string;
+}
+
 export class Gateway {
     account: string;
-    bank: [BankAccount];
+    entity: LegalEntity;
+    address: Address;
+    bank: BankAccount[];
     status: string;
+    modified: Date;
 }
 
 export class BankAccount {
-    name?: string;
     holder: string;
+    name?: string;
     number: number;
     sortCode: string;
-    created?: Date;
 }
 
 @Injectable()
@@ -30,7 +49,7 @@ export class GatewayService {
         private router: Router
     ) { }
 
-    createConnection(subscriptionData: object, bankData: BankAccount): Promise<Subscription> {
+    createConnection(legalEntity: object, bankData: BankAccount): Promise<Subscription> {
         return Promise
             .resolve((<any>window).Stripe)
             .then((stripe) => {
@@ -54,7 +73,7 @@ export class GatewayService {
                 })
             )))
             .then((token) =>
-                this.http.post('api/v1/gateway', { token, ...subscriptionData })
+                this.http.post('api/v1/gateway', { token, ...legalEntity })
                     .toPromise()
                     .catch((error) => {
                         console.log(error);

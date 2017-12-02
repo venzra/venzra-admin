@@ -18,6 +18,33 @@ interface IProductModel extends Document {
     status?: string;
 }
 
+const HistorySchema: Schema = new Schema({
+    account: {
+        type: Schema.Types.ObjectId,
+        ref: 'accounts',
+        required: true
+    },
+    field: {
+        type: String,
+        enum: ['previousPrice', 'currentPrice', 'status'],
+        required: true
+    },
+    previous: {
+        type: String,
+        required: true
+    },
+    next: {
+        type: String,
+        required: true
+    },
+    updated: {
+        type: Date,
+        required: true,
+        default: Date.now,
+        expires: 604800
+    }
+}, { _id: false });
+
 const ProductSchema: Schema = new Schema({
     subscription: {
         type: Schema.Types.ObjectId,
@@ -49,31 +76,7 @@ const ProductSchema: Schema = new Schema({
         min: 0
     },
     history: {
-        type: [{
-            account: {
-                type: Schema.Types.ObjectId,
-                ref: 'accounts',
-                required: true
-            },
-            field: {
-                type: String,
-                enum: ['previousPrice', 'currentPrice', 'status'],
-                required: true
-            },
-            previous: {
-                type: String,
-                required: true
-            },
-            next: {
-                type: String,
-                required: true
-            },
-            updated: {
-                type: Date,
-                required: true,
-                default: Date.now
-            }
-        }]
+        type: [HistorySchema]
     },
     status: {
         type: String,

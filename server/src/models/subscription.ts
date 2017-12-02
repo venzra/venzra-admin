@@ -1,18 +1,37 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
+interface ILegalEntity {
+    forename: string;
+    surname: string;
+    email: string;
+    dob: Date;
+}
+
+interface IAddress {
+    company?: string;
+    building: string;
+    street: string;
+    city: string;
+    county: string;
+    postalCode: string;
+    country: string;
+}
+
 interface IGatewayBank {
     name: string;
     holder: string;
     number: string;
     sortCode: string;
-    created: Date;
 }
 
 interface IGatewayModel {
     account: string;
+    entity: ILegalEntity;
+    address: IAddress;
     bank: IGatewayBank[];
     publicKey: string;
     privateKey: string;
+    modified: Date;
 }
 
 interface IChargesModel {
@@ -26,6 +45,8 @@ interface IPaymentModel {
     customer: string;
     subscription: string;
     price: IChargesModel;
+    term: Date;
+    status: string;
 }
 
 interface ISubscriptionModel extends Document {
@@ -35,6 +56,61 @@ interface ISubscriptionModel extends Document {
     gateway?: IGatewayModel;
     status?: string;
 }
+
+const PaymentSchema: Schema = new Schema({
+    package: String,
+    customer: String,
+    subscription: String,
+    price: {
+        type: {
+            currency: String,
+            quantity: Number,
+            value: Number
+        }
+    },
+    term: Date,
+    status: {
+        type: String,
+        enum: ['TRIALING', 'ACTIVE', 'PAST_DUE', 'UNPAID', 'CANCELED'],
+        uppercase: true
+    }
+}, { _id: false });
+
+const BankSchema: Schema = new Schema({
+    name: String,
+    holder: String,
+    number: String,
+    sortCode: String
+}, { _id: false });
+
+const GatewaySchema: Schema = new Schema({
+    account: String,
+    entity: {
+        type: {
+            forename: String,
+            surname: String,
+            email: String,
+            dob: Date
+        }
+    },
+    address: {
+        type: {
+            company: String,
+            building: String,
+            street: String,
+            city: String,
+            county: String,
+            postalCode: String,
+            country: String
+        }
+    },
+    bank: {
+        type: [BankSchema]
+    },
+    publicKey: String,
+    privateKey: String,
+    modified: Date
+}, { _id: false });
 
 const SubscriptionSchema: Schema = new Schema({
     storeName: {
@@ -51,67 +127,10 @@ const SubscriptionSchema: Schema = new Schema({
         lowercase: true
     },
     payment: {
-        type: {
-            package: {
-                type: String,
-                required: true
-            },
-            customer: {
-                type: String,
-                required: true
-            },
-            subscription: {
-                type: String,
-                required: true
-            },
-            price: {
-                type: {
-                    currency: String,
-                    quantity: Number,
-                    value: Number
-                }
-            }
-        }
+        type: PaymentSchema
     },
     gateway: {
-        type: {
-            account: {
-                type: String,
-                required: true
-            },
-            bank: {
-                type: [{
-                    name: {
-                        type: String,
-                        required: true
-                    },
-                    holder: {
-                        type: String,
-                        required: true
-                    },
-                    number: {
-                        type: String,
-                        required: true
-                    },
-                    sortCode: {
-                        type: String,
-                        required: true
-                    },
-                    created: {
-                        type: Date,
-                        required: true
-                    }
-                }]
-            },
-            publicKey: {
-                type: String,
-                required: true
-            },
-            privateKey: {
-                type: String,
-                required: true
-            }
-        }
+        type: GatewaySchema
     },
     status: {
         type: String,
