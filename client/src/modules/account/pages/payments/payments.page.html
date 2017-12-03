@@ -10,7 +10,13 @@
     </div>
     <p>Your account is currently in <strong>{{ subscription.status }}</strong> status.</p>
 
-    <p>Note that you must have an active account to ensure your store is available to customers. To activate your account please setup a payment gateway using the forms below.</p>
+    <div *ngIf="subscription.status === 'ACTIVE'">
+        <p>Customers are able to place orders on your store there is a transaction fee in place of <strong>{{ 0.014 + subscription.transactions.rate | percent: '1.2' }} + {{ 20 + subscription.transactions.base }}p</strong>.</p>
+        <p>Note that for orders placed using non european cards the fee is increased by 1.5% on orders placed.</p>
+    </div>
+    <div *ngIf="subscription.status !== 'ACTIVE'">
+        <p>An active account is required to ensure your store is available to customers. To activate your account please setup a payment gateway using the form below.</p>
+    </div>
 </mat-card>
 
 <account-subscription *ngIf="subscription.status === 'ACTIVE'"></account-subscription>

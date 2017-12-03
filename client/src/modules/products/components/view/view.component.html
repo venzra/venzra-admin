@@ -40,17 +40,17 @@
 
 <mat-card>
     <h2>History</h2>
-    <p>The following is a history of events that have occurred which modify certain information about this product, currently only pricing and status changes are recorded.</p>
+    <p>The following is a history of events that have occurred which modify certain information about this product, currently only pricing and status changes are recorded. Auditing history for each product is kept for 7 days.</p>
 
     <mat-divider></mat-divider>
 
-    <p *ngIf="!product.history.length"><em>No changes have been captured for this record.</em></p>
+    <p *ngIf="!product.history.length"><em>No recent changes have been recorded for this product.</em></p>
 
     <mat-card-content>
         <mat-list>
             <mat-list-item *ngFor="let history of product.history">
                 <h4 matLine>{{ history.account.identity }}</h4>
-                <p matLine>Changed <strong>{{ history.field }} </strong> from {{ history.previous }} to {{ history.next }} on {{ history.updated | date: 'MMMM dd, yyyy HH:mm:ss' }}</p>
+                <p matLine>Changed <strong>{{ history.field }} </strong> from {{ history.previous }} to {{ history.next }} on {{ history.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</p>
             </mat-list-item>
         </mat-list>
     </mat-card-content>

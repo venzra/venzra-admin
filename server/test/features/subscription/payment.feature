@@ -34,8 +34,8 @@ Feature: Creation of a new subscription payment
       | email                                       | plan | token                                    |
       | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
     Then there should be a 200 response from the "payment" request that contains:
-      | _id       | domainName               | storeName                | payment | status |
-      | OBJECT_ID | subscription-payment-one | Subscription Payment One | OBJECT  | TRIAL  |
+      | _id       | domainName               | storeName                | payment | transactions                  | status |
+      | OBJECT_ID | subscription-payment-one | Subscription Payment One | OBJECT  | { "base": 10, "rate": 0.021 } | TRIAL  |
     And the response path "payment" from the "payment" request contains:
       | customer           | subscription       | package | price  | term      | status |
       | cus_xxxxxxxxxxxxxx | sub_xxxxxxxxxxxxxx | TEST    | OBJECT | DATE_TIME | ACTIVE |

@@ -102,7 +102,10 @@ export class GatewayComponent implements OnInit {
 
         this.gatewayService
             .createConnection(legalEntity, bankAccount)
-            .then((subscription) => this.subscription = subscription)
+            .then((subscription) => {
+                this.subscription = subscription;
+                this.gateway = subscription.gateway;
+            })
             .catch((error) => this.snackbar.open(error.message || 'Creation failed', 'OK', { duration: 5000 }))
             .then(() => this.saving = false);
     }

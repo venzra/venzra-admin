@@ -22,12 +22,18 @@ export class Payment {
     term: Date;
 }
 
+export class Transaction {
+    base: number;
+    rate: number;
+}
+
 export class Subscription {
     _id: string;
     storeName: string;
     strapline: string;
     gateway: Gateway;
     payment: Payment;
+    transactions: Transaction;
     plan?: any;
     status: string;
     created: Date;

@@ -34,8 +34,8 @@ Feature: Creation of a new subscription gateway
       | forename | surname | company             | email                                      | dob                                      | legal                                                                                               | token                       |
       | John     | Smith   | Subscription Create | subscription-create-success@venzra-test.io | { "day": 31, "month": 12, "year": 1980 } | { "building": 1, "street": "Street", "city": "City", "county": "County", "postalCode": "po57 3ox" } | { "id": "btok_xxxxxxxxxx" } |
     Then there should be a 200 response from the "gateway" request that contains:
-      | _id       | domainName              | storeName               | gateway | status |
-      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | ACTIVE |
+      | _id       | domainName              | storeName               | gateway | transactions                  | status |
+      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ACTIVE |
     And the response path "gateway" from the "gateway" request contains:
       | account         | entity | address | bank     | modified  |
       | acct_xxxxxxxxxx | OBJECT | OBJECT  | ARRAY[1] | DATE_TIME |
@@ -56,8 +56,8 @@ Feature: Creation of a new subscription gateway
       | forename | surname | company             | email                                      | dob                                      | legal                                                                                               | token                       |
       | John     | Smith   | Subscription Create | subscription-create-success@venzra-test.io | { "day": 31, "month": 12, "year": 1980 } | { "building": 1, "street": "Street", "city": "City", "county": "County", "postalCode": "PO57 3OX" } | { "id": "btok_xxxxxxxxxx" } |
     Then there should be a 200 response from the "gateway" request that contains:
-      | _id       | domainName              | storeName               | gateway | status |
-      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | ACTIVE |
+      | _id       | domainName              | storeName               | gateway | transactions                  | status |
+      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ACTIVE |
     And the response path "gateway" from the "gateway" request contains:
       | account         | entity | address | bank     | modified  |
       | acct_xxxxxxxxxx | OBJECT | OBJECT  | ARRAY[1] | DATE_TIME |

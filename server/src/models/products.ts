@@ -1,12 +1,6 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
-interface IProductHistoryModel {
-    account: string;
-    field: string;
-    previous: any;
-    next: any;
-    updated?: Date;
-}
+import { IHistoryModel } from './history';
 
 interface IProductModel extends Document {
     subscription?: string;
@@ -14,36 +8,9 @@ interface IProductModel extends Document {
     displayName: string;
     previousPrice: number;
     currentPrice: number;
-    history?: IProductHistoryModel[];
+    history?: IHistoryModel[];
     status?: string;
 }
-
-const HistorySchema: Schema = new Schema({
-    account: {
-        type: Schema.Types.ObjectId,
-        ref: 'accounts',
-        required: true
-    },
-    field: {
-        type: String,
-        enum: ['previousPrice', 'currentPrice', 'status'],
-        required: true
-    },
-    previous: {
-        type: String,
-        required: true
-    },
-    next: {
-        type: String,
-        required: true
-    },
-    updated: {
-        type: Date,
-        required: true,
-        default: Date.now,
-        expires: 604800
-    }
-}, { _id: false });
 
 const ProductSchema: Schema = new Schema({
     subscription: {
@@ -76,7 +43,10 @@ const ProductSchema: Schema = new Schema({
         min: 0
     },
     history: {
-        type: [HistorySchema]
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'productHistory'
+        }]
     },
     status: {
         type: String,

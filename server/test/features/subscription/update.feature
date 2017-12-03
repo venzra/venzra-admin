@@ -14,8 +14,8 @@ Feature: Updating a new subscription via patch requests
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
     When I make an empty PATCH request to the API endpoint "/api/v1/subscription" as "subscription"
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | strapline                    | status |
-      | OBJECT_ID | subscription-update-one | Subscription Update One | Automated subscription entry | TRIAL  |
+      | _id       | domainName              | storeName               | strapline                    | transactions                  | status |
+      | OBJECT_ID | subscription-update-one | Subscription Update One | Automated subscription entry | { "base": 10, "rate": 0.046 } | TRIAL  |
 
   Scenario: It should not be possible to set an empty store name value
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
@@ -33,5 +33,5 @@ Feature: Updating a new subscription via patch requests
       | replace | storeName | Subscription Update Updated |
       | replace | strapline | Updated subscription entry  |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName                  | storeName                   | strapline                  | status |
-      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | TRIAL  |
+      | _id       | domainName                  | storeName                   | strapline                  | transactions                  | status |
+      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | { "base": 10, "rate": 0.046 } | TRIAL  |

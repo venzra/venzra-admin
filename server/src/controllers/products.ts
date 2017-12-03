@@ -3,6 +3,7 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { AuthenticationController } from './authentication';
 
 import { ProductModel } from '../models/products';
+import { ProductHistoryModel } from '../models/history';
 import { IRestOperation } from '../models/rest';
 import { NotFoundError } from '../middleware/error-handler';
 
@@ -43,6 +44,9 @@ class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
+            .populate({
+                path: 'history'
+            })
             .then((product) => {
                 if (!product) {
                     throw new NotFoundError();
@@ -52,6 +56,8 @@ class ProductsController extends AuthenticationController {
                     return;
                 }
 
+                let promise: Promise<any> = Promise.resolve();
+
                 (<Array<IRestOperation>>req.body).forEach((operation) => {
                     switch (operation.op) {
                         case 'replace':
@@ -59,15 +65,19 @@ class ProductsController extends AuthenticationController {
                                 case 'previousPrice':
                                 case 'currentPrice':
                                 case 'status':
-                                    product.history.unshift({ account: this.account._id, field: operation.path, previous: product.get(operation.path) || 'NIL', next: operation.value });
+                                    const history = new ProductHistoryModel({ account: this.account._id, table: 'products', field: operation.path, previous: product.get(operation.path), next: operation.value });
+                                    promise = promise
+                                        .then(() => history.save())
+                                        .then((history) => product.history.unshift(history));
                                 // falls-through
                                 case 'displayName':
-                                    product.set(operation.path, operation.value);
+                                    promise = promise
+                                        .then(() => product.set(operation.path, operation.value));
                             }
                     }
                 });
 
-                return product.save();
+                return promise.then(() => product.save());
             })
             .then(() => next())
             .catch((error) => next(error));
@@ -79,10 +89,14 @@ class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code displayName previousPrice currentPrice history status created updated')
+            .select('slug code displayName previousPrice currentPrice status created updated')
             .populate({
-                path: 'history.account',
-                select: 'identity'
+                path: 'history',
+                select: '-_id -table -__v',
+                populate: {
+                    path: 'account',
+                    select: 'identity'
+                }
             })
             .then((product) => res.status(200).send(product));
     }

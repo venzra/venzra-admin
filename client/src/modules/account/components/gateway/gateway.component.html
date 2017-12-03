@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <p class="mat-caption">{{ gateway.modified | date: 'medium' }}</p>
+        <p class="mat-caption">Connected on {{ gateway.modified | date: 'medium' }}</p>
     </section>
 
     <section *ngIf="!subscription.gateway">
@@ -43,8 +43,7 @@
             <mat-step label="Overview">
                 <h3>Overview</h3>
 
-                <p>Payment processing is powered by Stripe, we offer a seamless experience to all customers on your store using this gateway method. All transactions are performed securely.</p>
-                <p>Once a payment gateway has been setup customers will be able to begin using your store to place orders.</p>
+                <p>A payment gateway is required to enable customers to start using your store to place orders.</p>
                 <p>To process payments on your store every transaction is charged at 6% of the order value plus a 30p base charge. For example an order of £20 would incur a fee of £1.50 for processing.</p>
                 <p>Transaction fees can be reduced by setting up a monthly subscription after you have added your gateway. With an active and paid subscription the transaction fee is reduced to 3.5%, this would mean a £20 order would incur a fee of £1 saving 50p compared with a non-subscription based transaction.</p>
                 <p>The following information is required as part of our anti-fraud checking, if processing very large volumes of orders further information may be required in the future.</p>

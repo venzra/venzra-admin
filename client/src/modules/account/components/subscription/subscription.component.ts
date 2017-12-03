@@ -63,7 +63,7 @@ export class SubscriptionComponent implements OnInit {
             this.subscription = data.subscription;
             this.plans = data.plans.list;
 
-            if(this.subscription.payment) {
+            if (this.subscription.payment) {
                 this.subscription.plan = this.plans.find((plan) => plan.reference === this.subscription.payment.package);
             }
         });
@@ -97,7 +97,10 @@ export class SubscriptionComponent implements OnInit {
 
         this.paymentService
             .createSubscription(addressData.email, subscriptionData.plan, payment)
-            .then((subscription) => this.subscription = subscription)
+            .then((subscription) => {
+                this.subscription = subscription;
+                this.subscription.plan = this.plans.find((plan) => plan.reference === this.subscription.payment.package);
+            })
             .catch((error) => this.snackbar.open(error.message || 'Subscription failed', 'OK', { duration: 5000 }))
             .then(() => this.saving = false);
     }

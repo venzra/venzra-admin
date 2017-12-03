@@ -73,6 +73,8 @@ class SubscriptionController extends AuthenticationController {
                 quantity: 20
             })
             .then((customer) => {
+                this.account.subscription.transactions.rate = 0.021;
+
                 this.account.subscription.payment = {
                     customer: customer.id,
                     subscription: customer.subscriptions.data[0].id,

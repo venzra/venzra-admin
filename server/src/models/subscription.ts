@@ -49,11 +49,17 @@ interface IPaymentModel {
     status: string;
 }
 
+interface ITransactionModel {
+    base: number;
+    rate: number;
+}
+
 interface ISubscriptionModel extends Document {
     storeName?: string;
     strapline?: string;
     payment?: IPaymentModel;
     gateway?: IGatewayModel;
+    transactions: ITransactionModel;
     status?: string;
 }
 
@@ -112,6 +118,19 @@ const GatewaySchema: Schema = new Schema({
     modified: Date
 }, { _id: false });
 
+const TransactionSchema: Schema = new Schema({
+    base: {
+        type: Number,
+        required: true,
+        default: 10
+    },
+    rate: {
+        type: Number,
+        required: true,
+        default: 0.046
+    }
+}, { _id: false });
+
 const SubscriptionSchema: Schema = new Schema({
     storeName: {
         type: String,
@@ -131,6 +150,10 @@ const SubscriptionSchema: Schema = new Schema({
     },
     gateway: {
         type: GatewaySchema
+    },
+    transactions: {
+        type: TransactionSchema,
+        default: TransactionSchema
     },
     status: {
         type: String,
