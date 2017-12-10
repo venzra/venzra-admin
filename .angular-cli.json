@@ -15,7 +15,7 @@
             "tsconfig": "tsconfig.json",
             "prefix": "src",
             "styles": [
-                "styles.sass"
+                "styles.scss"
             ],
             "scripts": [],
             "environmentSource": "environments/environment.ts",
@@ -31,29 +31,11 @@
         }
     ],
     "defaults": {
-        "styleExt": "sass",
+        "styleExt": "scss",
         "component": {
             "spec": false,
             "inlineStyle": true,
             "inlineTemplate": true
-        },
-        "directive": {
-            "spec": false
-        },
-        "class": {
-            "spec": false
-        },
-        "guard": {
-            "spec": false
-        },
-        "module": {
-            "spec": false
-        },
-        "pipe": {
-            "spec": false
-        },
-        "service": {
-            "spec": false
         }
     }
 }
