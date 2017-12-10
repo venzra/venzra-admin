@@ -3,7 +3,7 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { AuthenticationController } from './authentication';
 
 import { ProductModel } from '../models/products';
-import { ProductHistoryModel } from '../models/history';
+import { ProductHistoryModel } from '../models/product-history';
 import { IRestOperation } from '../models/rest';
 import { NotFoundError } from '../middleware/error-handler';
 
@@ -68,8 +68,8 @@ class ProductsController extends AuthenticationController {
                                     const history = new ProductHistoryModel({ account: this.account._id, table: 'products', field: operation.path, previous: product.get(operation.path), next: operation.value });
                                     promise = promise
                                         .then(() => history.save())
-                                        .then((history) => product.history.unshift(history));
-                                // falls-through
+                                        .then(() => product.history.unshift(history));
+                                /* falls through */
                                 case 'displayName':
                                     promise = promise
                                         .then(() => product.set(operation.path, operation.value));

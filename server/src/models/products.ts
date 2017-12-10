@@ -1,6 +1,6 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
-import { IHistoryModel } from './history';
+import { IHistoryModel } from './product-history';
 
 interface IProductModel extends Document {
     subscription?: string;

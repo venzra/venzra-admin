@@ -5,17 +5,18 @@ import { encode, decode } from 'jwt-simple';
 
 import { AccessDeniedError, AuthenticationError } from '../middleware/error-handler';
 
-import { AccountModel, IAccountModel, IAccountLogin } from '../models/account';
+import { AccountModel, IAccountModel } from '../models/account';
 import { SubscriptionModel } from '../models/subscription';
 
 import { environment } from '../config';
+import { IAccountAccess } from '../models/objects/account-access';
 
 export class AuthenticationController {
 
     protected accountId: string;
     protected account: IAccountModel;
 
-    private token: IAccountLogin;
+    private token: IAccountAccess;
 
     getAccount(req: Request, res: Response) {
         AccountModel

@@ -9,7 +9,7 @@ interface IHistoryModel extends Document {
     updated?: Date;
 }
 
-const HistorySchema: Schema = new Schema({
+const ProductHistorySchema: Schema = new Schema({
     account: {
         type: Schema.Types.ObjectId,
         ref: 'accounts',
@@ -38,6 +38,6 @@ const HistorySchema: Schema = new Schema({
     }
 });
 
-const ProductHistoryModel: Model<IHistoryModel> = model('productHistory', HistorySchema, 'productHistory');
+const ProductHistoryModel: Model<IHistoryModel> = model('productHistory', ProductHistorySchema, 'productHistory');
 
 export { ProductHistoryModel, IHistoryModel };

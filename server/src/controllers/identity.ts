@@ -7,8 +7,9 @@ import { AccountAccessError } from '../middleware/error-handler';
 
 import { AuthenticationController } from './authentication';
 
-import { AccountModel, IAccountModel, IAccountPassword } from '../models/account';
+import { AccountModel, IAccountModel } from '../models/account';
 import { SubscriptionModel } from '../models/subscription';
+import { IAccountPassword } from '../models/objects/password';
 
 class IdentityController extends AuthenticationController {
 

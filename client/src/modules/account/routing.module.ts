@@ -26,7 +26,7 @@ const routes: Routes = [
     },
     {
         path: '',
-        redirectTo: '/account/payments',
+        redirectTo: 'store',
         pathMatch: 'full'
     }
 ];

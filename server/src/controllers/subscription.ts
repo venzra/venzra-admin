@@ -47,7 +47,7 @@ class SubscriptionController extends AuthenticationController {
             return next();
         }
 
-        let errors = [];
+        const errors = [];
 
         if (!req.body.email) {
             errors.push({ path: 'email', kind: 'required' });
@@ -99,7 +99,7 @@ class SubscriptionController extends AuthenticationController {
             return next();
         }
 
-        let errors = [];
+        const errors = [];
 
         if (!req.body.forename) {
             errors.push({ path: 'forename', kind: 'required' });
@@ -180,10 +180,10 @@ class SubscriptionController extends AuthenticationController {
                         forename: req.body.forename,
                         surname: req.body.surname,
                         email: req.body.email,
-                        dob: new Date(req.body.dob.year, req.body.dob.month -1, req.body.dob.day, 0, 0, 0, 0)
+                        dob: new Date(req.body.dob.year, req.body.dob.month - 1, req.body.dob.day, 0, 0, 0, 0)
                     },
                     address: {
-                        company: req.body.company,
+                        addressee: req.body.company,
                         street: req.body.legal.street,
                         building: req.body.legal.building,
                         city: req.body.legal.city,

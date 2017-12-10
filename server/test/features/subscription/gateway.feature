@@ -31,8 +31,8 @@ Feature: Creation of a new subscription gateway
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     And there is a POST consumer at "https://api.stripe.com" for "/v1/accounts" that will return "stripe/accounts/create-success.json" with status 200
     When I make a POST request to the API endpoint "/api/v1/gateway" as "gateway" using:
-      | forename | surname | company             | email                                      | dob                                      | legal                                                                                               | token                       |
-      | John     | Smith   | Subscription Create | subscription-create-success@venzra-test.io | { "day": 31, "month": 12, "year": 1980 } | { "building": 1, "street": "Street", "city": "City", "county": "County", "postalCode": "po57 3ox" } | { "id": "btok_xxxxxxxxxx" } |
+      | forename | surname | company             | email                                      | dob                                      | legal                                                                                                       | token                       |
+      | John     | Smith   | Subscription Create | subscription-create-success@venzra-test.io | { "day": 31, "month": 12, "year": 1980 } | { "street": "Street", "building": "Company", "city": "City", "county": "County", "postalCode": "po57 3ox" } | { "id": "btok_xxxxxxxxxx" } |
     Then there should be a 200 response from the "gateway" request that contains:
       | _id       | domainName              | storeName               | gateway | transactions                  | status |
       | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ACTIVE |
@@ -43,8 +43,8 @@ Feature: Creation of a new subscription gateway
       | forename | surname | email                                      | dob                      |
       | John     | Smith   | subscription-create-success@venzra-test.io | 1980-12-31T00:00:00.000Z |
     And the response path "gateway.address" from the "gateway" request contains:
-      | company             | building | street | city | county | postalCode | country |
-      | Subscription Create | 1        | Street | City | County | PO573OX    | GB      |
+      | addressee           | street | building | city | county | postalCode | country |
+      | Subscription Create | Street | Company  | City | County | PO573OX    | GB      |
     And the response path "gateway.bank" from the "gateway" request contains:
       | name             | holder      | number | sortCode   |
       | STRIPE TEST BANK | Jane Austen | "2345" | "10-88-00" |
@@ -53,8 +53,8 @@ Feature: Creation of a new subscription gateway
   Scenario: Sending a second request will not call to stripe or change / overwrite subscription information
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     When I make a POST request to the API endpoint "/api/v1/gateway" as "gateway" using:
-      | forename | surname | company             | email                                      | dob                                      | legal                                                                                               | token                       |
-      | John     | Smith   | Subscription Create | subscription-create-success@venzra-test.io | { "day": 31, "month": 12, "year": 1980 } | { "building": 1, "street": "Street", "city": "City", "county": "County", "postalCode": "PO57 3OX" } | { "id": "btok_xxxxxxxxxx" } |
+      | forename | surname | company             | email                                      | dob                                      | legal                                                                                                       | token                       |
+      | John     | Smith   | Subscription Create | subscription-create-success@venzra-test.io | { "day": 31, "month": 12, "year": 1980 } | { "street": "Street", "building": "Company", "city": "City", "county": "County", "postalCode": "PO57 3OX" } | { "id": "btok_xxxxxxxxxx" } |
     Then there should be a 200 response from the "gateway" request that contains:
       | _id       | domainName              | storeName               | gateway | transactions                  | status |
       | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ACTIVE |
@@ -65,8 +65,8 @@ Feature: Creation of a new subscription gateway
       | forename | surname | email                                      | dob                      |
       | John     | Smith   | subscription-create-success@venzra-test.io | 1980-12-31T00:00:00.000Z |
     And the response path "gateway.address" from the "gateway" request contains:
-      | company             | building | street | city | county | postalCode | country |
-      | Subscription Create | 1        | Street | City | County | PO573OX    | GB      |
+      | addressee           | street | building | city | county | postalCode | country |
+      | Subscription Create | Street | Company  | City | County | PO573OX    | GB      |
     And the response path "gateway.bank" from the "gateway" request contains:
       | name             | holder      | number | sortCode   |
       | STRIPE TEST BANK | Jane Austen | "2345" | "10-88-00" |

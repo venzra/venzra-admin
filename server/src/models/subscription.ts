@@ -1,135 +1,16 @@
 import { Schema, Document, Model, model } from 'mongoose';
-
-interface ILegalEntity {
-    forename: string;
-    surname: string;
-    email: string;
-    dob: Date;
-}
-
-interface IAddress {
-    company?: string;
-    building: string;
-    street: string;
-    city: string;
-    county: string;
-    postalCode: string;
-    country: string;
-}
-
-interface IGatewayBank {
-    name: string;
-    holder: string;
-    number: string;
-    sortCode: string;
-}
-
-interface IGatewayModel {
-    account: string;
-    entity: ILegalEntity;
-    address: IAddress;
-    bank: IGatewayBank[];
-    publicKey: string;
-    privateKey: string;
-    modified: Date;
-}
-
-interface IChargesModel {
-    currency: string;
-    quantity: number;
-    value: number;
-}
-
-interface IPaymentModel {
-    package: string;
-    customer: string;
-    subscription: string;
-    price: IChargesModel;
-    term: Date;
-    status: string;
-}
-
-interface ITransactionModel {
-    base: number;
-    rate: number;
-}
+import { GatewaySchema, IGatewayModel } from './objects/gateway';
+import { FeeSchema, IFeeModel } from './objects/transaction';
+import { IPaymentModel, PaymentSchema } from './objects/payment';
 
 interface ISubscriptionModel extends Document {
     storeName?: string;
     strapline?: string;
     payment?: IPaymentModel;
     gateway?: IGatewayModel;
-    transactions: ITransactionModel;
+    transactions: IFeeModel;
     status?: string;
 }
-
-const PaymentSchema: Schema = new Schema({
-    package: String,
-    customer: String,
-    subscription: String,
-    price: {
-        type: {
-            currency: String,
-            quantity: Number,
-            value: Number
-        }
-    },
-    term: Date,
-    status: {
-        type: String,
-        enum: ['TRIALING', 'ACTIVE', 'PAST_DUE', 'UNPAID', 'CANCELED'],
-        uppercase: true
-    }
-}, { _id: false });
-
-const BankSchema: Schema = new Schema({
-    name: String,
-    holder: String,
-    number: String,
-    sortCode: String
-}, { _id: false });
-
-const GatewaySchema: Schema = new Schema({
-    account: String,
-    entity: {
-        type: {
-            forename: String,
-            surname: String,
-            email: String,
-            dob: Date
-        }
-    },
-    address: {
-        type: {
-            company: String,
-            building: String,
-            street: String,
-            city: String,
-            county: String,
-            postalCode: String,
-            country: String
-        }
-    },
-    bank: {
-        type: [BankSchema]
-    },
-    publicKey: String,
-    privateKey: String,
-    modified: Date
-}, { _id: false });
-
-const TransactionSchema: Schema = new Schema({
-    base: {
-        type: Number,
-        required: true,
-        default: 10
-    },
-    rate: {
-        type: Number,
-        required: true,
-        default: 0.046
-    }
-}, { _id: false });
 
 const SubscriptionSchema: Schema = new Schema({
     storeName: {
@@ -152,8 +33,8 @@ const SubscriptionSchema: Schema = new Schema({
         type: GatewaySchema
     },
     transactions: {
-        type: TransactionSchema,
-        default: TransactionSchema
+        type: FeeSchema,
+        default: FeeSchema
     },
     status: {
         type: String,
@@ -175,7 +56,6 @@ const SubscriptionSchema: Schema = new Schema({
 
 SubscriptionSchema.index({ storeName: 1 }, { unique: true });
 SubscriptionSchema.index({ domainName: 1 }, { unique: true });
-SubscriptionSchema.index({ 'payment.customer': 1 }, { unique: true, sparse: true });
 
 SubscriptionSchema.pre('validate', function (next) {
     this.domainName = (this.storeName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
