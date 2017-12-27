@@ -1,0 +1,43 @@
+<div fxLayout="column" fxLayoutGap="10px">
+    <label fxLayout="row" fxLayoutGap="4px">
+        <span>{{ control.placeholder }}</span>
+        <span *ngIf="control.required">*</span>
+    </label>
+
+    <div [ngSwitch]="state" class="image-input" fxLayout="row" fxLayoutAlign="center center">
+        <div *ngSwitchCase="'info'" class="message" fxLayout="column" fxLayoutAlign="center center">
+            <mat-icon [ngClass]="{ 'required': control.required && touched }">perm_media</mat-icon>
+            <p>Drag and drop a file</p>
+            <span class="mat-caption">{{ accept }}</span>
+        </div>
+
+        <div *ngSwitchCase="'success'" class="message" fxLayout="column" fxLayoutAlign="center center" fxFlex="50%">
+            <ng-container *ngIf="image">
+                <div class="image">
+                    <div class="background" [style.background-image]="background"></div>
+                    <div class="foreground" fxLayout="row" fxLayoutAlign="center center">
+                        <img [src]="image" />
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!image">
+                <mat-icon class="required">cloud_upload</mat-icon>
+                <p *ngIf="mode === 'determinate'">Uploading to server</p>
+                <p *ngIf="mode === 'buffer'">Processing file</p>
+                <mat-progress-bar [mode]="mode" [value]="progress" color="accent"></mat-progress-bar>
+            </ng-container>
+        </div>
+
+        <div *ngSwitchCase="'error'" class="message">
+            <div [ngSwitch]="error" fxLayout="column" fxLayoutAlign="center center">
+                <mat-icon class="required">close</mat-icon>
+                <p *ngSwitchCase="'INVALID_TYPE'">Invalid file type</p>
+                <strong>{{ detail }}</strong>
+            </div>
+        </div>
+    </div>
+    <mat-error class="mat-caption" *ngIf="control.hasError() && touched">This field is required.</mat-error>
+
+    <ng-content></ng-content>
+</div>

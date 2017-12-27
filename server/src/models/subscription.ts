@@ -67,6 +67,6 @@ SubscriptionSchema.pre('save', function (next) {
     next();
 });
 
-const SubscriptionModel: Model<ISubscriptionModel> = model('subscriptions', SubscriptionSchema);
+const SubscriptionModel: Model<ISubscriptionModel> = model('subscriptions', SubscriptionSchema) as Model<ISubscriptionModel>;
 
 export { SubscriptionModel, ISubscriptionModel };

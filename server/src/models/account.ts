@@ -71,6 +71,6 @@ AccountSchema.pre('save', function (next) {
     next();
 });
 
-const AccountModel: Model<IAccountModel> = model('accounts', AccountSchema);
+const AccountModel: Model<IAccountModel> = model('accounts', AccountSchema) as Model<IAccountModel>;
 
 export { AccountModel, IAccountModel };

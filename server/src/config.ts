@@ -5,5 +5,6 @@ export const environment = {
     secure: process.env.NODE_ENV === 'PRODUCTION',
     secret: process.env.JWT_SECRET || 'venzra-development',
     stripe: process.env.STRIPE_KEY || '',
-    stripeWebhooks: process.env.STRIPE_WEBHOOK_KEY || ''
+    stripeWebhooks: process.env.STRIPE_WEBHOOK_KEY || '',
+    imageBucket: process.env.AWS_IMAGE_BUCKET || 'images.venza-test.com'
 };

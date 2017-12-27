@@ -54,6 +54,6 @@ PlanSchema.pre('save', function (next) {
     next();
 });
 
-const PlanModel: Model<IPlanModel> = model('plans', PlanSchema);
+const PlanModel: Model<IPlanModel> = model('plans', PlanSchema) as Model<IPlanModel>;
 
 export { PlanModel, IPlanModel };

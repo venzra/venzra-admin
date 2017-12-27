@@ -11,23 +11,26 @@
 
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-form-field>
-                <input matInput
-                       placeholder="Display name"
-                       formControlName="displayName"
-                       required="required"
-                />
+                <input matInput placeholder="Display name" formControlName="displayName" required />
                 <mat-error *ngIf="productForm.controls['displayName'].hasError('required')">This field is required.</mat-error>
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput
-                       placeholder="Product code"
-                       formControlName="code"
-                       required="required"
-                />
+                <input matInput placeholder="Product code" formControlName="code" required />
                 <mat-error *ngIf="productForm.controls['code'].hasError('required')">This field is required.</mat-error>
             </mat-form-field>
         </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <h2>Depictions</h2>
+        <p>Manage any imagery that you want to show for this product</p>
+
+        <mat-divider></mat-divider>
+
+        <venzra-image-upload target="/api/images" usage="product-feature" accept="image/png,image/jpeg">
+            <input imageInput placeholder="Feature image" formControlName="featureImage" required />
+        </venzra-image-upload>
     </mat-card>
 
     <mat-card>
@@ -39,13 +42,8 @@
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-form-field>
                 <span matPrefix>&pound; &nbsp;</span>
-                <input matInput
-                       placeholder="Previous retail price"
-                       formControlName="previousPrice"
-                />
-
+                <input matInput placeholder="Previous retail price" formControlName="previousPrice" />
                 <mat-hint align="start">Providing this will allow customers to see the typical or a recent retail price.</mat-hint>
-
                 <mat-error *ngIf="productForm.controls['previousPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
             </mat-form-field>
         </mat-card-content>
@@ -53,14 +51,8 @@
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-form-field>
                 <span matPrefix>&pound; &nbsp;</span>
-                <input matInput
-                       placeholder="Current sale price"
-                       formControlName="currentPrice"
-                       required="required"
-                />
-
+                <input matInput placeholder="Current sale price" formControlName="currentPrice" required />
                 <mat-hint align="start">This is the price customers will pay to purchase on the store.</mat-hint>
-
                 <mat-error *ngIf="productForm.controls['currentPrice'].hasError('required')">This field is required.</mat-error>
                 <mat-error *ngIf="productForm.controls['currentPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
             </mat-form-field>

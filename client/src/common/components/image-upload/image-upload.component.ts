@@ -1,0 +1,117 @@
+import { Component, ContentChild, ElementRef, HostListener, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+
+import { ImageInputControl } from './image-input.control';
+import { ImageService } from './image-upload.service';
+
+@Component({
+    selector: 'venzra-image-upload',
+    exportAs: 'venzraImageUpload',
+    templateUrl: 'image-upload.component.html',
+    styleUrls: ['image-upload.component.scss'],
+    providers: [ImageService]
+})
+export class ImageUploadComponent {
+
+    protected _accept: Array<string> = [];
+
+    public touched = false;
+    public state: 'info' | 'success' | 'error' = 'info';
+    public error: 'INVALID_TYPE' | null = null;
+    public detail: any;
+    public image: string;
+    public mode: string;
+    public progress: number;
+    public background: any;
+
+    @Input() target = '';
+
+    @Input() usage = '';
+
+    @Input()
+    get accept() { return this._accept.join(', '); }
+    set accept(value: any) { this._accept = value.split(',').map((option) => option.trim()); }
+
+    @ContentChild(ImageInputControl) control: ImageInputControl;
+
+    constructor(
+        protected element: ElementRef,
+        private sanitizer: DomSanitizer,
+        private imageService: ImageService
+    ) {
+        this.imageService.progress.subscribe((progress) => {
+            this.mode = 'determinate';
+            this.progress = progress;
+
+            if (this.progress === 100) {
+                this.mode = 'buffer';
+                this.progress = 0;
+            }
+        });
+
+        this.imageService.image.subscribe((image) => {
+            if (image && image._id) {
+                this.setValue(image._id);
+                this.image = `/api/v1/images/${image._id}`;
+                this.background = this.sanitizer.bypassSecurityTrustStyle(`url(${this.image})`);
+            } else {
+                this.image = null;
+                this.background = null;
+            }
+        });
+    }
+
+    setValue(value: string) {
+        this.control.ngControl.reset(value);
+    }
+
+    validate(data): File | boolean {
+        const file = data ? data.files[0] : null;
+        if (file && this._accept.length > 0) {
+            if (this._accept.indexOf(file.type) === -1) {
+                this.error = 'INVALID_TYPE';
+                this.detail = file.type;
+                return false;
+            }
+        }
+        return file || true;
+    }
+
+    @HostListener('dragenter', ['$event'])
+    @HostListener('dragover', ['$event'])
+    onDragOver(event: any) {
+        event.preventDefault();
+        this.touched = false;
+        const isValid = this.validate(event.dataTransfer);
+        this.element.nativeElement.classList.add(isValid ? 'active' : 'warning');
+    }
+
+    @HostListener('mouseleave')
+    @HostListener('dragleave')
+    onDragLeave() {
+        this.touched = true;
+        this.element.nativeElement.classList.remove('active', 'warning');
+    }
+
+    @HostListener('drop', ['$event'])
+    onDrop(event: any) {
+        event.preventDefault();
+
+        const file = this.validate(event.dataTransfer || event.target);
+
+        if (file instanceof File) {
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+                const name = file.name;
+                const usage = this.usage;
+                const data = btoa(reader.result);
+
+                this.imageService.create({ name, usage, data });
+            });
+            reader.readAsBinaryString(file);
+        }
+
+        this.state = this.state === 'success' || file ? 'success' : 'error';
+    }
+
+}

@@ -18,6 +18,10 @@ const ProductSchema: Schema = new Schema({
         ref: 'subscriptions',
         required: true
     },
+    slug: {
+        type: String,
+        lowercase: true
+    },
     code: {
         type: String,
         required: true,
@@ -28,9 +32,10 @@ const ProductSchema: Schema = new Schema({
         required: true,
         trim: true
     },
-    slug: {
-        type: String,
-        lowercase: true
+    featureImage: {
+        type: Schema.Types.ObjectId,
+        ref: 'images',
+        required: true
     },
     previousPrice: {
         type: Number,
@@ -81,6 +86,6 @@ ProductSchema.pre('save', function (next) {
     next();
 });
 
-const ProductModel: Model<IProductModel> = model('products', ProductSchema);
+const ProductModel: Model<IProductModel> = model('products', ProductSchema) as Model<IProductModel>;
 
 export { ProductModel, IProductModel };

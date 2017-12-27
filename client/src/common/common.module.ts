@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatPaginatorModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatStepperModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatPaginatorModule, MatProgressBarModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatStepperModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 
 import { AccountComponent } from './components/account/account.component';
 import { ServiceTermsComponent } from './components/service-terms/service-terms.component';
+import { ImageUploadComponent } from './components/image-upload/image-upload.component';
+import { ImageInputDirective } from './components/image-upload/image-input.directive';
 
 import { PricePipe } from './filters/price.pipe';
 
@@ -16,10 +19,13 @@ import { ErrorInterceptorModule } from './http.interceptor';
 @NgModule({
     declarations: [
         PricePipe,
+        ImageUploadComponent,
+        ImageInputDirective,
         AccountComponent,
         ServiceTermsComponent
     ],
     imports: [
+        CommonModule,
         HttpClientModule,
         ReactiveFormsModule,
         FlexLayoutModule,
@@ -31,6 +37,7 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatInputModule,
         MatListModule,
         MatPaginatorModule,
+        MatProgressBarModule,
         MatSelectModule,
         MatSidenavModule,
         MatSlideToggleModule,
@@ -41,6 +48,7 @@ import { ErrorInterceptorModule } from './http.interceptor';
         ErrorInterceptorModule
     ],
     exports: [
+        CommonModule,
         HttpClientModule,
         ReactiveFormsModule,
         FlexLayoutModule,
@@ -52,6 +60,7 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatInputModule,
         MatListModule,
         MatPaginatorModule,
+        MatProgressBarModule,
         MatSelectModule,
         MatSidenavModule,
         MatSlideToggleModule,
@@ -61,6 +70,8 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatTooltipModule,
         ErrorInterceptorModule,
         PricePipe,
+        ImageUploadComponent,
+        ImageInputDirective,
         AccountComponent
     ],
     entryComponents: [

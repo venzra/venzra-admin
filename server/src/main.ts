@@ -13,6 +13,7 @@ import { AccountController } from './controllers/account';
 import { IdentityController } from './controllers/identity';
 import { ProductsController } from './controllers/products';
 import { SubscriptionController } from './controllers/subscription';
+import { ImagesController } from './controllers/images';
 import { WebhookController } from './controllers/webhooks';
 
 require('mongoose').Promise = global.Promise;
@@ -30,8 +31,8 @@ app.use(cookieParser());
 /*
  * Register routing endpoints
  */
-jsonRouter.use(json());
-rawRouter.use(raw({ type: '*/*' }));
+jsonRouter.use(json({ limit: '1mb' }));
+rawRouter.use(raw({ type: '*/*', limit: '1mb' }));
 
 jsonRouter.use(morgan(':remote-addr - BASIC LOG - [:date[iso]] - ":method :url" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms'));
 
@@ -69,6 +70,7 @@ const account = new AccountController(jsonRouter);
 const identity = new IdentityController(jsonRouter);
 const products = new ProductsController(jsonRouter);
 const subscription = new SubscriptionController(jsonRouter);
+const images = new ImagesController(jsonRouter);
 const webhooks = new WebhookController(rawRouter);
 
 app.use(errorHandler);

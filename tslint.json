@@ -109,13 +109,13 @@
         "directive-selector": [
             true,
             "attribute",
-            "app",
+            "venzra",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            "app",
+            "venzra",
             "kebab-case"
         ],
         "use-input-property-decorator": true,

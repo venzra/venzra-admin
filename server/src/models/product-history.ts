@@ -38,6 +38,6 @@ const ProductHistorySchema: Schema = new Schema({
     }
 });
 
-const ProductHistoryModel: Model<IHistoryModel> = model('productHistory', ProductHistorySchema, 'productHistory');
+const ProductHistoryModel: Model<IHistoryModel> = model('productHistory', ProductHistorySchema, 'productHistory') as Model<IHistoryModel>;
 
 export { ProductHistoryModel, IHistoryModel };

@@ -11,19 +11,24 @@ Feature: Updating product information
       | identity                          | password | status | subscription               |
       | product-update-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
       | product-update-two@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
+    And there are the following "images" records in the database
+      | subscription               | name                   | usage           | size |
+      | {{ subscriptions[1]._id }} | ProductsUpdate Image A | product-feature | 1024 |
+      | {{ subscriptions[1]._id }} | ProductsUpdate Image B | product-feature | 4096 |
+      | {{ subscriptions[2]._id }} | ProductsUpdate Image C | product-feature | 2048 |
     And there are the following "products" records in the database
-      | subscription               | code                | displayName      | currentPrice |
-      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0001 | Product Update A | 9            |
-      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0002 | Product Update B | 99           |
-      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0003 | Product Update C | 999          |
-      | {{ subscriptions[2]._id }} | PRODUCT-UPDATE-0004 | Product Update D | 9999         |
+      | subscription               | code                | displayName      | featureImage        | currentPrice |
+      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0001 | Product Update A | {{ images[1]._id }} | 9            |
+      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0002 | Product Update B | {{ images[1]._id }} | 99           |
+      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0003 | Product Update C | {{ images[2]._id }} | 999          |
+      | {{ subscriptions[2]._id }} | PRODUCT-UPDATE-0004 | Product Update D | {{ images[3]._id }} | 9999         |
 
   Scenario: If no update information is provided then the request is ignored
     Given I am logged in with the "product-update-one@venzra-test.io" account
     When I make an empty PATCH request to the API endpoint "/api/v1/products/{{ products[1]._id }}" as "product"
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code                | history  | displayName      | previousPrice | currentPrice | status   | created   | updated   |
-      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | ARRAY[0] | Product Update A | 0             | 9            | INACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code                | history  | displayName      | featureImage        | previousPrice | currentPrice | status   | created   | updated   |
+      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | ARRAY[0] | Product Update A | {{ images[1]._id }} | 0             | 9            | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Attempting to update a product that does not belong to the account subscription is rejected
     Given I am logged in with the "product-update-two@venzra-test.io" account
@@ -43,8 +48,8 @@ Feature: Updating product information
       | replace | status        | ACTIVE               |
       | replace | slug          | updated-slug         |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | history  | displayName          | previousPrice | currentPrice | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | ARRAY[3] | Product Update PATCH | 8             | 5            | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | history  | displayName          | featureImage        | previousPrice | currentPrice | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | ARRAY[3] | Product Update PATCH | {{ images[1]._id }} | 8             | 5            | ACTIVE | DATE_TIME | DATE_TIME |
     And the "product" request that has a "history" field and row 1 contains:
       | account | field  | previous | next   | created   |
       | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
