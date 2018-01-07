@@ -14,6 +14,8 @@ export class PricePipe implements PipeTransform {
                 break;
         }
 
+        price /= 100;
+
         const formatted = (price || 0).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,').replace(/\.00$/, '');
         return `${prefix}${formatted} ${currency.toUpperCase()}`.trim();
     }

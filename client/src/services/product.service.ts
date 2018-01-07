@@ -39,23 +39,13 @@ export class ProductService extends RestfulService {
     changeStatus(productId: string, status: string): Promise<Product> {
         return this.http.patch(`api/v1/products/${productId}`, [{ op: 'replace', path: 'status', value: status }])
             .toPromise()
-            .then((response: any) => response as Product)
-            .then((product) => {
-                product.previousPrice /= 100;
-                product.currentPrice /= 100;
-                return product;
-            });
+            .then((response: any) => response as Product);
     }
 
     getProduct(productId: string): Promise<Product> {
         return this.http.get(`api/v1/products/${productId}`)
             .toPromise()
-            .then((response: any) => response as Product)
-            .then((product) => {
-                product.previousPrice /= 100;
-                product.currentPrice /= 100;
-                return product;
-            });
+            .then((response: any) => response as Product);
     }
 
     getAllProducts(query): Promise<ListModel<Product>> {
@@ -63,15 +53,7 @@ export class ProductService extends RestfulService {
 
         return this.http.get('api/v1/products', { params })
             .toPromise()
-            .then((response: any) => response as ListModel<Product>)
-            .then((products) => {
-                products.list.forEach((product) => {
-                    product.previousPrice /= 100;
-                    product.currentPrice /= 100;
-                    return product;
-                });
-                return products;
-            });
+            .then((response: any) => response as ListModel<Product>);
     }
 
 }

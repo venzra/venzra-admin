@@ -80,13 +80,7 @@ export class GatewayService {
                         throw new Error('Unable to attach gateway, please contact us or try again later');
                     })
             )
-            .then((subscription) => subscription as Subscription)
-            .then((subscription) => {
-                if(subscription.payment) {
-                    subscription.payment.price.value /= 100;
-                }
-                return subscription;
-            });
+            .then((subscription) => subscription as Subscription);
     }
 
 }

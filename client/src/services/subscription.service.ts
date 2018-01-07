@@ -54,25 +54,13 @@ export class SubscriptionService extends RestfulService {
 
         return this.http.patch('api/v1/subscription', subscriptionData)
             .toPromise()
-            .then((response) => response as Subscription)
-            .then((subscription) => {
-                if(subscription.payment) {
-                    subscription.payment.price.value /= 100;
-                }
-                return subscription;
-            });
+            .then((response) => response as Subscription);
     }
 
     getSubscription(): Promise<Subscription> {
         return this.http.get('api/v1/subscription')
             .toPromise()
-            .then((response) => response as Subscription)
-            .then((subscription) => {
-                if(subscription.payment) {
-                    subscription.payment.price.value /= 100;
-                }
-                return subscription;
-            });
+            .then((response) => response as Subscription);
     }
 }
 

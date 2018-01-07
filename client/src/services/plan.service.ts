@@ -25,11 +25,7 @@ export class PlanService {
     getAllPlans(): Promise<ListModel<Plan>> {
         return this.http.get('api/v1/plans')
             .toPromise()
-            .then((response: any) => response as ListModel<Plan>)
-            .then((plans) => {
-                plans.list.forEach((plan) => plan.price /= 100);
-                return plans;
-            });
+            .then((response: any) => response as ListModel<Plan>);
     }
 
 }
