@@ -40,3 +40,66 @@ jobs:
             - node_modules
       - store_artifacts:
           path: coverage
+
+  deploy:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: echo 'export AWS_S3_PATH=Admin/'${CIRCLE_BRANCH}'/'${CIRCLE_SHA1:0:7}'.zip' >> $BASH_ENV
+      - run: sudo apt-get update
+      - run: sudo apt-get install python3 python3-pip
+      - run: sudo pip3 install awscli --upgrade
+      - run:
+          name: Notify deploy start
+          command: |
+            BUILD=$CIRCLE_BRANCH-${CIRCLE_SHA1:0:7}
+            curl -H "Content-Type: application/json" \
+            -d '{ "release": "'$BUILD'" }' \
+            -X POST https://api-pipeline.dashboardhub.io/environments/b45b3780-f3b0-11e7-880a-e9e0dccedb6b/deployed/b45b3781-f3b0-11e7-880a-e9e0dccedb6b/startDeploy
+      - run:
+          name: Create deployment
+          command: npm run deploy
+      - run:
+          name: Publish release to S3
+          command: |
+            aws s3api put-object --region eu-west-1 --bucket releases.venzra.com --key "${AWS_S3_PATH}" --body admin.zip
+      - run:
+          name: Create or update application
+          command: |
+            git checkout .aws/config/beanstalk.json
+            sed -i 's|{{ DatabaseUri }}|'${DEPLOY_DB}'|g' .aws/config/beanstalk.json
+            sed -i 's|{{ JwtSecret }}|'${DEPLOY_JWT_SECRET}'|g' .aws/config/beanstalk.json
+            sed -i 's|{{ StripeKey }}|'${DEPLOY_STRIPE_KEY}'|g' .aws/config/beanstalk.json
+            sed -i 's|{{ StripeWebhookKey }}|'${DEPLOY_STRIPE_WEBHOOK_KEY}'|g' .aws/config/beanstalk.json
+            sed -i 's|{{ ReleaseVersion }}|'${AWS_S3_PATH}'|g' .aws/config/beanstalk.json
+            (aws cloudformation create-stack --stack-name "admin-app-production" --template-body "file://.aws/templates/beanstalk.template" --parameters "file://.aws/config/beanstalk.json" --region eu-west-1 --capabilities CAPABILITY_IAM \
+                && aws cloudformation wait stack-create-complete --stack-name "admin-app-production" --region eu-west-1) \
+            || (aws cloudformation update-stack --stack-name "admin-app-production" --template-body "file://.aws/templates/beanstalk.template" --parameters "file://.aws/config/beanstalk.json" --region eu-west-1 --capabilities CAPABILITY_IAM \
+                && aws cloudformation wait stack-update-complete --stack-name "admin-app-production" --region eu-west-1)
+            git checkout .aws/config/beanstalk.json
+          no_output_timeout: 20m
+      - run:
+          name: Notify deploy completed
+          command: |
+            BUILD=$CIRCLE_BRANCH-${CIRCLE_SHA1:0:7}
+            curl -H "Content-Type: application/json" \
+            -d '{ "release": "'$BUILD'" }' \
+            -X POST https://api-pipeline.dashboardhub.io/environments/b45b3780-f3b0-11e7-880a-e9e0dccedb6b/deployed/b45b3781-f3b0-11e7-880a-e9e0dccedb6b/finishDeploy
+      - store_artifacts:
+          path: website.zip
+
+workflows:
+  version: 2
+
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: /^(master)$/

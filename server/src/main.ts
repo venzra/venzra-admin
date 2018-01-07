@@ -1,6 +1,5 @@
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
-import * as fs from 'fs';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
@@ -25,6 +24,7 @@ const rawRouter: express.Router = express();
 /*
  * Configure security elements
  */
+app.enable('trust proxy');
 app.disable('x-powered-by');
 app.use(cookieParser());
 
@@ -40,16 +40,20 @@ app.use('/api/v1/', jsonRouter);
 app.use('/api/webhooks', rawRouter);
 
 app.use(express.static(path.join(__dirname, '../client')));
-app.route('*').get((req, res) => {
+app.route('*').get((req, res, next) => {
+    if (req.url.startsWith('/assets')) {
+        return next();
+    }
+
     res.type('html');
-    res.send(fs.readFileSync(path.join(__dirname, '../client/index.html')));
+    res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 /*
  * Database connection
  */
 const mongo = {
-    uri: `mongodb://${process.env.DB_URI || 'localhost/venzra'}`,
+    uri: process.env['DB_URI'],
     options: {
         useMongoClient: true,
         socketTimeoutMS: 0,

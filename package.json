@@ -13,11 +13,12 @@
         "test": "npm run test:server && npm run test:client",
         "test:client": "concurrently -k -s first \"npm start\" \"protractor ./client/test/protractor.conf.js\"",
         "test:server": "istanbul cover --report=none ./node_modules/.bin/cucumber-js -- ./server/test/features --require ./server/test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/html-report -t html",
-        "test:server:local": "mongo venzra-test --eval \"db.dropDatabase()\" && DB_URI=\"localhost/venzra-test\" PORT=\"1337\" npm run test:server",
+        "test:server:local": "mongo venzra-test --eval \"db.dropDatabase()\" && DB_URI=mongodb://localhost/venzra-test PORT=1337 npm run test:server",
         "watch": "concurrently -k -s first \"npm run watch:server\" \"npm run watch:client\"",
         "watch:client": "ng build -w --output-path=dist/client",
-        "watch:server": "concurrently -k -s first \"tsc -w -p ./server\" \"nodemon dist/server/main.js\"",
-        "postinstall": "webdriver-manager update --versions.chrome 2.31 --versions.standalone 3.4.0"
+        "watch:server": "concurrently -k -s first \"tsc -w -p ./server\" \"DB_URI=mongodb://localhost/venzra nodemon dist/server/main.js\"",
+        "webdrivers": "webdriver-manager update --versions.chrome 2.31 --versions.standalone 3.4.0",
+        "deploy": "npm run build && zip -r -X admin.zip .ebextensions package.json package-lock.json dist"
     },
     "dependencies": {
         "@angular/animations": "5.1.3",
