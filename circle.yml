@@ -12,6 +12,13 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
+          name: Notify build started
+          command: |
+            BUILD=$CIRCLE_BRANCH-${CIRCLE_SHA1:0:7}
+            curl -H "Content-Type: application/json" \
+            -d '{ "release": "'$BUILD'" }' \
+            -X POST https://api-pipeline.dashboardhub.io/environments/b45b3780-f3b0-11e7-880a-e9e0dccedb6b/deployed/b45b3781-f3b0-11e7-880a-e9e0dccedb6b/startBuild
+      - run:
           name: Install dependencies
           command: npm install
       - run:
@@ -20,6 +27,13 @@ jobs:
       - run:
           name: Test server
           command: npm run test:server
+      - run:
+          name: Notify build completed
+          command: |
+            BUILD=$CIRCLE_BRANCH-${CIRCLE_SHA1:0:7}
+            curl -H "Content-Type: application/json" \
+            -d '{ "release": "'$BUILD'" }' \
+            -X POST https://api-pipeline.dashboardhub.io/environments/b45b3780-f3b0-11e7-880a-e9e0dccedb6b/deployed/b45b3781-f3b0-11e7-880a-e9e0dccedb6b/finishBuild
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
