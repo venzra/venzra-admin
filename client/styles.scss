@@ -29,22 +29,11 @@ app-private {
     flex-direction: column;
 }
 
-.public-background {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: url(http://cdn.venzra.io/venzra-background.jpg);
-    background-size: cover;
-    background-position: center center;
-    z-index: -1;
-}
-
 .public-content {
     margin: 0 0 4em;
+    background-color: mat-color($venzra-app-primary);
 
-    h3 {
+    h2 {
         color: #fff;
     }
 
