@@ -90,7 +90,7 @@ jobs:
             -d '{ "release": "'$BUILD'" }' \
             -X POST https://api-pipeline.dashboardhub.io/environments/b45b3780-f3b0-11e7-880a-e9e0dccedb6b/deployed/b45b3781-f3b0-11e7-880a-e9e0dccedb6b/finishDeploy
       - store_artifacts:
-          path: website.zip
+          path: admin.zip
 
 workflows:
   version: 2
