@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { AccountService } from '../../../../services/account.service';
 import { Subscription } from '../../../../services/subscription.service';
-import { BankAccount, Gateway, GatewayService } from '../../../../services/gateway.service';
-import { CalendarService } from '../../../../services/calendar.service';
+import { Gateway, GatewayService } from '../../../../services/gateway.service';
+
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'payment-gateway',
@@ -14,99 +13,34 @@ import { CalendarService } from '../../../../services/calendar.service';
 })
 export class GatewayComponent implements OnInit {
 
-    public saving = false;
+    private account;
+    public clientToken: string;
     public subscription: Subscription;
     public gateway: Gateway;
-    public legalForm: FormGroup;
-    public addressForm: FormGroup;
-    public gatewayForm: FormGroup;
-    public months = [];
-    public years = [];
 
     constructor(
+        private router: Router,
         private route: ActivatedRoute,
-        private forms: FormBuilder,
-        private snackbar: MatSnackBar,
         private accountService: AccountService,
-        private gatewayService: GatewayService,
-        private calendarService: CalendarService
+        private gatewayService: GatewayService
     ) {
-        this.months = this.calendarService.getMonths();
-        this.years = this.calendarService.generateYears(80, -16);
+        this.clientToken = environment.stripeGateway;
     }
 
     ngOnInit(): void {
-        this.legalForm = this.forms.group({
-            forename: ['', [Validators.required]],
-            surname: ['', [Validators.required]],
-            email: ['', [Validators.required]],
-            day: ['', [Validators.required]],
-            month: ['', [Validators.required]],
-            year: ['', [Validators.required]]
-        });
-
-        this.addressForm = this.forms.group({
-            company: ['', [Validators.required]],
-            street: ['', [Validators.required]],
-            building: ['', []],
-            city: ['', []],
-            county: ['', [Validators.required]],
-            postalCode: ['', [Validators.required]]
-        });
-
-        this.gatewayForm = this.forms.group({
-            holder: ['', [Validators.required]],
-            number: ['', [Validators.required]],
-            sortCode: ['', [Validators.required]]
-        });
-
         this.route.data.subscribe((data: { subscription: Subscription }) => {
             this.subscription = data.subscription;
             this.gateway = data.subscription.gateway;
         });
 
-        this.accountService.getAccount().subscribe((account) => this.legalForm.get('email').setValue(account.identity));
-    }
-
-    allocateGateway() {
-        this.saving = true;
-
-        const legalData = this.legalForm.getRawValue();
-        const addressData = this.addressForm.getRawValue();
-        const gatewayData = this.gatewayForm.getRawValue();
-
-        const legalEntity = {
-            forename: legalData.forename as string,
-            surname: legalData.surname as string,
-            company: addressData.company as string,
-            email: legalData.email as string,
-            legal: {
-                street: addressData.street as string,
-                building: addressData.building as string,
-                city: addressData.city as string,
-                county: addressData.county as string,
-                postalCode: addressData.postalCode as string
-            },
-            dob: {
-                day: legalData.day as number,
-                month: legalData.month as number,
-                year: legalData.year as number
+        this.route.queryParams.subscribe((params: { code: string, scope: string, state: string }) => {
+            if (params.code) {
+                this.gatewayService
+                    .createConnection(params.code);
+                    // .then(() => this.router.navigate(['/account/payments']));
             }
-        };
+        });
 
-        const bankAccount: BankAccount = {
-            holder: gatewayData.holder as string,
-            number: gatewayData.number as number,
-            sortCode: gatewayData.sortCode as string
-        };
-
-        this.gatewayService
-            .createConnection(legalEntity, bankAccount)
-            .then((subscription) => {
-                this.subscription = subscription;
-                this.gateway = subscription.gateway;
-            })
-            .catch((error) => this.snackbar.open(error.message || 'Creation failed', 'OK', { duration: 5000 }))
-            .then(() => this.saving = false);
+        this.accountService.getAccount().subscribe((account) => this.account = account);
     }
 }

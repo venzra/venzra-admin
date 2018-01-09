@@ -1,12 +1,12 @@
 {
+    "id": "evt_xxxxxxxxxxxxxx",
+    "object": "event",
+    "api_version": "2017-08-15",
     "created": 1600436220,
     "livemode": false,
-    "id": "evt_xxxxxxxxxxxxxx",
     "type": "plan.created",
-    "object": "event",
-    "request": null,
     "pending_webhooks": 1,
-    "api_version": "2017-08-15",
+    "request": null,
     "data": {
         "object": {
             "id": "WebhooksStripePlansCreate",

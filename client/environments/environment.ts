@@ -5,5 +5,6 @@
 
 export const environment = {
     production: false,
-    stripe: 'pk_test_f4W7kfQd1Ow7UC8A9T8Ch7xY'
+    stripe: 'pk_test_f4W7kfQd1Ow7UC8A9T8Ch7xY',
+    stripeGateway: 'ca_5EKpUYPlhme8oWVJD8QXRaA1iAn0A408'
 };

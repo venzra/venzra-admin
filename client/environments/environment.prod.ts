@@ -1,4 +1,5 @@
 export const environment = {
     production: true,
-    stripe: 'pk_live_TH6Gy1tKafQhmwYD5vBKXi1j'
+    stripe: 'pk_live_TH6Gy1tKafQhmwYD5vBKXi1j',
+    stripeGateway: 'ca_C6e658eG9vF1oOxavoProzHzMiEg6JEy'
 };

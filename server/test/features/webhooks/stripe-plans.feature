@@ -8,8 +8,7 @@ Feature: Manage webhooks sent by stripe to inform of plan creation and removal
       | WebhooksStripePlansDelete | Webhooks Stripe Plans Delete | gbp      | 100   | 1        | week      |
 
   Scenario: A stripe payload with an invalid signature is rejected
-    Given there is a stripe webhook signature for the mock payload "stripe/plans/deleted-webhook.json"
-    When I make a POST request to the API endpoint "/api/webhooks/stripe" as "stripe" with the mock "stripe/plans/created-webhook.json"
+    Given I make a POST request to the API endpoint "/api/webhooks/stripe" as "stripe" with the mock "stripe/plans/created-webhook.json"
     Then the status returned from the "stripe" request should be a 403 error
 
   Scenario: Receipt of a created plan webhook from stripe

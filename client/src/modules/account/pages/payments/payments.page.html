@@ -15,10 +15,13 @@
         <p>Note that for orders placed using non european cards the fee is increased by 1.5% on orders placed.</p>
     </div>
     <div *ngIf="subscription.status !== 'ACTIVE'">
-        <p>An active account is required to ensure your store is available to customers. To activate your account please setup a payment gateway using the form below.</p>
+        <p>An active account is required to ensure your store is available to customers. Setup a payment gateway to set your account as active and enable orders to be placed.</p>
+    </div>
+    <div *ngIf="subscription.status !== 'INACTIVE' && subscription.payment">
+        <p>While customers are not able to place orders you still have an active subscription you are paying for, you may disable this subscription if no longer required.</p>
     </div>
 </mat-card>
 
-<account-subscription *ngIf="subscription.status === 'ACTIVE'"></account-subscription>
+<account-subscription *ngIf="subscription.status !== 'TRIAL'"></account-subscription>
 
 <payment-gateway></payment-gateway>

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as winston from 'winston';
 
 interface IVenzraError {
-    name: string;
+    name?: string;
     code?: number;
     account?: string;
     message: string;
@@ -55,7 +55,7 @@ export class ThirdPartyError extends VenzraError implements IVenzraError {
 }
 
 export const errorHandler = (err: IVenzraError, req: Request, res: Response, next: NextFunction): void => {
-    const logger = new (winston.Logger)({
+    const logger: winston.LoggerInstance = new (winston.Logger)({
         transports: [
             new (winston.transports.Console)({
                 timestamp: () => Date.now(),
@@ -72,7 +72,7 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
         case 'ValidationError':
             logger.info(err.message);
             const detail = new Set();
-            for (let key of Object.keys(err.errors)) {
+            for (const key of Object.keys(err.errors)) {
                 detail.add(`${err.errors[key].path} ${err.errors[key].kind}`.trim());
             }
             res.status(400).send({ message: 'Validation failed', detail: [...detail] });

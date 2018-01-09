@@ -1,13 +1,8 @@
 import { Schema } from 'mongoose';
-import { AddressSchema, IAddressModel } from './address';
-import { BankSchema, IBankModel } from './bank';
-import { ContactSchema, IContactModel } from './contact';
 
 interface IGatewayModel {
     account: string;
-    entity: IContactModel;
-    address: IAddressModel;
-    bank: IBankModel[];
+    refreshToken: string,
     publicKey: string;
     privateKey: string;
     modified: Date;
@@ -15,15 +10,7 @@ interface IGatewayModel {
 
 const GatewaySchema: Schema = new Schema({
     account: String,
-    entity: {
-        type: ContactSchema
-    },
-    address: {
-        type: AddressSchema
-    },
-    bank: {
-        type: [BankSchema]
-    },
+    refreshToken: String,
     publicKey: String,
     privateKey: String,
     modified: Date

@@ -9,14 +9,15 @@ defineSupportCode(({ Given, When, Then }) => {
         this.setHeader('Host', requestOrigin);
     });
 
-    Given(/^there is a stripe webhook signature for the mock payload "([^"]*)"$/, function (mockFile) {
+    Given(/^there is a (stripe|connect) webhook signature for the mock payload "([^"]*)"$/, function (hookType, mockFile) {
         const requestData = this.readMock(mockFile);
+        const hook = hookType === 'stripe' ? 'STRIPE_WEBHOOK_KEY' : 'STRIPE_CONNECT_KEY';
 
         let headerValue = [];
 
         headerValue.push(`t=${requestData.created}`);
-        headerValue.push(`v1=${crypto.createHmac('sha256', process.env.STRIPE_WEBHOOK_KEY).update(`${requestData.created}.${JSON.stringify(requestData)}`).digest('hex')}`);
-        headerValue.push(`v0=${crypto.createHmac('sha256', process.env.STRIPE_WEBHOOK_KEY).update(JSON.stringify(requestData)).digest('hex')}`);
+        headerValue.push(`v1=${crypto.createHmac('sha256', process.env[hook]).update(`${requestData.created}.${JSON.stringify(requestData)}`).digest('hex')}`);
+        headerValue.push(`v0=${crypto.createHmac('sha256', process.env[hook]).update(JSON.stringify(requestData)).digest('hex')}`);
 
         this.setHeader('stripe-signature', headerValue.join(','));
     });

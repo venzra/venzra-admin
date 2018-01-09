@@ -74,6 +74,7 @@ jobs:
             sed -i 's|{{ JwtSecret }}|'${DEPLOY_JWT_SECRET}'|g' .aws/config/beanstalk.json
             sed -i 's|{{ StripeKey }}|'${DEPLOY_STRIPE_KEY}'|g' .aws/config/beanstalk.json
             sed -i 's|{{ StripeWebhookKey }}|'${DEPLOY_STRIPE_WEBHOOK_KEY}'|g' .aws/config/beanstalk.json
+            sed -i 's|{{ StripeConnectKey }}|'${DEPLOY_STRIPE_CONNECT_KEY}'|g' .aws/config/beanstalk.json
             sed -i 's|{{ ReleaseVersion }}|'${AWS_S3_PATH}'|g' .aws/config/beanstalk.json
             (aws cloudformation create-stack --stack-name "admin-app-production" --template-body "file://.aws/templates/beanstalk.template" --parameters "file://.aws/config/beanstalk.json" --region eu-west-1 --capabilities CAPABILITY_IAM \
                 && aws cloudformation wait stack-create-complete --stack-name "admin-app-production" --region eu-west-1) \

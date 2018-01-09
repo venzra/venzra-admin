@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Router } from 'express';
+import * as request from 'request';
 import * as Stripe from 'stripe';
 
 import { ThirdPartyError, ValidationError } from '../middleware/error-handler';
@@ -101,113 +102,41 @@ class SubscriptionController extends AuthenticationController {
 
         const errors = [];
 
-        if (!req.body.forename) {
-            errors.push({ path: 'forename', kind: 'required' });
-        }
-
-        if (!req.body.surname) {
-            errors.push({ path: 'surname', kind: 'required' });
-        }
-
-        if (!req.body.company) {
-            errors.push({ path: 'company', kind: 'required' });
-        }
-
-        if (!req.body.email) {
-            errors.push({ path: 'email', kind: 'required' });
-        }
-
-        if (!req.body.legal) {
-            errors.push({ path: 'legal', kind: 'required' });
-        }
-
-        if (!req.body.dob) {
-            errors.push({ path: 'dob', kind: 'required' });
-        }
-
-        if (!req.body.token || !req.body.token.id) {
-            errors.push({ path: 'token', kind: 'required' });
+        if (!req.body.reference) {
+            errors.push({ path: 'reference', kind: 'required' });
         }
 
         if (errors.length) {
             return next(new ValidationError(errors));
         }
 
-        req.body.legal.postalCode = req.body.legal.postalCode.replace(/\s+/g, '').toUpperCase();
-
-        stripe.accounts
-            .create({
-                business_name: this.account.subscription.storeName,
-                type: 'custom',
-                country: 'GB',
-                email: req.body.email,
-                external_account: req.body.token.id,
-                legal_entity: {
-                    type: 'individual',
-                    business_name: req.body.company,
-                    first_name: req.body.forename,
-                    last_name: req.body.surname,
-                    address: {
-                        line1: req.body.legal.street,
-                        line2: req.body.legal.building,
-                        city: req.body.legal.city,
-                        state: req.body.legal.county,
-                        postal_code: req.body.legal.postalCode,
-                        country: 'GB'
-                    },
-                    dob: {
-                        day: req.body.dob.day,
-                        month: req.body.dob.month,
-                        year: req.body.dob.year
-                    }
-                },
-                payout_schedule: {
-                    delay_days: 7,
-                    interval: 'weekly',
-                    weekly_anchor: 'friday'
-                },
-                tos_acceptance: {
-                    date: Math.floor(Date.now() / 1000),
-                    ip: req.ip
+        const promise = new Promise((resolve, reject) => {
+            request.post({
+                uri: 'https://connect.stripe.com/oauth/token',
+                json: {
+                    client_secret: environment.stripe,
+                    code: req.body.reference,
+                    grant_type: 'authorization_code'
                 }
-            })
-            .then((subscription) => {
+            }, (error, response, body) => (response.statusCode !== 200) ? reject(body) : resolve(body));
+        });
+
+        promise
+            .then((gateway: { stripe_user_id: string, refresh_token: string, stripe_publishable_key: string, access_token: string }) => {
                 this.account.subscription.status = 'ACTIVE';
 
                 this.account.subscription.gateway = {
-                    account: subscription.id,
-                    entity: {
-                        forename: req.body.forename,
-                        surname: req.body.surname,
-                        email: req.body.email,
-                        dob: new Date(req.body.dob.year, req.body.dob.month - 1, req.body.dob.day, 0, 0, 0, 0)
-                    },
-                    address: {
-                        addressee: req.body.company,
-                        street: req.body.legal.street,
-                        building: req.body.legal.building,
-                        city: req.body.legal.city,
-                        county: req.body.legal.county,
-                        postalCode: req.body.legal.postalCode,
-                        country: 'GB'
-                    },
-                    bank: subscription.external_accounts.data.map((account) => {
-                        return {
-                            name: account.bank_name,
-                            holder: account.account_holder_name,
-                            number: account.last4,
-                            sortCode: account.routing_number
-                        };
-                    }),
-                    publicKey: subscription.keys.publishable,
-                    privateKey: subscription.keys.secret,
+                    account: gateway.stripe_user_id,
+                    refreshToken: gateway.refresh_token,
+                    publicKey: gateway.stripe_publishable_key,
+                    privateKey: gateway.access_token,
                     modified: new Date()
                 };
 
                 return this.account.subscription.save();
             })
             .then(() => next())
-            .catch((err) => next(new ThirdPartyError(err.type, err.message)));
+            .catch((err) => next(new ThirdPartyError('StripeInvalidRequestError', err.error_description)));
     }
 
     updateSettings(req: Request, res: Response, next: NextFunction) {

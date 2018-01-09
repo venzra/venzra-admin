@@ -3,33 +3,16 @@
     <section *ngIf="subscription.gateway">
         <h2>Payment gateway and bank payouts</h2>
 
-        <p>Purchases made on your store are <strong>enabled</strong>. Funds are transferred to the attached bank account every 7 days, and are for the previous week of store purchases.</p>
+        <div fxLayout="column" fxLayoutGap="10px">
+            <p>Your gateway connection to Stripe is active and purchases made on your store are <strong>enabled</strong>. To manage your gateway you can do so via the Stripe dashboard. Please beware if you remove your connection with Venzra via your Stripe dashboard your customers to place orders until you restore the connection.</p>
 
-        <div fxLayout="row" fxLayoutGap="20px">
-            <div fxFlex="33%">
-                <h4>Legal Entity</h4>
-                <div>{{ gateway.entity.forename }} {{ gateway.entity.surname }}</div>
-                <div>{{ gateway.entity.email }}</div>
-                <div>DOB {{ gateway.entity.dob | date: 'd MMMM yyyy' }}</div>
+            <div fxLayout="row" fxLayoutGap="20px">
+                <a mat-raised-button color="primary" href="https://dashboard.stripe.com" target="_blank">Open Stripe Dashboard</a>
+                <button mat-raised-button color="warn" (click)="deactivate()">Deactivate Stripe</button>
             </div>
-            <div fxFlex="33%">
-                <h4>Registered Address</h4>
-                <div>{{ gateway.address.building }}</div>
-                <div>{{ gateway.address.street }}</div>
-                <div>{{ gateway.address.city }}</div>
-                <div>{{ gateway.address.county }}</div>
-                <div>{{ gateway.address.postalCode }}</div>
-            </div>
-            <div fxFlex="33%">
-                <h4>Payout Bank</h4>
-                <div>{{ gateway.bank[0].name }}</div>
-                <div>{{ gateway.bank[0].holder }}</div>
-                <div>{{ 'xxxxxx' + gateway.bank[0].number }}</div>
-                <div>{{ gateway.bank[0].sortCode }}</div>
-            </div>
+
+            <p class="mat-caption">Connected on {{ gateway.modified | date: 'medium' }}</p>
         </div>
-
-        <p class="mat-caption">Connected on {{ gateway.modified | date: 'medium' }}</p>
     </section>
 
     <section *ngIf="!subscription.gateway">
@@ -39,143 +22,17 @@
             <mat-icon color="warn" matTooltip="To enable customers to place orders you need to setup your legal and banking information" matTooltipPosition="left">warning</mat-icon>
         </div>
 
-        <mat-horizontal-stepper linear>
-            <mat-step label="Overview">
-                <h3>Overview</h3>
+        <h3>Overview</h3>
 
-                <p>A payment gateway is required to enable customers to start using your store to place orders.</p>
-                <p>To process payments on your store every transaction is charged at 6% of the order value plus a 30p base charge. For example an order of £20 would incur a fee of £1.50 for processing.</p>
-                <p>Transaction fees can be reduced by setting up a monthly subscription after you have added your gateway. With an active and paid subscription the transaction fee is reduced to 3.5%, this would mean a £20 order would incur a fee of £1 saving 50p compared with a non-subscription based transaction.</p>
-                <p>The following information is required as part of our anti-fraud checking, if processing very large volumes of orders further information may be required in the future.</p>
+        <p>A payment gateway is required to enable customers to start using your store to place orders.</p>
+        <p>We use Stripe as a gateway for payments, to setup this gateway and start taking orders and recieving payments for orders please use the link below. If you would like more information about Stripe please visit their website at <a href="https://www.stripe.com" target="_blank">https://www.stripe.com</a>.</p>
+        <p>To process payments on your store every transaction is charged at 6% of the order value plus a 30p base charge (inclusive of any gateway fees). For example an order of £20 would incur a fee of £1.50 for processing.</p>
+        <p>Transaction fees can be reduced by setting up a monthly subscription after you have added your gateway. With an active and paid subscription the transaction fee is reduced to 3.5%, this would mean a £20 order would incur a fee of £1 saving 50p compared with a non-subscription based transaction. Note that fees can vary when customers use international cards by up to 1.5%, refer to Stripe pricing for more information.</p>
+        <p>The following information is required as part of our anti-fraud checking, if processing very large volumes of orders further information may be required in the future.</p>
 
-                <div fxLayoutGap="20px" fxLayoutAlign="center">
-                    <button mat-raised-button color="primary" matStepperNext>Setup gateway</button>
-                </div>
-            </mat-step>
-
-            <mat-step [stepControl]="legalForm" label="Legal entity">
-                <form fxLayout="column" fxLayoutGap="20px" [formGroup]="legalForm">
-                    <h3>Legal entity</h3>
-                    <p>The owner of the business that is responsible for this account</p>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="First name" formControlName="forename" />
-                        <mat-error *ngIf="legalForm.controls['forename'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="Last name" formControlName="surname" />
-                        <mat-error *ngIf="legalForm.controls['surname'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput placeholder="Contact email" formControlName="email" />
-                        <mat-error *ngIf="legalForm.controls['email'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <div>
-                        <h4>Date of birth</h4>
-                        <div fxLayout="row" fxLayoutGap="20px">
-                            <mat-form-field fxFlex="15%">
-                                <mat-select required placeholder="Day" formControlName="day">
-                                    <mat-option *ngFor="let day of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]" [value]="day">{{ day }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-
-                            <mat-form-field fxFlex="15%">
-                                <mat-select required placeholder="Month" formControlName="month">
-                                    <mat-option *ngFor="let month of months; let i = index" [value]="i + 1">{{ month.name }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-
-                            <mat-form-field fxFlex="20%">
-                                <mat-select required placeholder="Year" formControlName="year">
-                                    <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <mat-hint>Legal entity must be over the age of 16 at point of creation</mat-hint>
-                    </div>
-
-                    <div fxLayoutGap="20px" fxLayoutAlign="end center">
-                        <button mat-button type="button" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" matStepperNext [disabled]="legalForm.pristine || legalForm.invalid">Continue</button>
-                    </div>
-                </form>
-            </mat-step>
-
-            <mat-step [stepControl]="addressForm" label="Registered address">
-                <form fxLayout="column" fxLayoutGap="20px" [formGroup]="addressForm">
-                    <h3>Registered address</h3>
-                    <p>The registered address associated to this account</p>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="Company name" formControlName="company" />
-                        <mat-error *ngIf="addressForm.controls['company'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="Address Line 1" formControlName="street" />
-                        <mat-hint>Street address, P.O. box, etc</mat-hint>
-                        <mat-error *ngIf="addressForm.controls['street'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput placeholder="Address Line 2" formControlName="building" />
-                        <mat-hint>Building, Floor, Suite, Apartment, etc</mat-hint>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput placeholder="Town or City" formControlName="city" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="County" formControlName="county" />
-                        <mat-error *ngIf="addressForm.controls['county'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="Postal code" formControlName="postalCode" />
-                        <mat-error *ngIf="addressForm.controls['postalCode'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <div fxLayoutGap="20px" fxLayoutAlign="end center">
-                        <button mat-button type="button" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" matStepperNext [disabled]="addressForm.pristine || addressForm.invalid">Continue</button>
-                    </div>
-                </form>
-            </mat-step>
-
-            <mat-step [stepControl]="gatewayForm" label="Bank account">
-                <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="allocateGateway()" [formGroup]="gatewayForm">
-                    <h3>Bank account</h3>
-                    <p>This account should be owned by the legal entity provided</p>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="Account holders name" formControlName="holder" />
-                        <mat-error *ngIf="gatewayForm.controls['holder'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="Bank account number" formControlName="number" />
-                        <mat-hint align="start">We currently only support UK accounts paying in GBP</mat-hint>
-                        <mat-error *ngIf="gatewayForm.controls['number'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput required placeholder="Sort code" formControlName="sortCode" />
-                        <mat-error *ngIf="gatewayForm.controls['sortCode'].hasError('required')">This field is required.</mat-error>
-                    </mat-form-field>
-
-                    <div fxLayoutGap="20px" fxLayoutAlign="end center">
-                        <button mat-button type="button" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" type="submit" [disabled]="gatewayForm.pristine || gatewayForm.invalid || saving">Attach gateway</button>
-                    </div>
-
-                </form>
-            </mat-step>
-        </mat-horizontal-stepper>
-
+        <div fxLayoutAlign="center">
+            <a mat-raised-button color="primary" [href]="'https://connect.stripe.com/oauth/authorize?response_type=code&client_id=' + clientToken + '&scope=read_write'" target="_blank">Connect with Stripe</a>
+        </div>
     </section>
 
 </mat-card>

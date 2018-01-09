@@ -28,7 +28,7 @@ export class AuthenticationController {
     getSubscription(req: Request, res: Response) {
         SubscriptionModel
             .findById(this.account.subscription._id)
-            .select('storeName domainName strapline payment gateway.account gateway.entity gateway.address gateway.bank gateway.modified transactions status')
+            .select('storeName domainName strapline payment gateway.account gateway.modified transactions status')
             .then((subscription) => res.status(200).send(subscription));
     }
 
