@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit {
         this.layout.title = 'Settings';
 
         this.settingsForm = this.forms.group({
-            storeName: ['', [Validators.required, Validators.minLength(5)]],
+            storeName: ['', [Validators.required, Validators.minLength(3)]],
             strapline: ['', []]
         });
 

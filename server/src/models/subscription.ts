@@ -16,7 +16,8 @@ const SubscriptionSchema: Schema = new Schema({
     storeName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        minlength: 3
     },
     strapline: {
         type: String,

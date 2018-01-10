@@ -26,6 +26,15 @@ Feature: Updating a new subscription via patch requests
       | message           | detail                 |
       | Validation failed | ["storeName required"] |
 
+  Scenario: Store name should be at least 3 characters
+    Given I am logged in with the "subscription-update-one@venzra-test.io" account
+    When I make a PATCH request to the API endpoint "/api/v1/subscription" as "subscription" using:
+      | op      | path      | value |
+      | replace | storeName | xx    |
+    Then there should be a 400 error from the "subscription" request that contains:
+      | message           | detail                 |
+      | Validation failed | ["storeName minlength"] |
+
   Scenario: Update an existing account subscription record
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
     When I make a PATCH request to the API endpoint "/api/v1/subscription" as "subscription" using:
