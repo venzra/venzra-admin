@@ -75,7 +75,7 @@ export class GatewayService {
         //         })
         //     )))
             .then((token) =>
-                this.http.post('api/v1/gateway', { reference })
+                this.http.post('/api/subscription/gateway', { reference })
                     .toPromise()
                     .catch((error) => {
                         console.log(error);

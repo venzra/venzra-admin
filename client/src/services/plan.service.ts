@@ -23,7 +23,7 @@ export class PlanService {
     ) { }
 
     getAllPlans(): Promise<ListModel<Plan>> {
-        return this.http.get('api/v1/plans')
+        return this.http.get('/api/subscription/plans')
             .toPromise()
             .then((response: any) => response as ListModel<Plan>);
     }

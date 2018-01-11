@@ -25,21 +25,21 @@ Feature: Updating product information
 
   Scenario: If no update information is provided then the request is ignored
     Given I am logged in with the "product-update-one@venzra-test.io" account
-    When I make an empty PATCH request to the API endpoint "/api/v1/products/{{ products[1]._id }}" as "product"
+    When I make an empty PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product"
     Then there should be a 200 response from the "product" request that contains:
       | _id       | slug             | code                | history  | displayName      | featureImage        | previousPrice | currentPrice | status   | created   | updated   |
       | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | ARRAY[0] | Product Update A | {{ images[1]._id }} | 0             | 9            | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Attempting to update a product that does not belong to the account subscription is rejected
     Given I am logged in with the "product-update-two@venzra-test.io" account
-    When I make a PATCH request to the API endpoint "/api/v1/products/{{ products[1]._id }}" as "product" using:
+    When I make a PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product" using:
       | op      | path   | value  |
       | replace | status | ACTIVE |
     Then the status returned from the "product" request should be a 404 error
 
   Scenario: Update product information with values provided which can be altered
     Given I am logged in with the "product-update-one@venzra-test.io" account
-    When I make a PATCH request to the API endpoint "/api/v1/products/{{ products[1]._id }}" as "product" using:
+    When I make a PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product" using:
       | op      | path          | value                |
       | replace | code          | PRODUCT-UPDATE-9999  |
       | replace | displayName   | Product Update PATCH |

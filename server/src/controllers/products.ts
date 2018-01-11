@@ -1,3 +1,5 @@
+import * as parser from 'body-parser';
+
 import { Request, Response, NextFunction, Router } from 'express';
 
 import { AuthenticationController } from './authentication';
@@ -7,18 +9,23 @@ import { ProductHistoryModel } from '../models/product-history';
 import { IRestOperation } from '../models/rest';
 import { NotFoundError } from '../middleware/error-handler';
 
-class ProductsController extends AuthenticationController {
+export class ProductsController extends AuthenticationController {
 
-    constructor(private router: Router) {
+    public router: Router;
+
+    constructor() {
         super();
         this.registerRoutes();
     }
 
     registerRoutes() {
-        this.router.get('/products', this.validate.bind(this), this.findAll.bind(this));
-        this.router.post('/products', this.validate.bind(this), this.createProduct.bind(this), this.findOne.bind(this));
-        this.router.get('/products/:productId', this.validate.bind(this), this.findOne.bind(this));
-        this.router.patch('/products/:productId', this.validate.bind(this), this.updateProduct.bind(this), this.findOne.bind(this));
+        this.router = Router();
+        this.router.use(parser.json({ type: 'application/json' }));
+
+        this.router.get('/', this.validate.bind(this), this.findAll.bind(this));
+        this.router.post('/', this.validate.bind(this), this.createProduct.bind(this), this.findOne.bind(this));
+        this.router.get('/:productId', this.validate.bind(this), this.findOne.bind(this));
+        this.router.patch('/:productId', this.validate.bind(this), this.updateProduct.bind(this), this.findOne.bind(this));
     }
 
     createProduct(req: Request, res: Response, next: NextFunction) {
@@ -130,4 +137,4 @@ class ProductsController extends AuthenticationController {
 
 }
 
-export { ProductsController };
+export default new ProductsController().router;

@@ -1,3 +1,5 @@
+import * as parser from 'body-parser';
+
 import { Request, Response, NextFunction, Router } from 'express';
 import * as Stripe from 'stripe';
 
@@ -15,13 +17,17 @@ interface StripeWebhook {
     data: any
 }
 
-class WebhookController {
+export class WebhookController {
 
-    constructor(private router: Router) {
+    public router: Router;
+
+    constructor() {
+        this.router = Router();
         this.registerRoutes();
     }
 
     registerRoutes() {
+        this.router.use(parser.raw({ type: '*/*' }));
         this.router.post('/stripe', this.actionStripeHook.bind(this));
         this.router.post('/connect', this.actionConnectHook.bind(this));
     }
@@ -108,4 +114,4 @@ class WebhookController {
 
 }
 
-export { WebhookController };
+export default new WebhookController().router;

@@ -17,7 +17,7 @@ Feature: Creation of a new subscription payment
 
   Scenario: Retrieve a list of plans
     Given I am logged in with the "subscription-plans-one@venzra-test.io" account
-    When I make a GET request to the API endpoint "/api/v1/plans" as "plans"
+    When I make a GET request to the API endpoint "/api/subscription/plans" as "plans"
     Then there should be a 200 response from the "plans" request that contains:
       | list     | total |
       | ARRAY[3] | 3     |

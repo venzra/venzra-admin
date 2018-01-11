@@ -40,7 +40,7 @@ export class AccountService {
     ) { }
 
     activateAccount(activationData: Activation): Promise<any> {
-        return this.http.post('api/v1/identity/activate', activationData, { responseType: 'text' })
+        return this.http.post('/api/identity/activate', activationData, { responseType: 'text' })
             .toPromise();
     }
 
@@ -51,7 +51,7 @@ export class AccountService {
     performLogin(credentialData: AccountCredentials): Promise<boolean> {
         const redirect = localStorage.getItem('redirect') || '/account';
 
-        return this.http.post('api/v1/identity/login', credentialData, { responseType: 'text' })
+        return this.http.post('/api/identity/login', credentialData, { responseType: 'text' })
             .toPromise()
             .then(() => localStorage.setItem('authenticated', '1'))
             .then(() => localStorage.removeItem('redirect'))
@@ -59,12 +59,12 @@ export class AccountService {
     }
 
     performRecovery(forgottenData: Recovery): Promise<any> {
-        return this.http.post('api/v1/identity/recovery', forgottenData, { responseType: 'text' })
+        return this.http.post('/api/identity/recovery', forgottenData, { responseType: 'text' })
             .toPromise();
     }
 
     performLogout(): Promise<boolean> {
-        return this.http.post('api/v1/identity/logout', null, { responseType: 'text' })
+        return this.http.post('/api/identity/logout', null, { responseType: 'text' })
             .toPromise()
             .catch(() => null)
             .then(() => localStorage.clear())
@@ -75,7 +75,7 @@ export class AccountService {
         let subject = new BehaviorSubject<boolean>(true);
 
         if (localStorage.getItem('authenticated') === '1') {
-            this.http.get('api/v1/account')
+            this.http.get('/api/account')
                 .subscribe((account: Account) => {
                     this.account.next(account);
                     subject.next(true);

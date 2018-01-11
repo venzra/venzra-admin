@@ -20,8 +20,6 @@ export class StorePage implements OnInit {
     ngOnInit(): void {
         this.layout.title = 'Store configuration';
 
-        this.route.data.subscribe((data: { subscription: Subscription }) => {
-            this.subscription = data.subscription;
-        });
+        this.route.data.subscribe((data: { subscription: Subscription }) => this.subscription = data.subscription);
     }
 }

@@ -31,19 +31,19 @@ export class ProductService extends RestfulService {
         product.previousPrice *= 100;
         product.currentPrice *= 100;
 
-        return this.http.post('api/v1/products', product)
+        return this.http.post('/api/products', product)
             .toPromise()
             .then(() => this.router.navigate(['/products'], { replaceUrl: true }));
     }
 
     changeStatus(productId: string, status: string): Promise<Product> {
-        return this.http.patch(`api/v1/products/${productId}`, [{ op: 'replace', path: 'status', value: status }])
+        return this.http.patch(`/api/products/${productId}`, [{ op: 'replace', path: 'status', value: status }])
             .toPromise()
             .then((response: any) => response as Product);
     }
 
     getProduct(productId: string): Promise<Product> {
-        return this.http.get(`api/v1/products/${productId}`)
+        return this.http.get(`/api/products/${productId}`)
             .toPromise()
             .then((response: any) => response as Product);
     }
@@ -51,7 +51,7 @@ export class ProductService extends RestfulService {
     getAllProducts(query): Promise<ListModel<Product>> {
         const params = Object.keys(query).reduce((params, key) => params.set(key, query[key]), new HttpParams());
 
-        return this.http.get('api/v1/products', { params })
+        return this.http.get('/api/products', { params })
             .toPromise()
             .then((response: any) => response as ListModel<Product>);
     }

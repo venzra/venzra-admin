@@ -36,8 +36,8 @@ export class GatewayComponent implements OnInit {
         this.route.queryParams.subscribe((params: { code: string, scope: string, state: string }) => {
             if (params.code) {
                 this.gatewayService
-                    .createConnection(params.code);
-                    // .then(() => this.router.navigate(['/account/payments']));
+                    .createConnection(params.code)
+                    .then(() => this.router.navigate(['/account/payments'], { replaceUrl: true }));
             }
         });
 

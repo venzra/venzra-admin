@@ -35,7 +35,7 @@
     <div *ngIf="products.total">
         <mat-list>
             <mat-list-item *ngFor="let product of products.list">
-                <img matListAvatar [src]="'/api/v1/images/' + product.featureImage" />
+                <img matListAvatar [src]="'/api/images/' + product.featureImage" />
                 <h3 matLine>{{ product.displayName }} <span class="mat-caption">{{ '( ' + product.code + ' )' }}</span></h3>
                 <p matLine>{{ product.status }} @ {{ product.currentPrice | price }}</p>
                 <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">

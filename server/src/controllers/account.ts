@@ -1,18 +1,24 @@
+import * as parser from 'body-parser';
+
 import { Router } from 'express';
 
 import { AuthenticationController } from './authentication';
 
-class AccountController extends AuthenticationController {
+export class AccountController extends AuthenticationController {
 
-    constructor(private router: Router) {
+    public router: Router;
+
+    constructor() {
         super();
         this.registerRoutes();
     }
 
     registerRoutes() {
-        this.router.get('/account', this.validate.bind(this), this.getAccount.bind(this));
+        this.router = Router();
+        this.router.use(parser.json({ type: 'application/json' }));
+        this.router.get('/', this.validate.bind(this), this.getAccount.bind(this));
     }
 
 }
 
-export { AccountController };
+export default new AccountController().router;

@@ -51,7 +51,9 @@ export class SettingsComponent implements OnInit {
             .updateSettings(this.settingsForm.controls)
             .then((subscription) => this.settingsForm.reset(subscription))
             .then(() => this.settingsForm.markAsPristine())
-            .catch((error: HttpErrorResponse) => JSON.parse(error.error))
-            .then((error) => this.snackbar.open(error.message || 'Update failed', 'OK', { duration: 5000 }));
+            .catch((error: HttpErrorResponse) => {
+                error = JSON.parse(error.error);
+                this.snackbar.open(error.message || 'Update failed', 'OK', { duration: 5000 })
+            });
     }
 }

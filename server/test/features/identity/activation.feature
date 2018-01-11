@@ -9,7 +9,7 @@ Feature: Activation of a registered users account
       | identity-activation-two@venzra-test.io | {"key":"aaaabbbbccccdddd", "expires":"1980-09-18T00:00:00.000Z"} |
 
   Scenario: An incorrect account reference should return an error message
-    Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
+    Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
       | _id                      | password     | token            |
       | 000000000000000000000000 | VenzraTest$1 | aaaabbbbccccdddd |
     Then there should be a 400 error from the "activation" request that contains:
@@ -17,7 +17,7 @@ Feature: Activation of a registered users account
       | Invalid account credentials |
 
   Scenario: An expired token should no longer allow activation to occur
-    Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
+    Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
       | _id                   | password     | token            |
       | {{ accounts[2]._id }} | VenzraTest$1 | aaaabbbbccccdddd |
     Then there should be a 400 error from the "activation" request that contains:
@@ -25,7 +25,7 @@ Feature: Activation of a registered users account
       | Invalid account credentials |
 
   Scenario: An incorrect validation token should not allow activation to occur
-    Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
+    Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
       | _id                   | password     | token            |
       | {{ accounts[1]._id }} | VenzraTest$1 | ddddccccbbbbaaaa |
     Then there should be a 400 error from the "activation" request that contains:
@@ -33,12 +33,12 @@ Feature: Activation of a registered users account
       | Invalid account credentials |
 
   Scenario: Activate a registered user
-    Given I make a POST request to the API endpoint "/api/v1/identity/activate" as "activation" using:
+    Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
       | _id                   | password     | token            |
       | {{ accounts[1]._id }} | VenzraTest$1 | aaaabbbbccccdddd |
     Then the status returned from the "activation" request should be 202
     When I am logged in with the "identity-activation-one@venzra-test.io" account
-    And I make a GET request to the API endpoint "/api/v1/account" as "account"
+    And I make a GET request to the API endpoint "/api/account" as "account"
     Then there should be a 200 response from the "account" request that contains:
       | _id       | identity                               | status | subscription |
       | OBJECT_ID | identity-activation-one@venzra-test.io | ACTIVE | OBJECT_ID    |

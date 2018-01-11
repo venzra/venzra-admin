@@ -12,7 +12,7 @@ Feature: Creation of a new subscription payment
 
   Scenario: A missing email and stripe bank token will result in an error
     Given I am logged in with the "subscription-payment-one@venzra-test.io" account
-    When I make an empty POST request to the API endpoint "/api/v1/payment" as "payment"
+    When I make an empty POST request to the API endpoint "/api/subscription/payment" as "payment"
     Then there should be a 400 error from the "payment" request that contains:
       | message           | detail                                                |
       | Validation failed | ["email required", "plan required", "token required"] |
@@ -20,7 +20,7 @@ Feature: Creation of a new subscription payment
   Scenario: Handle a rejection from stripe occurring when attempting to create a subscription
     Given I am logged in with the "subscription-payment-one@venzra-test.io" account
     And there is a POST consumer at "https://api.stripe.com" for "/v1/customers" that will return "stripe/subscriptions/create-invalid.json" with status 400
-    When I make a POST request to the API endpoint "/api/v1/payment" as "payment" using:
+    When I make a POST request to the API endpoint "/api/subscription/payment" as "payment" using:
       | email                                       | plan | token                                    |
       | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
     Then there should be a 500 error from the "payment" request that contains:
@@ -30,7 +30,7 @@ Feature: Creation of a new subscription payment
   Scenario: Sending a valid request will create a subscription
     Given I am logged in with the "subscription-payment-one@venzra-test.io" account
     And there is a POST consumer at "https://api.stripe.com" for "/v1/customers" that will return "stripe/subscriptions/create-success.json" with status 200
-    When I make a POST request to the API endpoint "/api/v1/payment" as "payment" using:
+    When I make a POST request to the API endpoint "/api/subscription/payment" as "payment" using:
       | email                                       | plan | token                                    |
       | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
     Then there should be a 200 response from the "payment" request that contains:

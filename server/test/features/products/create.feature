@@ -22,14 +22,14 @@ Feature: Creation of a new product entry
 
   Scenario: An empty request to create a product fails validation
     Given I am logged in with the "products-create-one@venzra-test.io" account
-    When I make an empty POST request to the API endpoint "/api/v1/products" as "product"
+    When I make an empty POST request to the API endpoint "/api/products" as "product"
     Then there should be a 400 error from the "product" request that contains:
       | message           | detail                                                                                      |
       | Validation failed | ["featureImage required", "displayName required", "code required", "currentPrice required"] |
 
   Scenario: If the product already exists then the request should be rejected (based on product code)
     Given I am logged in with the "products-create-one@venzra-test.io" account
-    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+    When I make a POST request to the API endpoint "/api/products" as "product" using:
       | code                   | displayName        | featureImage        | currentPrice |
       | {{ products[1].code }} | Product Create AAA | {{ images[1]._id }} | 99           |
     Then there should be a 400 response from the "product" request that contains:
@@ -38,7 +38,7 @@ Feature: Creation of a new product entry
 
   Scenario: If the product already exists then the request should be rejected (based on product name)
     Given I am logged in with the "products-create-one@venzra-test.io" account
-    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+    When I make a POST request to the API endpoint "/api/products" as "product" using:
       | code       | displayName                   | featureImage        | currentPrice |
       | CREATE-999 | {{ products[1].displayName }} | {{ images[1]._id }} | 99           |
     Then there should be a 400 response from the "product" request that contains:
@@ -47,7 +47,7 @@ Feature: Creation of a new product entry
 
   Scenario: A valid request to create a new product record is successful (also strips any decimal places on price)
     Given I am logged in with the "products-create-one@venzra-test.io" account
-    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+    When I make a POST request to the API endpoint "/api/products" as "product" using:
       | code       | displayName      | featureImage        | currentPrice |
       | CREATE-002 | Product Create B | {{ images[2]._id }} | 99.99        |
     Then there should be a 200 response from the "product" request that contains:
@@ -56,7 +56,7 @@ Feature: Creation of a new product entry
 
   Scenario: An account linked to another subscription can use the same product code and name already used by a different subscription
     Given I am logged in with the "products-create-two@venzra-test.io" account
-    When I make a POST request to the API endpoint "/api/v1/products" as "product" using:
+    When I make a POST request to the API endpoint "/api/products" as "product" using:
       | code                   | displayName                   | featureImage        | previousPrice | currentPrice |
       | {{ products[1].code }} | {{ products[1].displayName }} | {{ images[3]._id }} | 104.99        | 99.49        |
     Then there should be a 200 response from the "product" request that contains:

@@ -12,7 +12,7 @@ Feature: Creation of a new subscription gateway
 
   Scenario: A missing email and stripe bank token will result in an error
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
-    When I make an empty POST request to the API endpoint "/api/v1/gateway" as "gateway"
+    When I make an empty POST request to the API endpoint "/api/subscription/gateway" as "gateway"
     Then there should be a 400 error from the "gateway" request that contains:
       | message           | detail                 |
       | Validation failed | ["reference required"] |
@@ -20,7 +20,7 @@ Feature: Creation of a new subscription gateway
   Scenario: Handle a rejection from stripe occurring when attempting to create a subscription
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     And there is a POST consumer at "https://connect.stripe.com" for "/oauth/token" that will return "stripe/connect/account/create-invalid.json" with status 400
-    When I make a POST request to the API endpoint "/api/v1/gateway" as "gateway" using:
+    When I make a POST request to the API endpoint "/api/subscription/gateway" as "gateway" using:
       | reference                           |
       | ac_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
     Then there should be a 500 error from the "gateway" request that contains:
@@ -30,7 +30,7 @@ Feature: Creation of a new subscription gateway
   Scenario: Sending a valid request will create subscription payment data
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
     And there is a POST consumer at "https://connect.stripe.com" for "/oauth/token" that will return "stripe/connect/account/create-success.json" with status 200
-    When I make a POST request to the API endpoint "/api/v1/gateway" as "gateway" using:
+    When I make a POST request to the API endpoint "/api/subscription/gateway" as "gateway" using:
       | reference                           |
       | ac_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
     Then there should be a 200 response from the "gateway" request that contains:
@@ -42,7 +42,7 @@ Feature: Creation of a new subscription gateway
 
   Scenario: Sending a second request will not call to stripe or change / overwrite subscription information
     Given I am logged in with the "subscription-create-one@venzra-test.io" account
-    When I make a POST request to the API endpoint "/api/v1/gateway" as "gateway" using:
+    When I make a POST request to the API endpoint "/api/subscription/gateway" as "gateway" using:
       | reference                           |
       | ac_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
     Then there should be a 200 response from the "gateway" request that contains:

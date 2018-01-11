@@ -38,7 +38,7 @@ Feature: Creation of a new product entry
 
   Scenario: Requesting a list of products should return only records for that subscription (subscription one)
     Given I am logged in with the "products-search-one@venzra-test.io" account
-    When I make a GET request to the API endpoint "/api/v1/products" as "product"
+    When I make a GET request to the API endpoint "/api/products" as "product"
     Then there should be a 200 response from the "product" request that contains:
       | list      | total | skip | limit |
       | ARRAY[12] | 12    | 0    | 25    |
@@ -48,7 +48,7 @@ Feature: Creation of a new product entry
 
   Scenario: Requesting a list of products should return only records for that subscription (subscription two)
     Given I am logged in with the "products-search-two@venzra-test.io" account
-    When I make a GET request to the API endpoint "/api/v1/products" as "product"
+    When I make a GET request to the API endpoint "/api/products" as "product"
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 3     | 0    | 25    |
@@ -58,14 +58,14 @@ Feature: Creation of a new product entry
 
   Scenario: Requesting a list of products should return no results when there are no products (subscription three)
     Given I am logged in with the "products-search-three@venzra-test.io" account
-    When I make a GET request to the API endpoint "/api/v1/products" as "product"
+    When I make a GET request to the API endpoint "/api/products" as "product"
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[0] | 0     | 0    | 25    |
 
   Scenario: Requesting a list of products adheres to pagination values for skip and limit
     Given I am logged in with the "products-search-one@venzra-test.io" account
-    When I make a GET request to the API endpoint "/api/v1/products?skip=2&limit=3" as "product"
+    When I make a GET request to the API endpoint "/api/products?skip=2&limit=3" as "product"
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 12    | 2    | 3     |
@@ -75,7 +75,7 @@ Feature: Creation of a new product entry
 
   Scenario: Listing of products supports searching by name
     Given I am logged in with the "products-search-one@venzra-test.io" account
-    When I make a GET request to the API endpoint "/api/v1/products?search=aa" as "product"
+    When I make a GET request to the API endpoint "/api/products?search=aa" as "product"
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[2] | 2     | 0    | 25    |

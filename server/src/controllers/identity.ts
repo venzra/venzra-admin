@@ -1,7 +1,8 @@
+import * as parser from 'body-parser';
+
 import { Request, Response, NextFunction, Router } from 'express';
 import { createHash, pbkdf2Sync } from 'crypto';
 import { v4 } from 'uuid';
-import { encode, decode } from 'jwt-simple';
 
 import { AccountAccessError } from '../middleware/error-handler';
 
@@ -11,18 +12,23 @@ import { AccountModel, IAccountModel } from '../models/account';
 import { SubscriptionModel } from '../models/subscription';
 import { IAccountPassword } from '../models/objects/password';
 
-class IdentityController extends AuthenticationController {
+export class IdentityController extends AuthenticationController {
 
-    constructor(private router: Router) {
+    public router: Router;
+
+    constructor() {
         super();
         this.registerRoutes();
     }
 
     registerRoutes() {
-        this.router.post('/identity/login', this.authorise.bind(this), this.tokenise.bind(this));
-        this.router.post('/identity/recover', this.recover.bind(this));
-        this.router.post('/identity/activate', this.activation.bind(this));
-        this.router.post('/identity/logout', this.validate.bind(this), this.logout.bind(this));
+        this.router = Router();
+        this.router.use(parser.json({ type: 'application/json' }));
+
+        this.router.post('/login', this.authorise.bind(this), this.tokenise.bind(this));
+        this.router.post('/recover', this.recover.bind(this));
+        this.router.post('/activate', this.activation.bind(this));
+        this.router.post('/logout', this.validate.bind(this), this.logout.bind(this));
     }
 
     recover(req: Request, res: Response, next: NextFunction) {
@@ -74,4 +80,4 @@ class IdentityController extends AuthenticationController {
 
 }
 
-export { IdentityController };
+export default new IdentityController().router;

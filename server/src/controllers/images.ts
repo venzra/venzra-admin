@@ -1,3 +1,5 @@
+import * as parser from 'body-parser';
+
 import { Request, Response, NextFunction, Router } from 'express';
 import { S3 } from 'aws-sdk';
 
@@ -8,19 +10,24 @@ import { ThirdPartyError, ValidationError } from '../middleware/error-handler';
 
 import { environment } from '../config';
 
-class ImagesController extends AuthenticationController {
+export class ImagesController extends AuthenticationController {
 
     private awsClient: S3;
 
-    constructor(private router: Router) {
+    public router: Router;
+
+    constructor() {
         super();
-        this.registerRoutes();
         this.awsClient = new S3({ region: 'eu-west-1' });
+        this.registerRoutes();
     }
 
     registerRoutes() {
-        this.router.post('/images', this.validate.bind(this), this.createImage.bind(this), this.findOne.bind(this));
-        this.router.get('/images/:imageId', this.validate.bind(this), this.findOne.bind(this));
+        this.router = Router();
+        this.router.use(parser.json({ type: 'application/json', limit: '1mb' }));
+
+        this.router.post('/', this.validate.bind(this), this.createImage.bind(this), this.findOne.bind(this));
+        this.router.get('/:imageId', this.validate.bind(this), this.findOne.bind(this));
     }
 
     createImage(req: Request, res: Response, next: NextFunction) {
@@ -92,4 +99,4 @@ class ImagesController extends AuthenticationController {
 
 }
 
-export { ImagesController };
+export default new ImagesController().router;

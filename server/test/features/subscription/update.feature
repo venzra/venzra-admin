@@ -12,14 +12,14 @@ Feature: Updating a new subscription via patch requests
 
   Scenario: If no update information is provided then the request is ignored
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
-    When I make an empty PATCH request to the API endpoint "/api/v1/subscription" as "subscription"
+    When I make an empty PATCH request to the API endpoint "/api/subscription" as "subscription"
     Then there should be a 200 response from the "subscription" request that contains:
       | _id       | domainName              | storeName               | strapline                    | transactions                  | status |
       | OBJECT_ID | subscription-update-one | Subscription Update One | Automated subscription entry | { "base": 10, "rate": 0.046 } | TRIAL  |
 
   Scenario: It should not be possible to set an empty store name value
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
-    When I make a PATCH request to the API endpoint "/api/v1/subscription" as "subscription" using:
+    When I make a PATCH request to the API endpoint "/api/subscription" as "subscription" using:
       | op      | path      | value |
       | replace | storeName |       |
     Then there should be a 400 error from the "subscription" request that contains:
@@ -28,7 +28,7 @@ Feature: Updating a new subscription via patch requests
 
   Scenario: Store name should be at least 3 characters
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
-    When I make a PATCH request to the API endpoint "/api/v1/subscription" as "subscription" using:
+    When I make a PATCH request to the API endpoint "/api/subscription" as "subscription" using:
       | op      | path      | value |
       | replace | storeName | xx    |
     Then there should be a 400 error from the "subscription" request that contains:
@@ -37,7 +37,7 @@ Feature: Updating a new subscription via patch requests
 
   Scenario: Update an existing account subscription record
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
-    When I make a PATCH request to the API endpoint "/api/v1/subscription" as "subscription" using:
+    When I make a PATCH request to the API endpoint "/api/subscription" as "subscription" using:
       | op      | path      | value                       |
       | replace | storeName | Subscription Update Updated |
       | replace | strapline | Updated subscription entry  |

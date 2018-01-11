@@ -18,7 +18,7 @@ export class ImageService {
 
     create(image): void {
         const reportProgress = true;
-        const req = new HttpRequest('POST', 'api/v1/images', image, { reportProgress });
+        const req = new HttpRequest('POST', '/api/images', image, { reportProgress });
 
         this.http.request(req)
             .subscribe((event: any) => {

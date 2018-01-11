@@ -9,7 +9,7 @@ Feature: Perform a logout command that removes any account authentication token
 
   Scenario: Logging out an account that has previously logged in should be a success
     Given I am logged in with the "identity-logout-one@venzra-test.io" account
-    When I make a POST request to the API endpoint "/api/v1/identity/logout" as "logout" using:
+    When I make a POST request to the API endpoint "/api/identity/logout" as "logout" using:
       | logout |
       | true   |
     Then the status returned from the "logout" request should be 202

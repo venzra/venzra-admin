@@ -1,3 +1,5 @@
+import * as parser from 'body-parser';
+
 import { Request, Response, NextFunction, Router } from 'express';
 import * as request from 'request';
 import * as Stripe from 'stripe';
@@ -13,17 +15,22 @@ import { PlanModel } from '../models/plans';
 
 const stripe = new Stripe(environment.stripe);
 
-class SubscriptionController extends AuthenticationController {
+export class SubscriptionController extends AuthenticationController {
 
-    constructor(private router: Router) {
+    public router: Router;
+
+    constructor() {
         super();
         this.registerRoutes();
     }
 
     registerRoutes() {
+        this.router = Router();
+        this.router.use(parser.json({ type: 'application/json' }));
+
+        this.router.get('/', this.validate.bind(this), this.getSubscription.bind(this));
+        this.router.patch('/', this.validate.bind(this), this.updateSettings.bind(this), this.getSubscription.bind(this));
         this.router.get('/plans', this.validate.bind(this), this.getPlans.bind(this));
-        this.router.get('/subscription', this.validate.bind(this), this.getSubscription.bind(this));
-        this.router.patch('/subscription', this.validate.bind(this), this.updateSettings.bind(this), this.getSubscription.bind(this));
         this.router.post('/payment', this.validate.bind(this), this.attachPayment.bind(this), this.getSubscription.bind(this));
         this.router.post('/gateway', this.validate.bind(this), this.attachGateway.bind(this), this.getSubscription.bind(this));
     }
@@ -162,4 +169,4 @@ class SubscriptionController extends AuthenticationController {
 
 }
 
-export { SubscriptionController };
+export default new SubscriptionController().router;

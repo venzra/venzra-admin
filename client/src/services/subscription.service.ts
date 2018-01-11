@@ -52,13 +52,13 @@ export class SubscriptionService extends RestfulService {
     updateSettings(formData: {[key: string]: AbstractControl}): Promise<Subscription> {
         const subscriptionData = this.preparePatch(formData);
 
-        return this.http.patch('api/v1/subscription', subscriptionData)
+        return this.http.patch('/api/subscription', subscriptionData)
             .toPromise()
             .then((response) => response as Subscription);
     }
 
     getSubscription(): Promise<Subscription> {
-        return this.http.get('api/v1/subscription')
+        return this.http.get('/api/subscription')
             .toPromise()
             .then((response) => response as Subscription);
     }

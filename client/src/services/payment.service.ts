@@ -58,7 +58,7 @@ export class PaymentService {
                 })
             )))
             .then((token) =>
-                this.http.post('api/v1/payment', { email, plan, token })
+                this.http.post('/api/subscription/payment', { email, plan, token })
                     .toPromise()
                     .catch(() => {
                         throw new Error('Unable to create subscription, please contact us or try again later');

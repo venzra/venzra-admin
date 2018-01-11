@@ -52,7 +52,7 @@ export class ImageUploadComponent {
         this.imageService.image.subscribe((image) => {
             if (image && image._id) {
                 this.setValue(image._id);
-                this.image = `/api/v1/images/${image._id}`;
+                this.image = `/api/images/${image._id}`;
                 this.background = this.sanitizer.bypassSecurityTrustStyle(`url(${this.image})`);
             } else {
                 this.image = null;

@@ -5,49 +5,16 @@ import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
 import * as path from 'path';
 
-import { raw, json } from 'body-parser';
+import AccountController from './controllers/account';
+import IdentityController from './controllers/identity';
+import ImagesController from './controllers/images';
+import ProductsController from './controllers/products';
+import SubscriptionController from './controllers/subscription';
+import WebhookController from './controllers/webhooks';
 
 import { errorHandler } from './middleware/error-handler';
-import { AccountController } from './controllers/account';
-import { IdentityController } from './controllers/identity';
-import { ProductsController } from './controllers/products';
-import { SubscriptionController } from './controllers/subscription';
-import { ImagesController } from './controllers/images';
-import { WebhookController } from './controllers/webhooks';
 
 require('mongoose').Promise = global.Promise;
-
-const app: express.Application = express();
-const jsonRouter: express.Router = express();
-const rawRouter: express.Router = express();
-
-/*
- * Configure security elements
- */
-app.enable('trust proxy');
-app.disable('x-powered-by');
-app.use(cookieParser());
-
-/*
- * Register routing endpoints
- */
-jsonRouter.use(json({ limit: '1mb' }));
-rawRouter.use(raw({ type: '*/*', limit: '1mb' }));
-
-jsonRouter.use(morgan(':remote-addr - BASIC LOG - [:date[iso]] - ":method :url" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms'));
-
-app.use('/api/v1/', jsonRouter);
-app.use('/api/webhooks', rawRouter);
-
-app.use(express.static(path.join(__dirname, '../client')));
-app.route('*').get((req, res, next) => {
-    if (req.url.startsWith('/assets')) {
-        return next();
-    }
-
-    res.type('html');
-    res.sendFile(path.join(__dirname, '../client/index.html'));
-});
 
 /*
  * Database connection
@@ -68,14 +35,35 @@ mongoose
     .catch((err) => console.error(`Mongo connection error: ${err.message}`));
 
 /*
- * Start controllers
+ * Configure security elements
  */
-const account = new AccountController(jsonRouter);
-const identity = new IdentityController(jsonRouter);
-const products = new ProductsController(jsonRouter);
-const subscription = new SubscriptionController(jsonRouter);
-const images = new ImagesController(jsonRouter);
-const webhooks = new WebhookController(rawRouter);
+const app: express.Application = express();
+app.enable('trust proxy');
+app.disable('x-powered-by');
+app.use(cookieParser());
+
+/*
+ * Register routing endpoints
+ */
+app.use('/api', morgan(':remote-addr - BASIC LOG - [:date[iso]] - ":method :url" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms'));
+
+app.use('/api/account', AccountController);
+app.use('/api/identity', IdentityController);
+app.use('/api/images', ImagesController);
+app.use('/api/products', ProductsController);
+app.use('/api/subscription', SubscriptionController);
+app.use('/api/webhooks', WebhookController);
+
+app.use(express.static(path.join(__dirname, '../client')));
+
+app.route('*').get((req, res, next) => {
+    if (req.url.startsWith('/assets')) {
+        return next();
+    }
+
+    res.type('html');
+    res.sendFile(path.join(__dirname, '../client/index.html'));
+});
 
 app.use(errorHandler);
 
