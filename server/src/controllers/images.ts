@@ -1,4 +1,5 @@
 import * as parser from 'body-parser';
+import * as stream from 'stream';
 
 import { Request, Response, NextFunction, Router } from 'express';
 import { S3 } from 'aws-sdk';
@@ -24,7 +25,7 @@ export class ImagesController extends AuthenticationController {
 
     registerRoutes() {
         this.router = Router();
-        this.router.use(parser.json({ type: 'application/json', limit: '1mb' }));
+        this.router.use(parser.raw({ type: 'image/*', limit: '1mb' }));
 
         this.router.post('/', this.validate.bind(this), this.createImage.bind(this), this.findOne.bind(this));
         this.router.get('/:imageId', this.validate.bind(this), this.findOne.bind(this));
@@ -33,11 +34,11 @@ export class ImagesController extends AuthenticationController {
     createImage(req: Request, res: Response, next: NextFunction) {
         const errors = [];
 
-        if (!req.body.name) {
+        if (!req.query.name) {
             errors.push({ path: 'name', kind: 'required' });
         }
 
-        if (!req.body.usage) {
+        if (!req.query.usage) {
             errors.push({ path: 'usage', kind: 'required' });
         }
 
@@ -47,21 +48,25 @@ export class ImagesController extends AuthenticationController {
 
         const image = new ImageModel({
             subscription: this.account.subscription._id,
-            name: req.body.name,
-            usage: req.body.usage
+            name: req.query.name,
+            usage: req.query.usage
         });
 
         const ACL = 'private';
         const Bucket = environment.imageBucket;
         const Key = `${image.subscription}/${image.usage}/${image._id}`;
-        const Body = Buffer.from(req.body.data, 'base64');
+        const Body = Buffer.from(req.body, 'base64');
+        const ContentType = req.headers['content-type'];
 
-        const params: S3.PutObjectRequest = { ACL, Bucket, Key, Body };
+        const params: S3.PutObjectRequest = { ACL, Bucket, Key, Body, ContentType };
 
         this.awsClient.putObject(params).promise()
             .then(() => image.set('size', Body.length))
             .then(() => image.save().then((result) => req.params.imageId = result._id))
-            .then((result) => next())
+            .then(() => {
+                req.headers['content-type'] = 'application/json';
+                next();
+            })
             .catch((error) => next(new ThirdPartyError('S3 image upload', error)));
     }
 
@@ -91,7 +96,7 @@ export class ImagesController extends AuthenticationController {
 
                             return this.awsClient.getObject(params).createReadStream();
                         })
-                        .then((stream) => stream.pipe(res));
+                        .then((result: stream.Readable) => result.pipe(res));
                 }
             })
             .catch((error) => next(error));

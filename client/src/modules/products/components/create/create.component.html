@@ -4,10 +4,8 @@
 
 <form (ngSubmit)="createProduct()" [formGroup]="productForm">
     <mat-card>
-        <h2>Information</h2>
-        <p>This is the primary information regarding the sale of your product and its availability to customers of your store.</p>
-
-        <mat-divider></mat-divider>
+        <mat-card-title>Information</mat-card-title>
+        <mat-card-subtitle>This is the primary information regarding the sale of your product and its availability to customers of your store.</mat-card-subtitle>
 
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-form-field>
@@ -23,10 +21,8 @@
     </mat-card>
 
     <mat-card>
-        <h2>Depictions</h2>
-        <p>Manage any imagery that you want to show for this product</p>
-
-        <mat-divider></mat-divider>
+        <mat-card-title>Depictions</mat-card-title>
+        <mat-card-subtitle>Manage any imagery that you want to show for this product</mat-card-subtitle>
 
         <venzra-image-upload target="/api/images" usage="product-feature" accept="image/png,image/jpeg">
             <input venzraImage placeholder="Feature image" formControlName="featureImage" required />
@@ -34,10 +30,8 @@
     </mat-card>
 
     <mat-card>
-        <h2>Pricing details</h2>
-        <p>Setup your current sale price, including any standard retail pricing information.</p>
-
-        <mat-divider></mat-divider>
+        <mat-card-title>Pricing details</mat-card-title>
+        <mat-card-subtitle>Setup your current sale price, including any standard retail pricing information.</mat-card-subtitle>
 
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-form-field>

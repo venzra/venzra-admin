@@ -39,6 +39,16 @@ export class ImageUploadComponent {
         private sanitizer: DomSanitizer,
         private imageService: ImageService
     ) {
+        this.imageService.result.subscribe(({ status, text }) => {
+            if (status !== 200) {
+                this.image = null;
+                this.background = null;
+                this.progress = 0;
+                this.state = 'error';
+                this.detail = `${status}: ${text}`;
+            }
+        });
+
         this.imageService.progress.subscribe((progress) => {
             this.mode = 'determinate';
             this.progress = progress;
@@ -104,11 +114,12 @@ export class ImageUploadComponent {
             reader.addEventListener('load', () => {
                 const name = file.name;
                 const usage = this.usage;
-                const data = btoa(reader.result);
+                const type = file.type;
+                const data = reader.result;
 
-                this.imageService.create({ name, usage, data });
+                this.imageService.create(data, { name, type, usage });
             });
-            reader.readAsBinaryString(file);
+            reader.readAsArrayBuffer(file);
         }
 
         this.state = this.state === 'success' || file ? 'success' : 'error';

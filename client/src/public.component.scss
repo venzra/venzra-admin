@@ -1,0 +1,26 @@
+@import '../styles';
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+:host {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.public-content {
+    margin: 0 0 4em;
+    background-color: mat-color($venzra-app-primary);
+
+    h2 {
+        color: #fff;
+    }
+
+    .hero {
+        padding: 4em 0 2em;
+        text-align: center;
+    }
+}

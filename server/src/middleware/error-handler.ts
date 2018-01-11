@@ -9,6 +9,8 @@ interface IVenzraError {
     message: string;
     reason?: string;
     errors?: any;
+    limit?: number;
+    length?: number;
 }
 
 class VenzraError extends Error {
@@ -91,8 +93,12 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             logger.error(`${err.name} - ${err.reason}`);
             res.status(403).send({ message: err.message });
             break;
+        case 'NotFound':
         case 'NotFoundError':
             res.status(404).send();
+            break;
+        case 'PayloadTooLargeError':
+            res.status(413).send({ message: `Request limit is: ${Math.floor(err.limit / 1024)} KiB`, detail: [`Received: ${Math.ceil(err.length / 1024)} KiB`] });
             break;
         case 'MongoError':
             switch (err.code) {

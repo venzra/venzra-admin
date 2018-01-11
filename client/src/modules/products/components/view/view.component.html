@@ -5,10 +5,8 @@
 </mat-toolbar>
 
 <mat-card>
-    <h2>Information</h2>
-    <p>This is the primary information regarding the sale of your product and its availability to customers of your store.</p>
-
-    <mat-divider></mat-divider>
+    <mat-card-title>Information</mat-card-title>
+    <mat-card-subtitle>This is the primary information regarding the sale of your product and its availability to customers of your store.</mat-card-subtitle>
 
     <mat-card-content fxLayout="column" fxLayoutGap="20px">
         <div fxLayout="row">
@@ -39,10 +37,8 @@
 </mat-card>
 
 <mat-card>
-    <h2>History</h2>
-    <p>The following is a history of events that have occurred which modify certain information about this product, currently only pricing and status changes are recorded. Auditing history for each product is kept for 7 days.</p>
-
-    <mat-divider></mat-divider>
+    <mat-card-title>History</mat-card-title>
+    <mat-card-subtitle>The following is a history of events that have occurred which modify certain information about this product, currently only pricing and status changes are recorded. Auditing history for each product is kept for 7 days.</mat-card-subtitle>
 
     <p *ngIf="!product.history.length"><em>No recent changes have been recorded for this product.</em></p>
 

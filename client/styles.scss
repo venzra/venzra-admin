@@ -9,55 +9,7 @@ $venzra-app-theme:   mat-light-theme($venzra-app-primary, $venzra-app-accent, $v
 
 @include angular-material-theme($venzra-app-theme);
 
-// general layout
-
-app-public {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-app-private {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.public-content {
-    margin: 0 0 4em;
-    background-color: mat-color($venzra-app-primary);
-
-    h2 {
-        color: #fff;
-    }
-
-    .hero {
-        padding: 4em 0 2em;
-        text-align: center;
-    }
-}
-
-.private-header {
-    z-index: 5;
-}
-
-.private-container {
-    min-height: 100%;
-
-    .private-content {
-        width: 750px;
-        margin: 2em 2em 4em;
-    }
-}
-
 // navigational layout
-
 mat-sidenav {
     width: 200px;
 
@@ -75,21 +27,16 @@ mat-sidenav {
 }
 
 //content items
-
 .mat-toolbar {
     background-color: inherit;
 }
 
 mat-card {
     margin-bottom: 20px;
-
-    mat-divider.mat-divider {
-        margin: 20px -24px;
-    }
 }
 
-mat-divider.mat-divider {
-    margin: 20px 0;
+mat-card-content {
+    padding: 10px 0;
 }
 
 .mat-form-field {
