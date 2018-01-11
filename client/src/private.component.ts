@@ -5,7 +5,6 @@ import { Account, AccountService } from './services/account.service';
 import { ServiceTermsComponent } from './common/components/service-terms/service-terms.component';
 
 @Component({
-    selector: 'app-private',
     templateUrl: './private.component.html'
 })
 export class PrivateComponent implements OnInit {

@@ -10,7 +10,6 @@ import { ListModel } from '../../../../services/restful.service';
 import { Product, ProductService } from '../../../../services/product.service';
 
 @Component({
-    selector: 'product-list',
     templateUrl: './list.component.html'
 })
 export class ProductListComponent implements OnInit {

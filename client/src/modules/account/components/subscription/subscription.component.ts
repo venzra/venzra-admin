@@ -11,7 +11,7 @@ import { Payment, PaymentService } from '../../../../services/payment.service';
 import { CalendarService } from '../../../../services/calendar.service';
 
 @Component({
-    selector: 'account-subscription',
+    selector: 'venzra-account-subscription',
     templateUrl: './subscription.component.html'
 })
 export class SubscriptionComponent implements OnInit {

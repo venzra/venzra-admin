@@ -8,8 +8,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { SubscriptionComponent } from './components/subscription/subscription.component';
 import { GatewayComponent } from './components/gateway/gateway.component';
 
-import { StorePage } from './pages/store/store.page';
-import { PaymentPage } from './pages/payments/payments.page';
+import { StorePageComponent } from './pages/store/store.page';
+import { PaymentPageComponent } from './pages/payments/payments.page';
 
 import { CalendarService } from '../../services/calendar.service';
 import { PaymentService } from '../../services/payment.service';
@@ -22,8 +22,8 @@ import { PlanListResolve, PlanService } from '../../services/plan.service';
         SettingsComponent,
         SubscriptionComponent,
         GatewayComponent,
-        StorePage,
-        PaymentPage
+        StorePageComponent,
+        PaymentPageComponent
     ],
     imports: [
         CommonModule,

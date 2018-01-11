@@ -4,7 +4,7 @@ import { ImageInputControl } from './image-input.control';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
-    selector: 'input[imageInput]',
+    selector: 'input[venzraImage]',
     exportAs: 'imageInput',
     providers: [{ provide: ImageInputControl, useExisting: ImageInputDirective }]
 })

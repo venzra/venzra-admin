@@ -5,7 +5,7 @@ export class PricePipe implements PipeTransform {
     transform(price: number, currency: string = 'gbp'): string {
         let prefix = '£';
 
-        switch(currency) {
+        switch (currency) {
             case 'eur':
                 prefix = '€';
                 break;

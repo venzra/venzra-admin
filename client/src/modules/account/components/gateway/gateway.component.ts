@@ -8,7 +8,7 @@ import { Gateway, GatewayService } from '../../../../services/gateway.service';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
-    selector: 'payment-gateway',
+    selector: 'venzra-payment-gateway',
     templateUrl: './gateway.component.html'
 })
 export class GatewayComponent implements OnInit {

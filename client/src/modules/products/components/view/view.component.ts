@@ -6,7 +6,6 @@ import { Product, ProductService } from '../../../../services/product.service';
 import { LayoutService } from '../../../../services/layout.service';
 
 @Component({
-    selector: 'product-view',
     templateUrl: './view.component.html'
 })
 export class ProductViewComponent implements OnInit {

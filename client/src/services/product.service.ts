@@ -49,7 +49,7 @@ export class ProductService extends RestfulService {
     }
 
     getAllProducts(query): Promise<ListModel<Product>> {
-        const params = Object.keys(query).reduce((params, key) => params.set(key, query[key]), new HttpParams());
+        const params = Object.keys(query).reduce((httpParams, key) => httpParams.set(key, query[key]), new HttpParams());
 
         return this.http.get('/api/products', { params })
             .toPromise()

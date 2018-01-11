@@ -72,7 +72,7 @@ export class AccountService {
     }
 
     isAuthenticated(): Observable<boolean> {
-        let subject = new BehaviorSubject<boolean>(true);
+        const subject = new BehaviorSubject<boolean>(true);
 
         if (localStorage.getItem('authenticated') === '1') {
             this.http.get('/api/account')

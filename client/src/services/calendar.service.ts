@@ -24,8 +24,8 @@ export class CalendarService {
         const date = new Date();
         date.setFullYear(date.getFullYear() + (pivotYear - count));
 
-        while(count > 0) {
-            if(pivotYear >= 0) {
+        while (count > 0) {
+            if (pivotYear >= 0) {
                 years.unshift(date.getFullYear() + count);
             } else {
                 years.push(date.getFullYear() + count);

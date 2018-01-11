@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Account, AccountService } from '../../../services/account.service';
 
 @Component({
-    selector: 'admin-account',
+    selector: 'venzra-admin-account',
     templateUrl: './account.component.html'
 })
 export class AccountComponent implements OnInit {

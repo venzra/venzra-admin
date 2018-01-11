@@ -8,7 +8,6 @@ import { Product, ProductService } from '../../../../services/product.service';
 import { LayoutService } from '../../../../services/layout.service';
 
 @Component({
-    selector: 'product-create',
     templateUrl: './create.component.html'
 })
 export class ProductCreateComponent implements OnInit {

@@ -20,7 +20,7 @@ export class HistoryModel {
 export class RestfulService {
 
     preparePatch(formData: { [key: string]: AbstractControl }) {
-        let operations = [];
+        const operations = [];
 
         Object.keys(formData).forEach((key: string) => {
             const field = formData[key];

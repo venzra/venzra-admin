@@ -8,7 +8,7 @@ import { LayoutService } from '../../../../services/layout.service';
 @Component({
     templateUrl: './store.page.html'
 })
-export class StorePage implements OnInit {
+export class StorePageComponent implements OnInit {
 
     subscription: Subscription;
 

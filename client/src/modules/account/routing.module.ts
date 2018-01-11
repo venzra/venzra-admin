@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { StorePage } from './pages/store/store.page';
-import { PaymentPage } from './pages/payments/payments.page';
+import { StorePageComponent } from './pages/store/store.page';
+import { PaymentPageComponent } from './pages/payments/payments.page';
 
 import { SubscriptionRetrieveResolve } from '../../services/subscription.service';
 import { PlanListResolve } from '../../services/plan.service';
@@ -11,14 +11,14 @@ import { PlanListResolve } from '../../services/plan.service';
 const routes: Routes = [
     {
         path: 'store',
-        component: StorePage,
+        component: StorePageComponent,
         resolve: {
             subscription: SubscriptionRetrieveResolve
         }
     },
     {
         path: 'payments',
-        component: PaymentPage,
+        component: PaymentPageComponent,
         resolve: {
             subscription: SubscriptionRetrieveResolve,
             plans: PlanListResolve

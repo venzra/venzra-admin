@@ -22,6 +22,6 @@
     </div>
 </mat-card>
 
-<account-subscription *ngIf="subscription.status !== 'TRIAL'"></account-subscription>
+<venzra-payment-gateway></venzra-payment-gateway>
 
-<payment-gateway></payment-gateway>
+<venzra-account-subscription *ngIf="subscription.status !== 'TRIAL'"></venzra-account-subscription>

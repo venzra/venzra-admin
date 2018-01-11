@@ -9,7 +9,7 @@ import { Subscription, SubscriptionService } from '../../../../services/subscrip
 import { LayoutService } from '../../../../services/layout.service';
 
 @Component({
-    selector: 'account-settings',
+    selector: 'venzra-account-settings',
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
