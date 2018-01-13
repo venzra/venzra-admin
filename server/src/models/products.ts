@@ -34,6 +34,10 @@ const ProductSchema: Schema = new Schema({
     },
     featureImage: {
         type: Schema.Types.ObjectId,
+        ref: 'images'
+    },
+    promotionalImage: {
+        type: Schema.Types.ObjectId,
         ref: 'images',
         required: true
     },

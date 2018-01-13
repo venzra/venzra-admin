@@ -22,6 +22,10 @@
         border-radius: 5px;
         position: relative;
 
+        &.invalid {
+            border-color: mat-color($venzra-app-warn);
+        }
+
         > div {
             .image {
                 .background {

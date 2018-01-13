@@ -1,11 +1,13 @@
 <div fxLayout="column" fxLayoutGap="10px">
-    <label fxLayout="row" fxLayoutGap="4px">
+    <label class="mat-subheading-2" fxLayout="row" fxLayoutGap="4px">
         <span>{{ control.placeholder }}</span>
         <span *ngIf="control.required">*</span>
     </label>
 
-    <div [ngSwitch]="state" class="image-input" fxLayout="row" fxLayoutAlign="center center">
-        <div *ngSwitchCase="'info'" class="message" fxLayout="column" fxLayoutAlign="center center">
+    <ng-content></ng-content>
+
+    <div [ngSwitch]="state" class="image-input" [class.invalid]="control.hasError() && touched" fxLayout="row" fxLayoutAlign="center center">
+        <div *ngSwitchCase="'info' || 'error'" class="message" fxLayout="column" fxLayoutAlign="center center">
             <mat-icon [ngClass]="{ 'required': control.required && touched }">perm_media</mat-icon>
             <p>Drag and drop a file</p>
             <span class="mat-caption">{{ accept }}</span>
@@ -30,15 +32,11 @@
         </div>
 
         <div *ngSwitchCase="'error'" class="message">
-            <div [ngSwitch]="error" fxLayout="column" fxLayoutAlign="center center">
+            <div fxLayout="column" fxLayoutAlign="center center">
                 <mat-icon class="required">close</mat-icon>
-                <p *ngSwitchCase="'INVALID_TYPE'">Invalid file type</p>
                 <strong>{{ detail }}</strong>
                 <span class="mat-caption">Please try again</span>
             </div>
         </div>
     </div>
-    <mat-error class="mat-caption" *ngIf="control.hasError() && touched">This field is required.</mat-error>
-
-    <ng-content></ng-content>
 </div>

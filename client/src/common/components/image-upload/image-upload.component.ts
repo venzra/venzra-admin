@@ -14,10 +14,10 @@ import { ImageService } from './image-upload.service';
 export class ImageUploadComponent {
 
     protected _accept: Array<string> = [];
+    protected _limit = 0;
 
     public touched = false;
     public state: 'info' | 'success' | 'error' = 'info';
-    public error: 'INVALID_TYPE' | null = null;
     public detail: any;
     public image: string;
     public mode: string;
@@ -27,6 +27,10 @@ export class ImageUploadComponent {
     @Input() target = '';
 
     @Input() usage = '';
+
+    @Input()
+    get limit() { return this._limit / 1000; }
+    set limit(value: number) { this._limit = value * 1000 }
 
     @Input()
     get accept() { return this._accept.join(', '); }
@@ -79,7 +83,6 @@ export class ImageUploadComponent {
         const file = data ? data.files[0] : null;
         if (file && this._accept.length > 0) {
             if (this._accept.indexOf(file.type) === -1) {
-                this.error = 'INVALID_TYPE';
                 this.detail = file.type;
                 return false;
             }
@@ -107,9 +110,19 @@ export class ImageUploadComponent {
     onDrop(event: any) {
         event.preventDefault();
 
-        const file = this.validate(event.dataTransfer || event.target);
+        const file: File = this.validate(event.dataTransfer || event.target) as File;
 
-        if (file instanceof File) {
+        if (!file && this.state !== 'success') {
+            this.state = 'error';
+            this.detail = '400: Invalid file provided';
+        }
+
+        if (file.size > this._limit && this.state !== 'success') {
+            this.state = 'error';
+            this.detail = '413: Payload Too Large';
+        }
+
+        if (file.size <= this._limit) {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
                 const name = file.name;
@@ -120,9 +133,10 @@ export class ImageUploadComponent {
                 this.imageService.create(data, { name, type, usage });
             });
             reader.readAsArrayBuffer(file);
+
+            this.state = 'success';
         }
 
-        this.state = this.state === 'success' || file ? 'success' : 'error';
     }
 
 }

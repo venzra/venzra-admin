@@ -1,6 +1,8 @@
 import * as parser from 'body-parser';
 import * as stream from 'stream';
 
+import * as sharp from 'sharp';
+
 import { Request, Response, NextFunction, Router } from 'express';
 import { S3 } from 'aws-sdk';
 
@@ -27,8 +29,25 @@ export class ImagesController extends AuthenticationController {
         this.router = Router();
         this.router.use(parser.raw({ type: 'image/*', limit: '1mb' }));
 
-        this.router.post('/', this.validate.bind(this), this.createImage.bind(this), this.findOne.bind(this));
+        this.router.post('/', this.validate.bind(this), this.processImage.bind(this), this.createImage.bind(this), this.findOne.bind(this));
         this.router.get('/:imageId', this.validate.bind(this), this.findOne.bind(this));
+    }
+
+    processImage(req: Request, res: Response, next: NextFunction) {
+        let image = sharp(req.body);
+
+        switch (req.query.usage) {
+            case 'feature':
+                image = image.resize(1024, 500);
+                break;
+            default:
+                image = image.resize(512, 512);
+        }
+
+        image.crop(sharp.gravity.center)
+            .jpeg({ quality: 75 }).toBuffer()
+            .then((imageBuffer) => req.body = imageBuffer)
+            .then(() => next());
     }
 
     createImage(req: Request, res: Response, next: NextFunction) {
@@ -56,7 +75,7 @@ export class ImagesController extends AuthenticationController {
         const Bucket = environment.imageBucket;
         const Key = `${image.subscription}/${image.usage}/${image._id}`;
         const Body = Buffer.from(req.body, 'base64');
-        const ContentType = req.headers['content-type'];
+        const ContentType = 'image/jpeg';
 
         const params: S3.PutObjectRequest = { ACL, Bucket, Key, Body, ContentType };
 

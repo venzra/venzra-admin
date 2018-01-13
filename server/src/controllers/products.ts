@@ -34,6 +34,7 @@ export class ProductsController extends AuthenticationController {
             code: req.body.code,
             displayName: req.body.displayName,
             featureImage: req.body.featureImage,
+            promotionalImage: req.body.promotionalImage,
             previousPrice: req.body.previousPrice,
             currentPrice: req.body.currentPrice
         });
@@ -97,7 +98,7 @@ export class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code displayName featureImage previousPrice currentPrice status created updated')
+            .select('slug code displayName featureImage promotionalImage previousPrice currentPrice status created updated')
             .populate({
                 path: 'history',
                 select: '-_id -table -__v',
@@ -128,7 +129,7 @@ export class ProductsController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        { $project: { slug: 1, code: 1, displayName: 1, featureImage: 1, currentPrice: 1, status: 1 } }
+                        { $project: { slug: 1, code: 1, displayName: 1, promotionalImage: 1, currentPrice: 1, status: 1 } }
                     ])
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )
