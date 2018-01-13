@@ -38,16 +38,22 @@ export class ImagesController extends AuthenticationController {
 
         switch (req.query.usage) {
             case 'feature':
-                image = image.resize(1024, 500);
+                image = image.resize(1024, 500).crop(sharp.gravity.center).jpeg({ quality: 60 });
+                break;
+            case 'promotion':
+                image = image.resize(512, 512).crop(sharp.gravity.center).jpeg({ quality: 75 });
+                break;
+            case 'logo':
+                image = image.resize(400, 100).max().jpeg({ quality: 90 });
                 break;
             default:
-                image = image.resize(512, 512);
+                image = image.resize(180, 180).crop(sharp.gravity.center).png();
         }
 
-        image.crop(sharp.gravity.center)
-            .jpeg({ quality: 75 }).toBuffer()
+        image.toBuffer()
             .then((imageBuffer) => req.body = imageBuffer)
-            .then(() => next());
+            .then(() => next())
+            .catch(() => next(new ValidationError([{ path: 'body', kind: 'invalid' }])));
     }
 
     createImage(req: Request, res: Response, next: NextFunction) {

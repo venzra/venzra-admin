@@ -4,6 +4,7 @@
 @include mat-core();
 
 :host {
+    width: 100%;
 
     &.active .image-input {
         background-color: #fafafa;
@@ -16,7 +17,7 @@
     }
 
     .image-input {
-        height: 240px;
+        height: 200px;
         padding: 0.5rem;
         border: 2px dashed #999999;
         border-radius: 5px;
@@ -69,4 +70,15 @@
         font-size: 48px;
     }
 
+    label {
+        cursor: pointer;
+
+        span {
+            color: mat-color($venzra-app-accent);
+        }
+    }
+
+    mat-progress-bar {
+        width: 50%;
+    }
 }

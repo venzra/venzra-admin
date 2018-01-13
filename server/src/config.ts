@@ -7,5 +7,5 @@ export const environment = {
     stripe: process.env.STRIPE_KEY || '',
     stripeWebhooks: process.env.STRIPE_WEBHOOK_KEY || '',
     stripeConnect: process.env.STRIPE_CONNECT_KEY || '',
-    imageBucket: process.env.AWS_IMAGE_BUCKET || 'images.venza-test.com'
+    imageBucket: process.env.AWS_IMAGE_BUCKET || 'images.venzra-test.com'
 };

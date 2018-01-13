@@ -27,6 +27,14 @@ const SubscriptionSchema: Schema = new Schema({
         type: String,
         lowercase: true
     },
+    icon: {
+        type: Schema.Types.ObjectId,
+        ref: 'images'
+    },
+    logo: {
+        type: Schema.Types.ObjectId,
+        ref: 'images'
+    },
     payment: {
         type: PaymentSchema
     },

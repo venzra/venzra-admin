@@ -20,7 +20,7 @@ const ImageSchema: Schema = new Schema({
     },
     usage: {
         type: String,
-        enum: ['feature', 'promotion'],
+        enum: ['logo', 'icon', 'feature', 'promotion'],
         required: true,
         trim: true
     },

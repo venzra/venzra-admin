@@ -30,7 +30,9 @@ export class SettingsComponent implements OnInit {
 
         this.settingsForm = this.forms.group({
             storeName: ['', [Validators.required, Validators.minLength(3)]],
-            strapline: ['', []]
+            strapline: ['', []],
+            icon: ['', []],
+            logo: ['', []]
         });
 
         this.route.data.subscribe((data: { subscription: Subscription }) => {

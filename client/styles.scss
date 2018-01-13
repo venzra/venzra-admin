@@ -3,7 +3,7 @@
 @include mat-core();
 
 $venzra-app-primary: mat-palette($mat-deep-purple);
-$venzra-app-accent:  mat-palette($mat-blue-grey, 300);
+$venzra-app-accent:  mat-palette($mat-amber, 800);
 $venzra-app-warn:    mat-palette($mat-red);
 $venzra-app-theme:   mat-light-theme($venzra-app-primary, $venzra-app-accent, $venzra-app-warn);
 

@@ -1,4 +1,4 @@
-import {NgControl} from '@angular/forms';
+import { NgControl } from '@angular/forms';
 
 export abstract class ImageInputControl {
 

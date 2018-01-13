@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, HostListener, Input } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, ElementRef, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ImageInputControl } from './image-input.control';
@@ -11,10 +11,9 @@ import { ImageService } from './image-upload.service';
     styleUrls: ['image-upload.component.scss'],
     providers: [ImageService]
 })
-export class ImageUploadComponent {
+export class ImageUploadComponent implements AfterContentInit {
 
     protected _accept: Array<string> = [];
-    protected _limit = 0;
 
     public touched = false;
     public state: 'info' | 'success' | 'error' = 'info';
@@ -27,10 +26,6 @@ export class ImageUploadComponent {
     @Input() target = '';
 
     @Input() usage = '';
-
-    @Input()
-    get limit() { return this._limit / 1000; }
-    set limit(value: number) { this._limit = value * 1000 }
 
     @Input()
     get accept() { return this._accept.join(', '); }
@@ -66,17 +61,62 @@ export class ImageUploadComponent {
         this.imageService.image.subscribe((image) => {
             if (image && image._id) {
                 this.setValue(image._id);
-                this.image = `/api/images/${image._id}`;
-                this.background = this.sanitizer.bypassSecurityTrustStyle(`url(${this.image})`);
+                this.showImage(image._id);
             } else {
-                this.image = null;
-                this.background = null;
+                this.showImage(null);
             }
         });
     }
 
+    ngAfterContentInit(): void {
+        const value = this.control.ngControl.value;
+
+        if (value) {
+            this.showImage(value);
+        }
+    }
+
+    showImage(reference) {
+        if (reference) {
+            this.image = `/api/images/${reference}`;
+            this.background = this.sanitizer.bypassSecurityTrustStyle(`url(${this.image})`);
+        } else {
+            this.image = null;
+            this.background = null;
+        }
+        this.state = 'success';
+    }
+
     setValue(value: string) {
         this.control.ngControl.reset(value);
+
+        if (value) {
+            this.control.ngControl.control.markAsDirty();
+            this.control.ngControl.control.markAsTouched();
+            this.control.ngControl.control.updateValueAndValidity();
+        }
+    }
+
+    getMeta() {
+        switch (this.usage) {
+            case 'feature':
+                return { limit: 1000 * 1000, width: 1024, height: 500, mode: 'crop' };
+            case 'promotion':
+                return { limit: 1000 * 1000, width: 512, height: 512, mode: 'crop' };
+            case 'icon':
+                return { limit: 400 * 1000, width: 180, height: 180, mode: 'crop' };
+            case 'logo':
+                return { limit: 1000 * 1000, width: 400, height: 100, mode: 'ratio' };
+        }
+    }
+
+    formatRequirements() {
+        const meta = this.getMeta();
+
+        return [
+            meta.mode === 'crop' ? `${meta.width} * ${meta.height}px` : `${meta.width}px wide or ${meta.height}px high`,
+            this.accept
+        ];
     }
 
     validate(data): File | boolean {
@@ -117,12 +157,14 @@ export class ImageUploadComponent {
             this.detail = '400: Invalid file provided';
         }
 
-        if (file.size > this._limit && this.state !== 'success') {
+        const meta = this.getMeta();
+
+        if (file.size > meta.limit && this.state !== 'success') {
             this.state = 'error';
             this.detail = '413: Payload Too Large';
         }
 
-        if (file.size <= this._limit) {
+        if (file.size <= meta.limit) {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
                 const name = file.name;
@@ -133,8 +175,6 @@ export class ImageUploadComponent {
                 this.imageService.create(data, { name, type, usage });
             });
             reader.readAsArrayBuffer(file);
-
-            this.state = 'success';
         }
 
     }

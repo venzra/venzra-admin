@@ -1,7 +1,8 @@
 import { Directive, ElementRef, Input, Self } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { ImageInputControl } from './image-input.control';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+
+import { ImageInputControl } from './image-input.control';
 
 @Directive({
     selector: 'input[venzraImage]',

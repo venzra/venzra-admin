@@ -1,4 +1,9 @@
+const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
+
+const sharp = require('sharp');
+
 const { defineSupportCode } = require('cucumber');
 
 defineSupportCode(({ Given, When, Then }) => {
@@ -26,12 +31,25 @@ defineSupportCode(({ Given, When, Then }) => {
         return Promise.resolve(this.performPost('/api/identity/login', { identity: userIdentity, password: 'VenzraTest$1' }));
     });
 
-    When(/^I make a (GET) request to the API endpoint "([^"]*)" as "([^"]*)"$/, function (requestMethod, requestEndpoint, historyName) {
+    When(/^I make a (GET) request to the API endpoint "([^"]*)" as "([^"]*)"(?: with "([^"]*)" content type)?$/, function (requestMethod, requestEndpoint, historyName, contentType) {
+        this.setHeader('content-type', contentType ? contentType : 'application/json');
         return Promise.resolve(this.performGet(requestEndpoint, historyName));
     });
 
     When(/^I make an empty (POST) request to the API endpoint "([^"]*)" as "([^"]*)"$/, function (requestMethod, requestEndpoint, historyName) {
         return Promise.resolve(this.performPost(requestEndpoint, null, historyName));
+    });
+
+    When(/^I make a binary data (POST) request to the API endpoint "([^"]*)" as "([^"]*)" with image data:$/, function (requestMethod, requestEndpoint, historyName, imageData) {
+        imageData = this.getHashes(imageData)[0];
+
+        let image = sharp({ create: { width: imageData.width, height: imageData.height, channels: 4, background: { r: 103, g: 58, b: 183 } } });
+
+        image = image.toFormat(imageData.format);
+        image = image.overlayWith(fs.readFileSync(path.join(__dirname, '../mocks/images/complex.jpg')), { tile: true });
+
+        this.setHeader('content-type', `image/${imageData.format}`);
+        return image.toBuffer().then((imageBuffer) => Promise.resolve(this.performPost(requestEndpoint, imageBuffer, historyName)));
     });
 
     When(/^I make a (POST) request to the API endpoint "([^"]*)" as "([^"]*)" using:$/, function (requestMethod, requestEndpoint, historyName, requestData) {

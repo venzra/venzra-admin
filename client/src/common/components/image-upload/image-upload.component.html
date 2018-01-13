@@ -1,19 +1,23 @@
 <div fxLayout="column" fxLayoutGap="10px">
-    <label class="mat-subheading-2" fxLayout="row" fxLayoutGap="4px">
+    <div class="mat-subheading-2" fxLayout="row" fxLayoutGap="4px">
         <span>{{ control.placeholder }}</span>
         <span *ngIf="control.required">*</span>
-    </label>
+    </div>
 
     <ng-content></ng-content>
 
-    <div [ngSwitch]="state" class="image-input" [class.invalid]="control.hasError() && touched" fxLayout="row" fxLayoutAlign="center center">
-        <div *ngSwitchCase="'info' || 'error'" class="message" fxLayout="column" fxLayoutAlign="center center">
-            <mat-icon [ngClass]="{ 'required': control.required && touched }">perm_media</mat-icon>
-            <p>Drag and drop a file</p>
-            <span class="mat-caption">{{ accept }}</span>
+    <div [ngSwitch]="state" class="image-input" [class.invalid]="control.hasError() && touched">
+        <div *ngSwitchCase="'info' || 'error'" class="message" fxLayout="column" fxFlex>
+            <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow">
+                <mat-icon [ngClass]="{ 'required': control.required && touched }">perm_media</mat-icon>
+                <p>Drag and drop a file</p>
+            </div>
+            <span class="mat-caption" fxLayout="column" fxLayoutAlign="center center">
+                <p *ngFor="let requirement of formatRequirements()">{{ requirement }}</p>
+            </span>
         </div>
 
-        <div *ngSwitchCase="'success'" class="message" fxLayout="column" fxLayoutAlign="center center" fxFlex="50%">
+        <div *ngSwitchCase="'success'" class="message" fxLayout="column" fxLayoutAlign="center center" fxFlex>
             <ng-container *ngIf="image">
                 <div class="image">
                     <div class="background" [style.background-image]="background"></div>
@@ -39,4 +43,5 @@
             </div>
         </div>
     </div>
+    <label class="mat-caption">or <span>click here</span> to browse for a file</label>
 </div>

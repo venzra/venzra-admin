@@ -6,6 +6,10 @@ Feature: Updating a new subscription via patch requests
     Given there are the following "subscriptions" records in the database
       | storeName               | strapline                    |
       | Subscription Update One | Automated subscription entry |
+    And there are the following "images" records in the database
+      | subscription               | name                       | usage | size |
+      | {{ subscriptions[1]._id }} | SubscriptionUpdate Image A | icon  | 1024 |
+      | {{ subscriptions[1]._id }} | SubscriptionUpdate Image B | logo  | 1024 |
     And there are the following "accounts" records in the database
       | identity                               | password | status | subscription               |
       | subscription-update-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
@@ -32,7 +36,7 @@ Feature: Updating a new subscription via patch requests
       | op      | path      | value |
       | replace | storeName | xx    |
     Then there should be a 400 error from the "subscription" request that contains:
-      | message           | detail                 |
+      | message           | detail                  |
       | Validation failed | ["storeName minlength"] |
 
   Scenario: Update an existing account subscription record
@@ -41,6 +45,8 @@ Feature: Updating a new subscription via patch requests
       | op      | path      | value                       |
       | replace | storeName | Subscription Update Updated |
       | replace | strapline | Updated subscription entry  |
+      | replace | icon      | {{ images[1]._id }}         |
+      | replace | logo      | {{ images[2]._id }}         |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName                  | storeName                   | strapline                  | transactions                  | status |
-      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | { "base": 10, "rate": 0.046 } | TRIAL  |
+      | _id       | domainName                  | storeName                   | strapline                  | icon                | logo                | transactions                  | status |
+      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | {{ images[1]._id }} | {{ images[2]._id }} | { "base": 10, "rate": 0.046 } | TRIAL  |

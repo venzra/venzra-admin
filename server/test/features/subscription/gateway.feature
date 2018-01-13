@@ -23,9 +23,7 @@ Feature: Creation of a new subscription gateway
     When I make a POST request to the API endpoint "/api/subscription/gateway" as "gateway" using:
       | reference                           |
       | ac_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
-    Then there should be a 500 error from the "gateway" request that contains:
-      | message                                                                                            |
-      | This authorization code has already been used. All tokens issued with this code have been revoked. |
+    Then the status returned from the "gateway" request should be a 500 error
 
   Scenario: Sending a valid request will create subscription payment data
     Given I am logged in with the "subscription-create-one@venzra-test.io" account

@@ -76,9 +76,9 @@ export class SubscriptionController extends AuthenticationController {
         stripe.customers
             .create({
                 email: req.body.email,
-                card: req.body.token.id,
                 plan: req.body.plan,
-                quantity: 20
+                quantity: 20,
+                source: req.body.token.id
             })
             .then((customer) => {
                 this.account.subscription.transactions.rate = 0.021;
@@ -157,6 +157,8 @@ export class SubscriptionController extends AuthenticationController {
                     switch (operation.path) {
                         case 'storeName':
                         case 'strapline':
+                        case 'icon':
+                        case 'logo':
                             this.account.subscription[operation.path] = operation.value;
                     }
             }

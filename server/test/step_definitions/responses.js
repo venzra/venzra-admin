@@ -2,14 +2,15 @@ const { defineSupportCode } = require('cucumber');
 const { expect } = require('chai');
 
 const cookieParser = require('cookie');
+const sharp = require('sharp');
 
 defineSupportCode(({ Given, When, Then }) => {
 
-    const checkValues = (expected, actual) => {
+    const checkValues = (expected, actual, exact = true) => {
         const expectedKeys = Object.keys(expected);
         const actualKeys = Object.keys(actual);
 
-        expect(actualKeys, 'Response keys do not match expectation').to.have.members(expectedKeys);
+        expect(actualKeys, 'Response keys do not match expectation').to[exact ? 'have' : 'contain'].members(expectedKeys);
 
         expectedKeys.map((key) => {
             let check;
@@ -45,12 +46,24 @@ defineSupportCode(({ Given, When, Then }) => {
             .then((history) => expect(history.status).to.equal(parseInt(statusCode)));
     });
 
-    Then(/^the status returned from the "([^"]*)" request should be a (401|403|404) error$/, function (historyName, statusCode) {
+    Then(/^the status returned from the "([^"]*)" request should be a (401|403|404|500) error$/, function (historyName, statusCode) {
         return Promise.resolve(this.getHistory(historyName))
             .then((history) => expect(history.status).to.equal(parseInt(statusCode)));
     });
 
-    Then(/^(?:there should be a (200|400|500) (?:response|error) from )?the "([^"]*)" request that(?: has (?:a|an) "([^"]*)" field and row (\d+))? contains:$/, function (statusCode, historyName, expectedField, expectedRecord, expectedData) {
+    Then(/^there should be a 200 response from the "([^"]*)" request with an "([^"]*)" binary containing:$/, function (historyName, expectedType, expectedData) {
+        expectedData = this.getHashes(expectedData);
+
+        return Promise.resolve(this.getHistory(historyName))
+            .then((history) => Promise.all([
+                    expect(history.status).to.equal(parseInt(200)),
+                    expect(history.headers['content-type']).to.equal(expectedType),
+                    sharp(history.response).metadata().then((metadata) => checkValues(expectedData[0], metadata, false))
+                ])
+            );
+    });
+
+    Then(/^(?:there should be a (200|400|413) (?:response|error) from )?the "([^"]*)" request that(?: has (?:a|an) "([^"]*)" field and row (\d+))? contains:$/, function (statusCode, historyName, expectedField, expectedRecord, expectedData) {
         expectedData = this.getHashes(expectedData);
 
         return Promise.resolve(this.getHistory(historyName))

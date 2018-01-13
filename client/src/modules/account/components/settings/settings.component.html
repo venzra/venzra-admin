@@ -1,16 +1,12 @@
-<mat-card>
-    <section>
-        <h2>Store settings</h2>
-        <p>Specify details about your store, set logo, name, domain and template options here.</p>
+<form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
 
-        <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
+    <mat-card>
+        <mat-card-title>Branding information</mat-card-title>
+        <mat-card-subtitle>Specify details about your store, set logo, name, domain options here.</mat-card-subtitle>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-form-field>
-                <input matInput
-                       placeholder="Store name"
-                       formControlName="storeName"
-                       required="required"
-                       #storeName
-                />
+                <input matInput placeholder="Store name" formControlName="storeName" required="required" #storeName />
 
                 <mat-icon matSuffix *ngIf="settingsForm.controls['storeName'].touched && settingsForm.controls['storeName'].valid" color="primary">check_circle</mat-icon>
                 <mat-icon matSuffix *ngIf="settingsForm.controls['storeName'].touched && settingsForm.controls['storeName'].invalid" color="warn">error</mat-icon>
@@ -22,15 +18,23 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput
-                       placeholder="Strapline"
-                       formControlName="strapline"
-                />
+                <input matInput placeholder="Strapline" formControlName="strapline" />
             </mat-form-field>
 
-            <div fxLayoutAlign="end">
-                <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.pristine || settingsForm.invalid">Save changes</button>
-            </div>
-        </form>
-    </section>
-</mat-card>
+            <mat-card-content fxLayout="row" fxLayoutGap="40px">
+                <venzra-image-upload target="/api/images" usage="icon" accept="image/png,image/jpeg" fxFlex="33%">
+                    <input venzraImage placeholder="Brand icon" formControlName="icon" />
+                </venzra-image-upload>
+
+                <venzra-image-upload target="/api/images" usage="logo" accept="image/png,image/jpeg" fxFlex="66%">
+                    <input venzraImage placeholder="Store logo" formControlName="logo" />
+                </venzra-image-upload>
+            </mat-card-content>
+        </mat-card-content>
+    </mat-card>
+
+    <div fxLayoutGap="20px" fxLayoutAlign="end">
+        <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.pristine || settingsForm.invalid">Save changes</button>
+    </div>
+
+</form>
