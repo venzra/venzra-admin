@@ -74,7 +74,7 @@ defineSupportCode(({ Given, When, Then }) => {
             );
     });
 
-    Then(/^the response path "([^"]*)" from the "([^"]*)" request contains:/, function (responsePath, historyName, expectedData) {
+    Then(/^the response path "([^"]*)" from the "([^"]*)" request contains:$/, function (responsePath, historyName, expectedData) {
         expectedData = this.getHashes(expectedData);
 
         return Promise.resolve(this.getHistory(historyName))

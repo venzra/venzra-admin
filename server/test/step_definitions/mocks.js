@@ -3,10 +3,23 @@ const nock = require('nock');
 const fs = require('fs');
 const path = require('path');
 
+const { expect } = require('chai');
+
 defineSupportCode(({ Given, When, Then }) => {
 
-    const prepareMock = (uri, target, type, status, file) => {
-        let mock = nock(uri);
+    const prepareMock = (uri, target, type, status, file, body) => {
+        let mock = nock(uri).log((message, actual, separator, expected) => {
+            message = message.trim();
+            switch(message) {
+                case 'bodies don\'t match:':
+                    expect(expected).to.equal(actual);
+                    break;
+                default:
+                    if(!message.startsWith('matching')) {
+                        throw new Error(`Unknown network mocking error occurred: ${message}`);
+                    }
+            }
+        });
 
         if (type === 'POST' || type === 'PUT') {
             mock.filteringPath(/.*/, '*');

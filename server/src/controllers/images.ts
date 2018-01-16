@@ -39,15 +39,19 @@ export class ImagesController extends AuthenticationController {
         switch (req.query.usage) {
             case 'feature':
                 image = image.resize(1024, 500).crop(sharp.gravity.center).jpeg({ quality: 60 });
+                req.headers['content-type'] = 'image/jpeg';
                 break;
             case 'promotion':
                 image = image.resize(512, 512).crop(sharp.gravity.center).jpeg({ quality: 75 });
+                req.headers['content-type'] = 'image/jpeg';
                 break;
             case 'logo':
-                image = image.resize(400, 100).max().jpeg({ quality: 90 });
+                image = image.resize(400, 100).max().png();
+                req.headers['content-type'] = 'image/png';
                 break;
             default:
                 image = image.resize(180, 180).crop(sharp.gravity.center).png();
+                req.headers['content-type'] = 'image/png';
         }
 
         image.toBuffer()
@@ -81,7 +85,7 @@ export class ImagesController extends AuthenticationController {
         const Bucket = environment.imageBucket;
         const Key = `${image.subscription}/${image.usage}/${image._id}`;
         const Body = Buffer.from(req.body, 'base64');
-        const ContentType = 'image/jpeg';
+        const ContentType = req.headers['content-type'];
 
         const params: S3.PutObjectRequest = { ACL, Bucket, Key, Body, ContentType };
 
