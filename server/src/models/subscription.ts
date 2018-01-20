@@ -1,12 +1,12 @@
 import { Schema, Document, Model, model } from 'mongoose';
 import { GatewaySchema, IGatewayModel } from './objects/gateway';
 import { FeeSchema, IFeeModel } from './objects/transaction';
-import { IPaymentModel, PaymentSchema } from './objects/payment';
+import { ISubscriptionPaymentModel, SubscriptionPaymentSchema } from './objects/subscription-payment';
 
 interface ISubscriptionModel extends Document {
     storeName?: string;
     strapline?: string;
-    payment?: IPaymentModel;
+    payment?: ISubscriptionPaymentModel;
     gateway?: IGatewayModel;
     transactions: IFeeModel;
     status?: string;
@@ -36,7 +36,7 @@ const SubscriptionSchema: Schema = new Schema({
         ref: 'images'
     },
     payment: {
-        type: PaymentSchema
+        type: SubscriptionPaymentSchema
     },
     gateway: {
         type: GatewaySchema

@@ -8,6 +8,7 @@ import * as path from 'path';
 import AccountController from './controllers/account';
 import IdentityController from './controllers/identity';
 import ImagesController from './controllers/images';
+import OrdersController from './controllers/orders';
 import ProductsController from './controllers/products';
 import SubscriptionController from './controllers/subscription';
 import WebhookController from './controllers/webhooks';
@@ -20,7 +21,7 @@ require('mongoose').Promise = global.Promise;
  * Database connection
  */
 const mongo = {
-    uri: process.env['DB_URI'],
+    uri: process.env['DB_URI'] as string,
     options: {
         useMongoClient: true,
         socketTimeoutMS: 0,
@@ -50,6 +51,7 @@ app.use('/api', morgan(':remote-addr - BASIC LOG - [:date[iso]] - ":method :url"
 app.use('/api/account', AccountController);
 app.use('/api/identity', IdentityController);
 app.use('/api/images', ImagesController);
+app.use('/api/orders', OrdersController);
 app.use('/api/products', ProductsController);
 app.use('/api/subscription', SubscriptionController);
 app.use('/api/webhooks', WebhookController);

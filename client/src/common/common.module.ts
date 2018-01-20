@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatPaginatorModule, MatProgressBarModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatStepperModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatStepperModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 
 import { AccountComponent } from './components/account/account.component';
 import { ServiceTermsComponent } from './components/service-terms/service-terms.component';
@@ -36,13 +36,17 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatIconModule,
         MatInputModule,
         MatListModule,
+        MatMenuModule,
         MatPaginatorModule,
         MatProgressBarModule,
+        MatRadioModule,
         MatSelectModule,
         MatSidenavModule,
         MatSlideToggleModule,
         MatSnackBarModule,
+        MatSortModule,
         MatStepperModule,
+        MatTableModule,
         MatToolbarModule,
         MatTooltipModule,
         ErrorInterceptorModule
@@ -59,13 +63,17 @@ import { ErrorInterceptorModule } from './http.interceptor';
         MatIconModule,
         MatInputModule,
         MatListModule,
+        MatMenuModule,
         MatPaginatorModule,
+        MatRadioModule,
         MatProgressBarModule,
         MatSelectModule,
         MatSidenavModule,
         MatSlideToggleModule,
         MatSnackBarModule,
+        MatSortModule,
         MatStepperModule,
+        MatTableModule,
         MatToolbarModule,
         MatTooltipModule,
         ErrorInterceptorModule,

@@ -1,22 +1,11 @@
-import { Schema, Document, Model, model } from 'mongoose';
+import { Schema, Model, model } from 'mongoose';
 
-interface IHistoryModel extends Document {
-    account: string;
-    table: string;
-    field: string;
-    previous: any;
-    next: any;
-    updated?: Date;
-}
+import { IHistoryModel } from './objects/history';
 
 const ProductHistorySchema: Schema = new Schema({
     account: {
         type: Schema.Types.ObjectId,
         ref: 'accounts',
-        required: true
-    },
-    table: {
-        type: String,
         required: true
     },
     field: {
@@ -34,7 +23,7 @@ const ProductHistorySchema: Schema = new Schema({
         type: Date,
         required: true,
         default: Date.now,
-        expires: 604800
+        expires: 2419200
     }
 });
 

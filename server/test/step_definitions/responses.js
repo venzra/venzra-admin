@@ -74,6 +74,13 @@ defineSupportCode(({ Given, When, Then }) => {
             );
     });
 
+    Then(/^the response from the "([^"]*)" request has a "([^"]*)" that contains rows:$/, function (historyName, expectedField, expectedData) {
+        expectedData = this.getHashes(expectedData);
+
+        return Promise.resolve(this.getHistory(historyName))
+            .then((history) => expectedData.reduce((chain, next, idx) => chain.then(() => checkValues(next, history.response[expectedField][idx], false)), Promise.resolve()))
+    });
+
     Then(/^the response path "([^"]*)" from the "([^"]*)" request contains:$/, function (responsePath, historyName, expectedData) {
         expectedData = this.getHashes(expectedData);
 

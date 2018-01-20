@@ -3,11 +3,13 @@ import * as parser from 'body-parser';
 import { Request, Response, NextFunction, Router } from 'express';
 import * as Stripe from 'stripe';
 
-import { ThirdPartyError } from '../middleware/error-handler';
+import { NotFoundError, ThirdPartyError } from '../middleware/error-handler';
 
 import { environment } from '../config';
 import { PlanModel } from '../models/plans';
 import { SubscriptionModel } from '../models/subscription';
+import { OrderModel } from '../models/orders';
+import { OrderHistoryModel } from '../models/order-history';
 
 const stripe = new Stripe(environment.stripe);
 
@@ -37,7 +39,7 @@ export class WebhookController {
 
         const promise = new Promise((resolve, reject) => {
             try {
-                const event = stripe.webhooks.constructEvent(req.body, signature, environment.stripeWebhooks);
+                const event: StripeWebhook = stripe.webhooks.constructEvent(req.body, signature, environment.stripeWebhooks);
 
                 const type = event.type;
                 const data = event.data.object;
@@ -49,7 +51,8 @@ export class WebhookController {
         });
 
         promise
-            .then((payload: StripeWebhook) => {
+            .catch((error) => { throw new ThirdPartyError(error.type, error.message) })
+            .then((payload: StripeWebhook): any => {
                 switch (payload.type) {
                     case 'plan.created':
                         const planData = {
@@ -74,7 +77,7 @@ export class WebhookController {
 
             })
             .then((record: any) => res.status(200).send({ result: record ? record._id : 'skipped' }))
-            .catch((error) => next(new ThirdPartyError(error.type, error.message)));
+            .catch((error) => next(error));
     }
 
     actionConnectHook(req: Request, res: Response, next: NextFunction) {
@@ -95,21 +98,40 @@ export class WebhookController {
         });
 
         promise
-            .then((payload: StripeWebhook) => {
-                const type = payload.type.split('.');
-
+            .catch((error) => { throw new ThirdPartyError(error.type, error.message) })
+            .then((payload: StripeWebhook): any => {
                 switch (payload.type) {
                     case 'account.application.deauthorized':
                         return SubscriptionModel
                             .findOne({ 'gateway.account': payload.account })
                             .then((subscription) => subscription ? subscription.update({ status: 'INACTIVE', $unset: { gateway: 1 } }).exec().then(() => subscription) : null);
+
+                    case 'charge.succeeded':
+                        return OrderModel.findOne({ 'payment.reference': payload.data.id })
+                            .populate({ path: 'history' })
+                            .then((order) => {
+                                if (!order) {
+                                    throw new NotFoundError();
+                                }
+
+                                if (order.status === 'CREATED') {
+                                    const history = new OrderHistoryModel({ field: 'status', previous: 'CREATED', next: 'AUTHORISED' });
+                                    return Promise.resolve()
+                                        .then(() => history.save())
+                                        .then(() => order.history.unshift(history))
+                                        .then(() => order.set('status', 'AUTHORISED').save());
+                                } else {
+                                    return order;
+                                }
+                            });
+
                     default:
                         console.log(`Ignored connect hook for "${payload.type}"`);
                 }
 
             })
             .then((record: any) => res.status(200).send({ result: record ? record._id : 'skipped' }))
-            .catch((error) => next(new ThirdPartyError(error.type, error.message)));
+            .catch((error) => next(error));
     }
 
 }

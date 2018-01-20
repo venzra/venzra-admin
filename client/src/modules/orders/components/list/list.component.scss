@@ -1,0 +1,21 @@
+@import '../../../../../styles';
+
+@import '~@angular/material/theming';
+@include mat-core();
+
+.mat-menu-item {
+    span {
+        margin-right: 25px;
+    }
+}
+
+.table-row {
+    &:hover {
+        cursor: pointer;
+        background-color: mat-color($venzra-app-accent, 'default', 0.16);
+    }
+}
+
+.column-double {
+    flex-grow: 2.5;
+}

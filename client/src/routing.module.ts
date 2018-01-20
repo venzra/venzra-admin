@@ -24,6 +24,12 @@ const routes: Routes = [
         canLoad: [AuthGuard]
     },
     {
+        path: 'orders',
+        component: PrivateComponent,
+        loadChildren: './modules/orders/orders.module#OrdersModule',
+        canLoad: [AuthGuard]
+    },
+    {
         path: 'errors',
         component: PublicComponent,
         loadChildren: './modules/errors/errors.module#ErrorsModule'

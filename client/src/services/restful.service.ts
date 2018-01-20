@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
 export class ListModel<T> {
-    list: Array<T>;
+    list: T[];
     skip: number;
     limit: number;
     total: number;
 }
 
 export class HistoryModel {
-    account: any;
+    account?: any;
     field: string;
     previous: string;
     next: string;

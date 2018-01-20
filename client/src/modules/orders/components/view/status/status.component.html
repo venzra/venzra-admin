@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Update order status</h2>
+
+<div mat-dialog-content fxLayout="row">
+    <mat-radio-group (change)="updateStatus($event)" fxLayout="column" fxLayoutGap="20px" fxFlex="33%">
+        <mat-radio-button *ngFor="let progress of statusList" [checked]="progress.value === selectedState.value" [disabled]="progress.position < currentState.position" [value]="progress">{{ progress.name }}</mat-radio-button>
+    </mat-radio-group>
+
+    <div class="status-review mat-elevation-z2" fxLayout="column" fxLayoutGap="20px" fxFlex="66%">
+        <div>
+            <h4>Current status: <strong>{{ currentState.name }}</strong></h4>
+            <p>{{ currentState.description }}</p>
+        </div>
+        <div *ngIf="selectedState && selectedState.value !== currentState.value">
+            <h4>New status: <strong>{{ selectedState.name }}</strong></h4>
+            <p>{{ selectedState.description }}</p>
+
+            <form *ngIf="selectedState.value === 'DISPATCHED'" [formGroup]="dispatchForm">
+                <div fxLayout="column" fxLayoutGap="20px">
+                    <mat-form-field>
+                        <input matInput placeholder="Courier name" formControlName="courier" />
+                        <mat-error *ngIf="dispatchForm.controls['courier'].hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput placeholder="Tracking code" formControlName="tracking" />
+                        <mat-error *ngIf="dispatchForm.controls['tracking'].hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+                </div>
+                <p class="mat-caption">Note that the customer will be sent a notification with any delivery information provided.</p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div fxLayoutAlign="end" mat-dialog-actions>
+    <button mat-button (click)="cancel()" color="warn">Cancel</button>
+    <button mat-raised-button (click)="save()" color="primary">Save</button>
+</div>

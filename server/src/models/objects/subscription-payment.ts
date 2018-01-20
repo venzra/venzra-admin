@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import { ChargesSchema, IChargesModel } from './charges';
 
-interface IPaymentModel {
+interface ISubscriptionPaymentModel {
     package: string;
     customer: string;
     subscription: string;
@@ -10,7 +10,7 @@ interface IPaymentModel {
     status: string;
 }
 
-const PaymentSchema: Schema = new Schema({
+const SubscriptionPaymentSchema: Schema = new Schema({
     package: String,
     customer: String,
     subscription: String,
@@ -25,6 +25,6 @@ const PaymentSchema: Schema = new Schema({
     }
 }, { _id: false });
 
-PaymentSchema.index({ customer: 1 }, { unique: true, sparse: true });
+SubscriptionPaymentSchema.index({ customer: 1 }, { unique: true, sparse: true });
 
-export { IPaymentModel, PaymentSchema };
+export { ISubscriptionPaymentModel, SubscriptionPaymentSchema };

@@ -1,5 +1,5 @@
 @Webhooks @WebhooksConnect  @WebhooksConnectAccount
-Feature: Manage webhooks sent by stripe to inform of plan creation and removal
+Feature: Manage connect hook sent by stripe to inform of account association or removal
 
   @Seed
   Scenario: Setup test data seed for feature

@@ -7,12 +7,15 @@ import { RestfulService, ListModel, HistoryModel } from './restful.service';
 
 export class Product {
     _id?: string;
+    slug: string;
     code: string;
     displayName: string;
-    previousPrice: number;
+    featureImage?: string;
+    promotionalImage: string;
+    previousPrice?: number;
     currentPrice: number;
-    history: [HistoryModel];
-    status?: string;
+    history?: HistoryModel[];
+    status: string;
     created?: Date;
     updated?: Date;
 }
