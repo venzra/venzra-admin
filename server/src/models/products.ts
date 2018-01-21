@@ -78,6 +78,11 @@ const ProductSchema: Schema = new Schema({
 ProductSchema.index({ subscription: 1, code: 1 }, { unique: true });
 ProductSchema.index({ subscription: 1, slug: 1 }, { unique: true });
 
+ProductSchema.index({ code: 1 });
+ProductSchema.index({ displayName: 1 });
+ProductSchema.index({ currentPrice: 1 });
+ProductSchema.index({ status: 1 });
+
 ProductSchema.pre('validate', function (next) {
     this.slug = (this.displayName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
     this.previousPrice = this.previousPrice ? Math.floor(this.previousPrice) : this.previousPrice;

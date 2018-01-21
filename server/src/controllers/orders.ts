@@ -122,7 +122,7 @@ export class OrdersController extends AuthenticationController {
 
         switch (req.query.sort) {
             case 'status':
-                order = { status: req.query.direction === 'desc' ? -1 : 1 };
+                order[req.query.sort] = (req.query.direction === 'desc') ? -1 : 1;
                 break;
             default:
                 order = { created: req.query.direction === 'asc' ? 1 : -1 };
@@ -137,18 +137,7 @@ export class OrdersController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        {
-                            $project: {
-                                customer: 1,
-                                reference: 1,
-                                shipping: 1,
-                                destination: 1,
-                                payment: { name: 1, card: 1, brand: 1, fee: 1, value: 1 },
-                                items: 1,
-                                status: 1,
-                                created: 1
-                            }
-                        }
+                        { $project: { customer: 1, reference: 1, shipping: 1, destination: 1, payment: { name: 1, card: 1, brand: 1, fee: 1, value: 1 }, items: 1, status: 1, created: 1 } }
                     ])
                     .then((result) => CustomerModel.populate(result, {
                         path: 'customer',

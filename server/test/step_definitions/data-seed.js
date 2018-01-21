@@ -10,7 +10,7 @@ defineSupportCode(({ Given, When, Then }) => {
             if (series) {
                 return new Promise((resolve) => {
                     const results = [];
-                    const insert = dataset.reduce((chain, row) => chain.then(() => new mongoose.models[collection](row).save().then((result) => results.push(result))), Promise.resolve());
+                    const insert = dataset.reduce((chain, row) => chain.then(() => new Promise((resolve) => setTimeout(resolve, 5))).then(() => new mongoose.models[collection](row).save().then((result) => results.push(result))), Promise.resolve());
                     insert.then(() => resolve(results))
                 }).then((records) => this.history[collection] = records);
             } else {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatPaginator, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -28,7 +28,6 @@ export class OrderListComponent implements OnInit {
     public orders: ListModel<Order>;
     public searchForm: FormGroup;
 
-    public loading = false;
     public availableColumns = ['reference', 'identity', 'destination', 'value', 'status', 'created'];
     public dataSource = new MatTableDataSource();
 
@@ -55,38 +54,17 @@ export class OrderListComponent implements OnInit {
         this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
         this.searchForm.get('searchQuery').valueChanges.debounceTime(500).subscribe(() => this.paginator.pageIndex = 0);
 
-        this.route.data.subscribe((data: { orderData: ListModel<Order> }) => {
-            this.dataSource.data = data.orderData.list;
-            this.orders = data.orderData;
-        });
+        this.route.data.subscribe((data: { orderData: ListModel<Order> }) => this.orders = data.orderData);
 
         merge(this.sort.sortChange, this.paginator.page, this.statusChange, this.searchForm.get('searchQuery').valueChanges.debounceTime(500))
             .pipe(
                 startWith({}),
-                switchMap(() => {
-                    this.loading = true;
-
-                    const search = this.searchForm.get('searchQuery').value;
-                    const status = this.statusChange.getValue();
-                    const sort = this.sort.active;
-                    const direction = this.sort.direction;
-                    const skip = this.paginator.pageIndex * this.paginator.pageSize;
-                    const limit = this.paginator.pageSize;
-
-                    const query = { search, status, sort, direction, skip, limit };
-                    Object.keys(query).forEach((key) => (!query[key]) && delete query[key]);
-                    return this.ordersService.getAllOrders(query);
-                }),
+                switchMap(() => this.reload()),
                 map((orderData: ListModel<Order>) => {
-                    this.loading = false;
                     this.orders = orderData;
-
                     return orderData.list;
                 }),
-                catchError(() => {
-                    this.loading = false;
-                    return observableOf([]);
-                })
+                catchError(() => observableOf([]))
             )
             .subscribe((data: Array<Order>) => this.dataSource.data = data);
     }
@@ -101,15 +79,23 @@ export class OrderListComponent implements OnInit {
         }
     }
 
-    updatePage(pageEvent: PageEvent) {
-        const skip = pageEvent.pageIndex * pageEvent.pageSize;
-        const limit = pageEvent.pageSize;
+    reload() {
+        const search = this.searchForm.get('searchQuery').value;
+        const status = this.statusChange.getValue();
+        const sort = this.sort.active;
+        const direction = this.sort.direction;
+        const skip = this.paginator.pageIndex * this.paginator.pageSize;
+        const limit = this.paginator.pageSize;
 
-        this.router.navigate(['/orders'], {
-            queryParams: { skip, limit },
-            queryParamsHandling: 'merge',
-            replaceUrl: true
-        });
+        const query = { search, status, sort, direction, skip, limit };
+        Object.keys(query).forEach((key) => (!query[key]) && delete query[key]);
+        return this.ordersService.getAllOrders(query);
+    }
+
+    refresh() {
+        this.reload()
+            .then((orderData) => this.dataSource.data = orderData.list)
+            .catch(() => this.dataSource.data = []);
     }
 
     navigateTo(order) {

@@ -113,11 +113,24 @@ export class ProductsController extends AuthenticationController {
     findAll(req: Request, res: Response, next: NextFunction) {
         const searchParams: any = { subscription: this.account.subscription._id };
         const skip = parseInt(req.query.skip, 10) || 0;
-        const limit = parseInt(req.query.limit, 10) || 25;
-        const order = { displayName: 1 };
+        const limit = parseInt(req.query.limit, 10) || 20;
+        let order = {};
 
         if (req.query.search) {
-            searchParams.displayName = new RegExp(req.query.search, 'i');
+            searchParams.code = new RegExp(req.query.search, 'i');
+        }
+
+        if (req.query.status) {
+            searchParams.status = req.query.status;
+        }
+
+        switch (req.query.sort) {
+            case 'displayName':
+            case 'currentPrice':
+                order[req.query.sort] = (req.query.direction === 'desc') ? -1 : 1;
+                break;
+            default:
+                order = { created: req.query.direction === 'asc' ? 1 : -1 };
         }
 
         ProductModel
@@ -129,7 +142,7 @@ export class ProductsController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        { $project: { slug: 1, code: 1, displayName: 1, promotionalImage: 1, currentPrice: 1, status: 1 } }
+                        { $project: { slug: 1, code: 1, displayName: 1, promotionalImage: 1, currentPrice: 1, status: 1, created: 1 } }
                     ])
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )

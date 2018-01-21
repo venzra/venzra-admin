@@ -32,17 +32,7 @@ const ImageSchema: Schema = new Schema({
         type: Date,
         required: true,
         default: Date.now
-    },
-    updated: {
-        type: Date,
-        required: true,
-        default: Date.now
     }
-});
-
-ImageSchema.pre('save', function (next) {
-    this.updated = Date.now();
-    next();
 });
 
 const ImageModel: Model<IImageModel> = model('images', ImageSchema) as Model<IImageModel>;
