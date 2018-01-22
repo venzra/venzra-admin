@@ -117,7 +117,7 @@ export class OrdersController extends AuthenticationController {
         }
 
         if (req.query.status) {
-            searchParams.status = req.query.status;
+            searchParams.status = req.query.status.toUpperCase();
         }
 
         switch (req.query.sort) {

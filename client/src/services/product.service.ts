@@ -30,6 +30,13 @@ export class ProductService extends RestfulService {
         super();
     }
 
+    statusList() {
+        return [
+            { name: 'Active', value: 'active' },
+            { name: 'Inactive', value: 'inactive' }
+        ];
+    }
+
     createProduct(product: Product): Promise<boolean> {
         product.previousPrice *= 100;
         product.currentPrice *= 100;

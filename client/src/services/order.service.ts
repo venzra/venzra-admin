@@ -71,6 +71,17 @@ export class OrderService extends RestfulService {
         super();
     }
 
+    statusList() {
+        return [
+            { name: 'Created', value: 'created' },
+            { name: 'Authorised', value: 'authorised' },
+            { name: 'Processing', value: 'processing' },
+            { name: 'Dispatched', value: 'dispatched' },
+            { name: 'Delivered', value: 'delivered' },
+            { name: 'Refunded', value: 'refunded' }
+        ];
+    }
+
     changeStatus(orderId: string, changes: any): Promise<Order> {
         const payload = Object.keys(changes).map((change) => ({ op: 'replace', path: change, value: changes[change] }));
 

@@ -15,19 +15,19 @@ const routes: Routes = [
         path: 'account',
         component: PrivateComponent,
         loadChildren: './modules/account/account.module#AccountModule',
-        canLoad: [AuthGuard]
+        canActivateChild: [AuthGuard]
     },
     {
         path: 'products',
         component: PrivateComponent,
         loadChildren: './modules/products/products.module#ProductsModule',
-        canLoad: [AuthGuard]
+        canActivateChild: [AuthGuard]
     },
     {
         path: 'orders',
         component: PrivateComponent,
         loadChildren: './modules/orders/orders.module#OrdersModule',
-        canLoad: [AuthGuard]
+        canActivateChild: [AuthGuard]
     },
     {
         path: 'errors',
