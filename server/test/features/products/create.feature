@@ -25,7 +25,7 @@ Feature: Creation of a new product entry
     When I make an empty POST request to the API endpoint "/api/products" as "product"
     Then there should be a 400 error from the "product" request that contains:
       | message           | detail                                                                                          |
-      | Validation failed | ["promotionalImage required", "displayName required", "code required", "currentPrice required"] |
+      | Validation failed | ["code required", "displayName required", "promotionalImage required", "currentPrice required"] |
 
   Scenario: If the product already exists then the request should be rejected (based on product code)
     Given I am logged in with the "products-create-one@venzra-test.io" account

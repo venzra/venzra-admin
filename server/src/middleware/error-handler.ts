@@ -101,6 +101,7 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             res.status(413).send({ message: `Request limit is: ${Math.floor(err.limit / 1024)} KiB`, detail: [`Received: ${Math.ceil(err.length / 1024)} KiB`] });
             break;
         case 'MongoError':
+        case 'BulkWriteError':
             switch (err.code) {
                 case 11000:
                     logger.info(err.message);
@@ -117,7 +118,7 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             res.status(500).send();
             break;
         default:
-            logger.error(err.message);
+            logger.error(`${err.name} - ${err.message}`);
             res.status(500).send();
     }
 };
