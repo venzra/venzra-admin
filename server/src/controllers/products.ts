@@ -36,7 +36,8 @@ export class ProductsController extends AuthenticationController {
             featureImage: req.body.featureImage,
             promotionalImage: req.body.promotionalImage,
             previousPrice: req.body.previousPrice,
-            currentPrice: req.body.currentPrice
+            currentPrice: req.body.currentPrice,
+            status: req.body.status
         });
 
         product.save()

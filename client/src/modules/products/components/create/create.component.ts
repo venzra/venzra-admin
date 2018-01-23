@@ -31,12 +31,14 @@ export class ProductCreateComponent implements OnInit {
             featureImage: ['', []],
             promotionalImage: ['', [Validators.required]],
             previousPrice: ['', [Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
-            currentPrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]]
+            currentPrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
+            status: [true, []]
         });
     }
 
     createProduct() {
         const productData = this.productForm.getRawValue();
+        productData.status = productData.status ? 'ACTIVE' : 'INACTIVE';
 
         this.productService
             .createProduct(productData)

@@ -54,11 +54,11 @@ Feature: Creation of a new product entry
       | _id       | slug             | code       | history  | displayName      | featureImage        | promotionalImage    | previousPrice | currentPrice | status   | created   | updated   |
       | OBJECT_ID | product-create-b | CREATE-002 | ARRAY[0] | Product Create B | {{ images[2]._id }} | {{ images[1]._id }} | 0             | 99           | INACTIVE | DATE_TIME | DATE_TIME |
 
-  Scenario: An account linked to another subscription can use the same product code and name already used by a different subscription
+  Scenario: An account linked to another subscription can use the same product code and name already used by a different subscription, also allows for setting of status
     Given I am logged in with the "products-create-two@venzra-test.io" account
     When I make a POST request to the API endpoint "/api/products" as "product" using:
-      | code                   | displayName                   | featureImage        | promotionalImage    | previousPrice | currentPrice |
-      | {{ products[1].code }} | {{ products[1].displayName }} | {{ images[3]._id }} | {{ images[3]._id }} | 104.99        | 99.49        |
+      | code                   | displayName                   | featureImage        | promotionalImage    | previousPrice | currentPrice | status |
+      | {{ products[1].code }} | {{ products[1].displayName }} | {{ images[3]._id }} | {{ images[3]._id }} | 104.99        | 99.49        | ACTIVE |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code       | history  | displayName      | featureImage        | promotionalImage    | previousPrice | currentPrice | status   | created   | updated   |
-      | OBJECT_ID | product-create-a | CREATE-001 | ARRAY[0] | Product Create A | {{ images[3]._id }} | {{ images[3]._id }} | 104           | 99           | INACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code       | history  | displayName      | featureImage        | promotionalImage    | previousPrice | currentPrice | status | created   | updated   |
+      | OBJECT_ID | product-create-a | CREATE-001 | ARRAY[0] | Product Create A | {{ images[3]._id }} | {{ images[3]._id }} | 104           | 99           | ACTIVE | DATE_TIME | DATE_TIME |

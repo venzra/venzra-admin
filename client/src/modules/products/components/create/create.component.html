@@ -4,7 +4,10 @@
 
 <form (ngSubmit)="createProduct()" [formGroup]="productForm">
     <mat-card>
-        <mat-card-title>Information</mat-card-title>
+        <mat-card-title fxLayout="row">
+            <span fxFlex>Information</span>
+            <mat-slide-toggle formControlName="status" labelPosition="before">Activate on create</mat-slide-toggle>
+        </mat-card-title>
         <mat-card-subtitle>This is the primary information regarding the sale of your product and its availability to customers of your store.</mat-card-subtitle>
 
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
