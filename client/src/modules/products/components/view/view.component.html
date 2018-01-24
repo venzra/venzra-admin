@@ -37,6 +37,23 @@
 </mat-card>
 
 <mat-card>
+    <mat-card-title>Advertising details</mat-card-title>
+    <mat-card-subtitle>The following are the main advertising points for this product being shown to customers. To attract customers to purchase the product, ensure images are clear and that descriptive text is concise and accurate.</mat-card-subtitle>
+
+    <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="20px">
+            <div fxLayoutAlign="center center" fxFlex="40%">
+                <img [src]="'/api/images/' + product.promotionalImage" style="max-width: 100%" />
+            </div>
+            <div fxLayout="column">
+                <h2>{{ product.displayName }}</h2>
+                <div [venzraMarkdown]="product.description" fxFlex="60%"></div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card>
     <mat-card-title>History</mat-card-title>
     <mat-card-subtitle>The following is a history of events that have occurred which modify certain information about this product, currently only pricing and status changes are recorded. Auditing history for each product is kept for 28 days.</mat-card-subtitle>
 

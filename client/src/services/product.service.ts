@@ -10,6 +10,7 @@ export class Product {
     slug: string;
     code: string;
     displayName: string;
+    description: string;
     featureImage?: string;
     promotionalImage: string;
     previousPrice?: number;

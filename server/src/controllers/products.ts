@@ -33,6 +33,7 @@ export class ProductsController extends AuthenticationController {
             subscription: this.account.subscription._id,
             code: req.body.code,
             displayName: req.body.displayName,
+            description: req.body.description,
             featureImage: req.body.featureImage,
             promotionalImage: req.body.promotionalImage,
             previousPrice: req.body.previousPrice,
@@ -99,7 +100,7 @@ export class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code displayName featureImage promotionalImage previousPrice currentPrice status created updated')
+            .select('slug code displayName description featureImage promotionalImage previousPrice currentPrice status created updated')
             .populate({
                 path: 'history',
                 select: '-_id -table -__v',

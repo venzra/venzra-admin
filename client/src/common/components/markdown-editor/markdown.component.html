@@ -1,0 +1,42 @@
+<div fxLayout="row" fxLayoutGap="20px">
+    <div fxFlex="grow">
+        <ng-content></ng-content>
+    </div>
+    <div class="markdown-preview" [venzraMarkdown]="content" headers="false" *ngIf="preview" fxFlex="50%">No preview available, try inserting some text.</div>
+    <div class="markdown-help" *ngIf="help" fxFlex="50%">
+        <div fxLayout="column" fxLayoutGap="20px">
+            <h3>Markdown editing guide</h3>
+            <div class="mat-body-1">Content can be created using markdown syntax for basic styling and emphasis, note that note all markdown formatting features are supported to ensure a consistent output when used, however these may be enabled in the future.</div>
+            <p>
+                > Tip: When editing ensure paragraphs are properly spaced. To create a new line without having a paragraph, insert two spaces at the end of the line before creating the next line (this also works within lists).
+            </p>
+
+            <h4>Emphasis</h4>
+            <p>
+                <strong>**bold**</strong><br/>
+                <em>*italics*</em><br/>
+                <del>~~strikethrough~~</del>
+            </p>
+
+            <h4>Lists</h4>
+            <p>
+                - General list item<br/>
+                - General list item<br/>
+                - General list item
+            </p>
+
+            <p>
+                1. Numbered list item<br/>
+                2. Numbered list item<br/>
+                3. Numbered list item
+            </p>
+
+            <h4>Web page links</h4>
+            <p>
+                [Text to display](https://www.venzra.com)
+            </p>
+
+            <div class="mat-body-1">Still not sure? Try copying and pasting into the text field some of the examples above and using the preview option to see what happens. Alternatively read more online on <a href="https://en.wikipedia.org/wiki/Markdown" target="_blank">wikipedia</a>.</div>
+        </div>
+    </div>
+</div>
