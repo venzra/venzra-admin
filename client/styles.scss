@@ -9,23 +9,6 @@ $venzra-app-theme:   mat-light-theme($venzra-app-primary, $venzra-app-accent, $v
 
 @include angular-material-theme($venzra-app-theme);
 
-// navigational layout
-mat-sidenav {
-    width: 200px;
-
-    mat-nav-list {
-        margin-bottom: 2em;
-    }
-}
-
-.mat-nav-list .mat-list-item.active {
-    color: #673ab7;
-}
-
-.mat-drawer-container {
-    width: 100%;
-}
-
 //content items
 .mat-toolbar {
     background-color: inherit;

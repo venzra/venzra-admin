@@ -23,12 +23,39 @@
     }
 }
 
+mat-sidenav {
+    width: 240px;
+
+    mat-nav-list {
+        margin: 1rem 0 4rem;
+    }
+}
+
+.mat-nav-list {
+
+    h3 mat-icon {
+        margin-right: 10px;
+    }
+
+    a {
+        padding-left: 34px;
+    }
+
+    .mat-list-item.active {
+        color: #673ab7;
+    }
+}
+
+.mat-drawer-container {
+    width: 100%;
+}
+
 .private-container {
     min-height: 100%;
 
     .private-content {
         width: 1000px;
-        margin: 2em 2em 4em;
+        margin: 2em 40px 4em;
     }
 }
 

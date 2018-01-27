@@ -2,8 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 
-import { IOrderModel } from '../../../../../../../server/src/models/orders';
-import { OrderService } from '../../../../../services/order.service';
+import { Order, OrderService } from '../../../../../services/order.service';
 
 interface OrderStatus {
     name: string;
@@ -27,7 +26,7 @@ export class OrderStatusDialogComponent implements OnInit {
     constructor(
         private forms: FormBuilder,
         public dialogRef: MatDialogRef<OrderStatusDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) private data: { order: IOrderModel },
+        @Inject(MAT_DIALOG_DATA) private data: { order: Order },
         private snackbar: MatSnackBar,
         private orderService: OrderService
     ) { }

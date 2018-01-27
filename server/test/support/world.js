@@ -203,6 +203,41 @@ class World {
         });
     }
 
+    performDelete(endpoint, storage) {
+        return new Promise((resolve) => {
+            let request = this.agent.delete(this.parseTemplateString(endpoint));
+
+            this.headers.forEach((header) => {
+                request.set(header.name, header.value);
+            });
+
+            request.expect((res) => {
+                if (this.mocks.length > 0) {
+                    this.mocks.forEach((mock) => {
+                        mock.done();
+                    })
+                }
+
+                let data = {
+                    status: res.statusCode,
+                    headers: res.headers
+                };
+
+                try {
+                    data.response = JSON.parse(res.text);
+                } catch (ex) {
+                    data.response = res.text || res.body;
+                }
+
+                if (storage) {
+                    this.history[storage] = data;
+                }
+            });
+
+            request.end(resolve);
+        });
+    }
+
 }
 
 defineSupportCode(({ setWorldConstructor }) => setWorldConstructor(World));

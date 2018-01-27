@@ -71,4 +71,8 @@ defineSupportCode(({ Given, When, Then }) => {
         return Promise.resolve(this.performPatch(requestEndpoint, requestData, historyName));
     });
 
+    When(/^I make a (DELETE) request to the API endpoint "([^"]*)" as "([^"]*)"$/, function (requestMethod, requestEndpoint, historyName) {
+        return Promise.resolve(this.performDelete(requestEndpoint, historyName));
+    });
+
 });

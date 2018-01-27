@@ -1,0 +1,69 @@
+<mat-toolbar>
+    <span class="mat-headline">Create new shipping option</span>
+</mat-toolbar>
+
+<form (ngSubmit)="createShipping()" [formGroup]="shippingForm">
+    <mat-card>
+        <mat-card-title fxLayout="row">
+            <span fxFlex>Displayed information</span>
+        </mat-card-title>
+        <mat-card-subtitle>The following details setup a shipping option to be shown during checkout, it can be configured to only display the option based on the customers cart value.</mat-card-subtitle>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="20px">
+            <mat-form-field>
+                <input matInput placeholder="Display name" formControlName="displayName" required />
+                <mat-error *ngIf="shippingForm.controls['displayName'].hasError('required')">This field is required.</mat-error>
+            </mat-form-field>
+        </mat-card-content>
+
+        <mat-form-field>
+            <span matPrefix>&pound; &nbsp;</span>
+            <input matInput placeholder="Shipping price" formControlName="currentPrice" required />
+            <mat-hint align="start">This will be displayed as the shipping price to customers. Enter zero for a free delivery option.</mat-hint>
+            <mat-error *ngIf="shippingForm.controls['currentPrice'].hasError('required')">This field is required.</mat-error>
+            <mat-error *ngIf="shippingForm.controls['currentPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+        </mat-form-field>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>Option thresholds</mat-card-title>
+        <mat-card-subtitle>Control when this option will be made available to customers, for example when a customer has a cart with a value of &pound;50 you may want to offer free two day delivery, and then when the car reaches &pound;100 they could have free next day delivery as an option. Typically maximum should be equal or greater than the minimum set, unless no maximum applies.</mat-card-subtitle>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="40px">
+            <mat-form-field>
+                <span matPrefix>&pound; &nbsp;</span>
+                <input matInput placeholder="Minimum cart value required" formControlName="cartMinimum" required />
+                <mat-hint align="start">Minimum cart spend that triggers showing this option. Leave as zero if no minimum spend.</mat-hint>
+                <mat-error *ngIf="shippingForm.controls['cartMinimum'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="shippingForm.controls['cartMinimum'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <span matPrefix>&pound; &nbsp;</span>
+                <input matInput placeholder="Maximum cart value allowed" formControlName="cartMaximum" required />
+                <mat-hint align="start">Maximum cart spend that triggers hiding this option. Leave as zero if no maximum spend.</mat-hint>
+                <mat-error *ngIf="shippingForm.controls['cartMaximum'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="shippingForm.controls['cartMaximum'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+            </mat-form-field>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>Fulfilment expectations</mat-card-title>
+        <mat-card-subtitle>This is how long you would expect to normally fulfil the delivery based on the option that has been chosen. Currently this is only used as an internal tool to allow ordering customer orders based on when you expect them to be completed.</mat-card-subtitle>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="40px">
+            <mat-form-field>
+                <input matInput placeholder="Expected delivery timeframe (hours)" formControlName="shipmentTime" required />
+                <mat-hint align="start">Not shown to customers, this is used to help prioritise your order fulfilment based on expected delivery.</mat-hint>
+                <mat-error *ngIf="shippingForm.controls['shipmentTime'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="shippingForm.controls['shipmentTime'].hasError('pattern')">Must contain a positive number.</mat-error>
+            </mat-form-field>
+        </mat-card-content>
+    </mat-card>
+
+    <div fxLayoutGap="20px" fxLayoutAlign="end">
+        <button mat-button color="warn" type="button" routerLink="/shipping">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="shippingForm.pristine || shippingForm.invalid">Save</button>
+    </div>
+</form>

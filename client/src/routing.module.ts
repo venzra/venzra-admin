@@ -12,22 +12,27 @@ const routes: Routes = [
         loadChildren: './modules/auth/auth.module#AuthModule'
     },
     {
-        path: 'account',
+        path: '',
         component: PrivateComponent,
-        loadChildren: './modules/account/account.module#AccountModule',
-        canActivateChild: [AuthGuard]
-    },
-    {
-        path: 'products',
-        component: PrivateComponent,
-        loadChildren: './modules/products/products.module#ProductsModule',
-        canActivateChild: [AuthGuard]
-    },
-    {
-        path: 'orders',
-        component: PrivateComponent,
-        loadChildren: './modules/orders/orders.module#OrdersModule',
-        canActivateChild: [AuthGuard]
+        canActivateChild: [AuthGuard],
+        children: [
+            {
+                path: 'account',
+                loadChildren: './modules/account/account.module#AccountModule'
+            },
+            {
+                path: 'orders',
+                loadChildren: './modules/orders/orders.module#OrdersModule'
+            },
+            {
+                path: 'products',
+                loadChildren: './modules/products/products.module#ProductsModule'
+            },
+            {
+                path: 'shipping',
+                loadChildren: './modules/shipping/shipping.module#ShippingModule'
+            }
+        ]
     },
     {
         path: 'errors',

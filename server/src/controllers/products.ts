@@ -2,12 +2,13 @@ import * as parser from 'body-parser';
 
 import { Request, Response, NextFunction, Router } from 'express';
 
+import { NotFoundError } from '../middleware/error-handler';
+
 import { AuthenticationController } from './authentication';
 
 import { ProductModel } from '../models/products';
-import { IHistoryModel, ProductHistoryModel } from '../models/product-history';
+import { ProductHistoryModel } from '../models/product-history';
 import { IRestOperation } from '../models/rest';
-import { NotFoundError } from '../middleware/error-handler';
 
 export class ProductsController extends AuthenticationController {
 
@@ -109,7 +110,7 @@ export class ProductsController extends AuthenticationController {
                     select: 'identity'
                 }
             })
-            .then((product) => res.status(200).send(product));
+            .then((product) => product ? res.status(200).send(product) : next(new NotFoundError()));
     }
 
     findAll(req: Request, res: Response, next: NextFunction) {

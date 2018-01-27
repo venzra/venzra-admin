@@ -10,6 +10,7 @@ import IdentityController from './controllers/identity';
 import ImagesController from './controllers/images';
 import OrdersController from './controllers/orders';
 import ProductsController from './controllers/products';
+import ShippingController from './controllers/shipping';
 import SubscriptionController from './controllers/subscription';
 import WebhookController from './controllers/webhooks';
 
@@ -52,6 +53,7 @@ app.use('/api/identity', IdentityController);
 app.use('/api/images', ImagesController);
 app.use('/api/orders', OrdersController);
 app.use('/api/products', ProductsController);
+app.use('/api/shipping', ShippingController);
 app.use('/api/subscription', SubscriptionController);
 app.use('/api/webhooks', WebhookController);
 

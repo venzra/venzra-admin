@@ -8,26 +8,24 @@
     <mat-sidenav-container>
         <mat-sidenav class="mat-elevation-z4" mode="side" opened="true">
             <mat-nav-list dense>
-                <h3 matSubheader>Construct</h3>
-                <a mat-list-item routerLink="/account/store" routerLinkActive="active">Store configuration</a>
-                <a mat-list-item routerLink="/account/payments" routerLinkActive="active">Manage payments</a>
+                <h3 matSubheader><mat-icon>apps</mat-icon> Products</h3>
+                <a mat-list-item routerLink="/products" routerLinkActive="active">All products</a>
 
                 <mat-divider></mat-divider>
 
-                <h3 matSubheader>Compose</h3>
-                <a mat-list-item routerLink="/products" routerLinkActive="active">Products</a>
+                <h3 matSubheader><mat-icon>cloud_done</mat-icon> Orders</h3>
+                <a mat-list-item routerLink="/orders" routerLinkActive="active">All Orders</a>
 
                 <mat-divider></mat-divider>
 
-                <h3 matSubheader>Customer</h3>
-                <a mat-list-item routerLink="/orders" routerLinkActive="active">Orders</a>
+                <h3 matSubheader><mat-icon>store</mat-icon> Store setup</h3>
+                <a mat-list-item routerLink="/account/store" routerLinkActive="active">Branding</a>
+                <a mat-list-item routerLink="/shipping" routerLinkActive="active">Shipping</a>
 
                 <mat-divider></mat-divider>
 
-                <h3 matSubheader>Control</h3>
-
-                <mat-divider></mat-divider>
-
+                <h3 matSubheader><mat-icon>account_box</mat-icon> Account</h3>
+                <a mat-list-item routerLink="/account/payments" routerLinkActive="active">Payments and subscription</a>
                 <a mat-list-item routerLink="/auth/logout">Logout</a>
             </mat-nav-list>
         </mat-sidenav>
