@@ -16,7 +16,7 @@ const stripe = new Stripe(environment.stripe);
 interface StripeWebhook {
     type: string;
     account?: string;
-    data: any
+    data: any;
 }
 
 export class WebhookController {
@@ -51,7 +51,7 @@ export class WebhookController {
         });
 
         promise
-            .catch((error) => { throw new ThirdPartyError(error.type, error.message) })
+            .catch((error) => { throw new ThirdPartyError(error.type, error.message); })
             .then((payload: StripeWebhook): any => {
                 switch (payload.type) {
                     case 'plan.created':
@@ -98,7 +98,7 @@ export class WebhookController {
         });
 
         promise
-            .catch((error) => { throw new ThirdPartyError(error.type, error.message) })
+            .catch((error) => { throw new ThirdPartyError(error.type, error.message); })
             .then((payload: StripeWebhook): any => {
                 switch (payload.type) {
                     case 'account.application.deauthorized':

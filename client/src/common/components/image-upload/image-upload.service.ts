@@ -35,7 +35,7 @@ export class ImageService {
                     this.result.next({ status: event.status, text: event.statusText });
                 } else if (event.type === HttpEventType.UploadProgress) {
                     this.image.next(null);
-                    this.progress.next(Math.round(100 * (event.loaded / event.total)))
+                    this.progress.next(Math.round(100 * (event.loaded / event.total)));
                 } else if (event instanceof HttpResponse) {
                     this.image.next(event.body);
                 }

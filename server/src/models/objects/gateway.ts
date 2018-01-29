@@ -2,7 +2,7 @@ import { Schema } from 'mongoose';
 
 interface IGatewayModel {
     account: string;
-    refreshToken: string,
+    refreshToken: string;
     publicKey: string;
     privateKey: string;
     modified: Date;

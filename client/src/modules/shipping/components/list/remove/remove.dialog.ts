@@ -26,7 +26,7 @@ export class RemoveShippingDialogComponent implements OnInit {
 
         this.removalForm = this.forms.group({
             confirm: ['', [Validators.required, Validators.pattern(verification)]]
-        })
+        });
     }
 
     close(): void {

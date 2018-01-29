@@ -45,8 +45,8 @@ export class ProductCreateComponent implements OnInit {
             .createProduct(productData)
             .catch((error: HttpErrorResponse) => {
                 error = JSON.parse(error.error);
-                this.snackbar.open(error.message || 'Create failed', 'OK', { duration: 5000 })
-            })
+                this.snackbar.open(error.message || 'Create failed', 'OK', { duration: 5000 });
+            });
     }
 
 }

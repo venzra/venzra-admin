@@ -13,7 +13,7 @@ interface IAccountModel extends Document {
     subscription?: ISubscriptionModel;
     identity?: string;
     password?: IAccountPassword;
-    access?: IAccountAccess,
+    access?: IAccountAccess;
     lock?: IAccountBlocked;
     validation?: IAccountValidation;
     status?: string;
