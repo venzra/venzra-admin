@@ -4,7 +4,7 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { createHash, pbkdf2Sync } from 'crypto';
 import { v4 } from 'uuid';
 
-import { AccountAccessError } from '../middleware/error-handler';
+import { AccountAccessError, ValidationError } from '../middleware/error-handler';
 
 import { AuthenticationController } from './authentication';
 
@@ -36,6 +36,16 @@ export class IdentityController extends AuthenticationController {
     }
 
     activation(req: Request, res: Response, next: NextFunction) {
+        const errors = [];
+
+        if (!req.body.terms) {
+            errors.push({ path: 'terms', kind: 'required' });
+        }
+
+        if (errors.length) {
+            return next(new ValidationError(errors));
+        }
+
         AccountModel.findById(req.body._id)
             .then((account: IAccountModel) => {
                 if (!account) {
@@ -69,6 +79,7 @@ export class IdentityController extends AuthenticationController {
                     .then((subscription) => account.update({
                         password: authorisation,
                         lock: { failures: 0 },
+                        terms: new Date(),
                         status: 'ACTIVE',
                         subscription: subscription,
                         $unset: { validation: 1 }

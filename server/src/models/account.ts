@@ -46,6 +46,9 @@ const AccountSchema: Schema = new Schema({
     validation: {
         type: AccountValidationSchema
     },
+    terms: {
+        type: Date
+    },
     status: {
         type: String,
         enum: ['REGISTERED', 'ACTIVE', 'RECOVERY', 'LOCKED', 'DISABLED'],

@@ -1,30 +1,26 @@
 <mat-card role="form">
     <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="activate()" [formGroup]="activationForm">
         <h3>Account Activation</h3>
-        <p class="mat-caption">Account activation is for newly registered accounts and those attempting to recover their passwords. If you are having problems with account activation please consider following the <a routerLink="/auth/recovery">forgotten password</a> process even if this was originally used.</p>
+        <p class="mat-caption">Account activation is for newly registered accounts. If you are having problems with account activation please consider following the <a routerLink="/auth/recovery">forgotten password</a> process as you may already have an activated account. When choosing your account password, consider <a href="https://xkcd.com/936/" target="_blank">this short comic</a>, note we require passwords to pass our validation checks.</p>
 
         <mat-form-field>
-            <input matInput
-                   type="password"
-                   placeholder="Set account password"
-                   formControlName="activation"
-            />
+            <input matInput type="password" placeholder="Set account password" formControlName="activation" required />
             <mat-hint align="end">{{ activationForm.controls['activation'].value.length < 8 ? 'Must be at least 8 characters' : '' }}</mat-hint>
             <mat-error *ngIf="activationForm.controls['activation'].hasError('required')">This field is required.</mat-error>
             <mat-error *ngIf="activationForm.controls['activation'].hasError('minlength')">Password is too short.</mat-error>
+            <mat-error *ngIf="activationForm.controls['activation'].hasError('strength')">{{ suggestion }}</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput
-                   type="password"
-                   placeholder="Confirm password"
-                   formControlName="confirmation"
-            />
+            <input matInput type="password" placeholder="Confirm password" formControlName="confirmation" required />
             <mat-error *ngIf="activationForm.controls['confirmation'].hasError('required')">This field is required.</mat-error>
             <mat-error *ngIf="activationForm.controls['confirmation'].hasError('match')">Passwords entered must match.</mat-error>
         </mat-form-field>
 
-        <div fxLayoutAlign="end">
+        <mat-checkbox formControlName="terms" required>Accept Agreement Terms *</mat-checkbox>
+
+        <div fxLayout="row" fxLayoutAlign="space-between">
+            <button mat-raised-button type="button" (click)="viewServiceAgreement()">View Agreement</button>
             <div fxLayout="row" fxLayoutGap="10px">
                 <a mat-button routerLink="/auth">Account login</a>
                 <button mat-raised-button color="primary" type="submit" [disabled]="activationForm.pristine || activationForm.invalid || saving">Submit</button>

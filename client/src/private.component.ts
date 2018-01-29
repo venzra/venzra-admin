@@ -22,7 +22,7 @@ export class PrivateComponent implements OnInit {
     }
 
     viewServiceAgreement() {
-        this.dialog.open(ServiceTermsComponent, { width: '640px' });
+        this.dialog.open(ServiceTermsComponent, { width: '90%', maxWidth: '720px' });
     }
 
 }

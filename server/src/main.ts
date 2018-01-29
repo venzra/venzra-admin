@@ -12,6 +12,7 @@ import OrdersController from './controllers/orders';
 import ProductsController from './controllers/products';
 import ShippingController from './controllers/shipping';
 import SubscriptionController from './controllers/subscription';
+import ValidationController from './controllers/validation';
 import WebhookController from './controllers/webhooks';
 
 import { errorHandler } from './middleware/error-handler';
@@ -55,6 +56,7 @@ app.use('/api/orders', OrdersController);
 app.use('/api/products', ProductsController);
 app.use('/api/shipping', ShippingController);
 app.use('/api/subscription', SubscriptionController);
+app.use('/api/validation', ValidationController);
 app.use('/api/webhooks', WebhookController);
 
 app.use(express.static(path.join(__dirname, '../client')));

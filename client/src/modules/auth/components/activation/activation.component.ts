@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
+
+import 'rxjs/add/operator/debounceTime';
+
+import { ServiceTermsComponent } from '../../../../common/components/service-terms/service-terms.component';
 
 import { Activation, AccountService } from '../../../../services/account.service';
 import { LayoutService } from '../../../../services/layout.service';
@@ -10,30 +14,42 @@ import { LayoutService } from '../../../../services/layout.service';
     templateUrl: './activation.component.html',
     styleUrls: ['./activation.component.css']
 })
-export class ActivationComponent {
+export class ActivationComponent implements OnInit {
 
-    account: Activation;
-    activationForm: FormGroup;
-    saving: Boolean = false;
+    public account: Activation;
+    public activationForm: FormGroup;
+    public saving: Boolean = false;
+    public suggestion = '';
 
     constructor(
         private forms: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
+        private dialog: MatDialog,
         private snackbar: MatSnackBar,
         private accountService: AccountService,
         private layout: LayoutService
-    ) {
-        this.layout.title = 'Activation';
-        this.createForm();
-    }
+    ) { }
 
-    createForm(): void {
+    ngOnInit(): void {
+        this.layout.title = 'Activation';
         this.activationForm = this.forms.group({
             activation: ['', [Validators.required, Validators.minLength(8)]],
-            confirmation: ['', [Validators.required]]
-        }, {
-            validator: this.passwordMatch
+            confirmation: ['', [Validators.required]],
+            terms: [false, [Validators.requiredTrue]]
+        }, { validator: this.passwordMatch });
+
+        this.activationForm.get('activation').valueChanges.debounceTime(500).subscribe((password) => {
+            if (this.activationForm.get('activation').invalid) {
+                return;
+            }
+
+            this.accountService.validatePassword(password).then((validation) => {
+                if (validation.score < 3) {
+                    this.activationForm.get('activation').setErrors({ strength: true });
+                    this.suggestion = validation.message;
+                }
+            });
         });
     }
 
@@ -42,8 +58,12 @@ export class ActivationComponent {
         const confirmation = control.get('confirmation').value;
 
         if (password !== confirmation) {
-            control.get('confirmation').setErrors({ match: true })
+            control.get('confirmation').setErrors({ match: true });
         }
+    }
+
+    viewServiceAgreement() {
+        this.dialog.open(ServiceTermsComponent, { width: '90%', maxWidth: '720px' });
     }
 
     activate(): void {
@@ -52,9 +72,10 @@ export class ActivationComponent {
         const activationData = this.activationForm.getRawValue();
 
         this.account = {
-            _id: this.route.snapshot.params.account as string,
-            password: activationData.activation as string,
-            token: this.route.snapshot.queryParams.token as string
+            _id: this.route.snapshot.params.account,
+            password: activationData.activation,
+            token: this.route.snapshot.queryParams.token,
+            terms: activationData.terms
         };
 
         this.accountService

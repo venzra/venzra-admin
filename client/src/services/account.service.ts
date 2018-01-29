@@ -7,25 +7,31 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import 'rxjs/add/operator/toPromise';
 
-export class Account {
+export interface Account {
     _id?: string;
     identity: string;
     status?: string;
     subscription?: string;
 }
 
-export class AccountCredentials {
+export interface AccountCredentials {
     identity: string;
     password: string;
 }
 
-export class Activation {
+export interface Activation {
     _id: string;
     password: string;
     token: string;
+    terms: boolean;
 }
 
-export class Recovery {
+export interface PasswordStrength {
+    score: number;
+    message: string;
+}
+
+export interface Recovery {
     identity: string;
 }
 
@@ -46,6 +52,13 @@ export class AccountService {
 
     getAccount(): BehaviorSubject<Account> {
         return this.account;
+    }
+
+    validatePassword(password: string): Promise<PasswordStrength> {
+        return this.http.post('/api/validation/password', { password })
+            .toPromise()
+            .then((result) => result as PasswordStrength)
+            .catch(() => ({ score: 0, message: 'Validation not currently available' }));
     }
 
     performLogin(credentialData: AccountCredentials): Promise<boolean> {
