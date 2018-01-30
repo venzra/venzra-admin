@@ -1,10 +1,17 @@
 import { Schema, Document } from 'mongoose';
 
 interface IShippingModel extends Document {
+    name: string;
+    courier: string;
+    tracking: string;
     price: number;
 }
 
 const ShippingSchema: Schema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
     courier: {
         type: String,
         maxlength: 30
@@ -15,8 +22,7 @@ const ShippingSchema: Schema = new Schema({
     },
     price: {
         type: Number,
-        required: true,
-        default: 500
+        required: true
     }
 }, { _id: false });
 

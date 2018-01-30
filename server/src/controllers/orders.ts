@@ -69,7 +69,7 @@ export class OrdersController extends AuthenticationController {
                                 case 'courier':
                                 case 'tracking':
                                     promise = promise
-                                        .then(() => order.set(`shipping.${operation.path}`, operation.value));
+                                        .then(() => order.shipping.set(operation.path, operation.value));
                             }
                     }
                 });

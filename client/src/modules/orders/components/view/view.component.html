@@ -55,6 +55,11 @@
         <div fxLayout="column" fxLayoutGap="20px" fxFlex>
             <h2>Shipping</h2>
 
+            <div *ngIf="order.shipping.name" fxLayout="row">
+                <span fxFlex>Name</span>
+                <span fxFlex="66%">{{ order.shipping.name }}</span>
+            </div>
+
             <div *ngIf="order.shipping.courier" fxLayout="row">
                 <span fxFlex>Courier</span>
                 <span fxFlex="66%">{{ order.shipping.courier }}</span>
