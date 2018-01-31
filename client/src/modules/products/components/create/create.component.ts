@@ -29,8 +29,8 @@ export class ProductCreateComponent implements OnInit {
             displayName: ['', [Validators.required]],
             code: ['', [Validators.required]],
             description: ['', [Validators.required]],
-            featureImage: ['', []],
             promotionalImage: ['', [Validators.required]],
+            featureImage: [null, []],
             previousPrice: ['', [Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
             currentPrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
             status: [true, []]
@@ -43,10 +43,7 @@ export class ProductCreateComponent implements OnInit {
 
         this.productService
             .createProduct(productData)
-            .catch((error: HttpErrorResponse) => {
-                error = JSON.parse(error.error);
-                this.snackbar.open(error.message || 'Create failed', 'OK', { duration: 5000 });
-            });
+            .catch((response) => this.snackbar.open(response.error.message || 'Create failed', 'OK', { duration: 5000 }));
     }
 
 }

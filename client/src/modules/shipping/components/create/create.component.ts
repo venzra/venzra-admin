@@ -38,7 +38,7 @@ export class ShippingCreateComponent implements OnInit {
 
         this.shippingService
             .createShipping(shippingData)
-            .catch((error: HttpErrorResponse) => this.snackbar.open(error.message || 'Create failed', 'OK', { duration: 5000 }));
+            .catch((response) => this.snackbar.open(response.error.message || 'Create failed', 'OK', { duration: 5000 }));
     }
 
 }
