@@ -1,6 +1,7 @@
 import { Schema, Document } from 'mongoose';
 
 interface IShippingModel extends Document {
+    reference: string;
     name: string;
     courier: string;
     tracking: string;
@@ -8,6 +9,9 @@ interface IShippingModel extends Document {
 }
 
 const ShippingSchema: Schema = new Schema({
+    reference: {
+        type: String
+    },
     name: {
         type: String,
         required: true

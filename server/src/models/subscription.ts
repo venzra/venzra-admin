@@ -1,4 +1,6 @@
 import { Schema, Document, Model, model } from 'mongoose';
+import { v4 } from 'uuid';
+
 import { GatewaySchema, IGatewayModel } from './objects/gateway';
 import { FeeSchema, IFeeModel } from './objects/transaction';
 import { ISubscriptionPaymentModel, SubscriptionPaymentSchema } from './objects/subscription-payment';
@@ -6,6 +8,9 @@ import { ISubscriptionPaymentModel, SubscriptionPaymentSchema } from './objects/
 interface ISubscriptionModel extends Document {
     storeName?: string;
     strapline?: string;
+    domainName?: string;
+    icon?: string;
+    logo?: string;
     payment?: ISubscriptionPaymentModel;
     gateway?: IGatewayModel;
     transactions: IFeeModel;
@@ -25,7 +30,8 @@ const SubscriptionSchema: Schema = new Schema({
     },
     domainName: {
         type: String,
-        lowercase: true
+        lowercase: true,
+        required: true
     },
     icon: {
         type: Schema.Types.ObjectId,
@@ -67,7 +73,8 @@ SubscriptionSchema.index({ storeName: 1 }, { unique: true });
 SubscriptionSchema.index({ domainName: 1 }, { unique: true });
 
 SubscriptionSchema.pre('validate', function (next) {
-    this.domainName = (this.storeName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
+    this.storeName = this.storeName || `store ${v4().substr(0, 8)}`;
+    this.domainName = (this.storeName).replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
     next();
 });
 

@@ -69,9 +69,7 @@ export class IdentityController extends AuthenticationController {
                 };
 
                 if (!account.subscription) {
-                    const subscription = new SubscriptionModel({
-                        storeName: `Store ${v4().substr(0, 8)}`
-                    });
+                    const subscription = new SubscriptionModel();
                     account.subscription = subscription;
                 }
 

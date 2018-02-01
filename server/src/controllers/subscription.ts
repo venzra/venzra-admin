@@ -170,6 +170,10 @@ export class SubscriptionController extends AuthenticationController {
                 case 'replace':
                     switch (operation.path) {
                         case 'storeName':
+                            if (!operation.value) {
+                                return next(new ValidationError([{ path: 'storeName', kind: 'required' }]));
+                            }
+                        /* falls through */
                         case 'strapline':
                         case 'icon':
                         case 'logo':
