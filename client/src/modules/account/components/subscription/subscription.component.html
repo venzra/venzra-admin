@@ -1,6 +1,6 @@
 <mat-card>
 
-    <section *ngIf="subscription.payment">
+    <section *ngIf="subscription.payment && subscription.payment.status !== 'CANCELED'">
         <h2>Manage subscription</h2>
 
         <p>You have an <strong>{{ subscription.status }}</strong> subscription on our <strong>{{ subscription.plan.name }}</strong> plan.</p>
@@ -10,7 +10,7 @@
         <p>The next payment of <strong>{{ (subscription.payment.price.quantity * subscription.payment.price.value) | price: subscription.payment.price.currency }}</strong> is due on <strong>{{ subscription.payment.term | date: 'dd MMM yyyy' }}</strong>.</p>
     </section>
 
-    <section *ngIf="!subscription.payment">
+    <section *ngIf="!subscription.payment || subscription.payment.status === 'CANCELED'">
         <div fxLayout="row">
             <h2>Setup subscription</h2>
             <span fxFlex></span>

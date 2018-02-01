@@ -71,6 +71,21 @@ export class WebhookController {
                             .findOne({ reference: payload.data.id })
                             .then((plan) => plan ? plan.remove() : null);
 
+                    case 'customer.subscription.deleted':
+                        return SubscriptionModel.findOne({ 'payment.customer': payload.data.customer, 'payment.subscription': payload.data.id })
+                            .then((subscription) => subscription ? subscription.update({
+                                $unset: {
+                                    'payment.subscription': 1,
+                                    'payment.package': 1,
+                                    'payment.price': 1
+                                },
+                                $set: {
+                                    'transactions.rate': 0.046,
+                                    'payment.status': 'CANCELED',
+                                    'payment.term': new Date(payload.data.canceled_at * 1000)
+                                }
+                            }).then(() => subscription) : null);
+
                     default:
                         console.log(`Ignored stripe hook for "${payload.type}"`);
                 }

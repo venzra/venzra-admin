@@ -20,6 +20,7 @@ export class Payment {
     subscription: string;
     price: Pricing;
     term: Date;
+    status: string;
 }
 
 export class Transaction {

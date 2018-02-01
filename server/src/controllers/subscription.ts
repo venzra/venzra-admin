@@ -51,10 +51,6 @@ export class SubscriptionController extends AuthenticationController {
     }
 
     attachPayment(req: Request, res: Response, next: NextFunction) {
-        if (!this.account.subscription || this.account.subscription.payment) {
-            return next();
-        }
-
         const errors = [];
 
         if (!req.body.email) {
@@ -73,27 +69,45 @@ export class SubscriptionController extends AuthenticationController {
             return next(new ValidationError(errors));
         }
 
-        stripe.customers
-            .create({
-                email: req.body.email,
-                plan: req.body.plan,
-                quantity: 20,
-                source: req.body.token.id
-            })
-            .then((customer) => {
+        const promise = new Promise((resolve, reject) => {
+            if (this.account.subscription.payment && this.account.subscription.payment.customer) {
+                stripe.subscriptions
+                    .create({
+                        customer: this.account.subscription.payment.customer,
+                        plan: req.body.plan,
+                        quantity: 20,
+                        source: req.body.token.id
+                    })
+                    .then((subscription) => resolve(subscription))
+                    .catch((error) => reject(error));
+            } else {
+                stripe.customers
+                    .create({
+                        email: req.body.email,
+                        plan: req.body.plan,
+                        quantity: 20,
+                        source: req.body.token.id
+                    })
+                    .then((customer) => resolve(customer.subscriptions.data[0]))
+                    .catch((error) => reject(error));
+            }
+        });
+
+        promise
+            .then((subscription: any) => {
                 this.account.subscription.transactions.rate = 0.021;
 
                 this.account.subscription.payment = {
-                    customer: customer.id,
-                    subscription: customer.subscriptions.data[0].id,
-                    package: customer.subscriptions.data[0].plan.id,
+                    customer: subscription.customer,
+                    subscription: subscription.id,
+                    package: subscription.plan.id,
                     price: {
-                        currency: customer.subscriptions.data[0].plan.currency,
-                        quantity: customer.subscriptions.data[0].quantity,
-                        value: customer.subscriptions.data[0].plan.amount
+                        currency: subscription.plan.currency,
+                        quantity: subscription.quantity,
+                        value: subscription.plan.amount
                     },
-                    term: new Date(customer.subscriptions.data[0].current_period_end * 1000),
-                    status: customer.subscriptions.data[0].status
+                    term: new Date(subscription.current_period_end * 1000),
+                    status: subscription.status
                 };
 
                 return this.account.subscription.save();
