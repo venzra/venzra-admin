@@ -43,13 +43,13 @@ export class SubscriptionComponent implements OnInit {
         });
 
         this.addressForm = this.forms.group({
-            cardHolder: ['', [Validators.required]],
+            cardHolder: ['', [Validators.required, Validators.maxLength(80)]],
             email: [{ value: '', disabled: true }, []],
-            street: ['', [Validators.required]],
-            building: ['', []],
-            city: ['', []],
-            county: ['', [Validators.required]],
-            postalCode: ['', [Validators.required]]
+            street: ['', [Validators.required, Validators.maxLength(50)]],
+            building: ['', [Validators.maxLength(50)]],
+            city: ['', [Validators.maxLength(50)]],
+            county: ['', [Validators.required, Validators.maxLength(50)]],
+            postalCode: ['', [Validators.required, Validators.maxLength(12)]]
         });
 
         this.paymentForm = this.forms.group({

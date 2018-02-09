@@ -14,11 +14,13 @@
                 <mat-hint *ngIf="settingsForm.controls['storeName'].valid" align="start"><strong>{{ getDomain() }}</strong></mat-hint>
 
                 <mat-error *ngIf="settingsForm.controls['storeName'].hasError('required')">This field is required.</mat-error>
-                <mat-error *ngIf="settingsForm.controls['storeName'].hasError('minlength')">Store name is too short.</mat-error>
+                <mat-error *ngIf="settingsForm.controls['storeName'].hasError('minlength')">Entered text is too short.</mat-error>
+                <mat-error *ngIf="settingsForm.controls['storeName'].hasError('maxlength')">Entered text is too long.</mat-error>
             </mat-form-field>
 
             <mat-form-field>
                 <input matInput placeholder="Strapline" formControlName="strapline" />
+                <mat-error *ngIf="settingsForm.controls['strapline'].hasError('maxlength')">Entered text is too long.</mat-error>
             </mat-form-field>
 
             <mat-card-content fxLayout="row" fxLayoutGap="40px">

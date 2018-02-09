@@ -34,7 +34,8 @@ const OrderSchema: Schema = new Schema({
     reference: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        maxlength: 20
     },
     items: {
         type: [ItemSchema],

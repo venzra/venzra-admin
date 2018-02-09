@@ -34,7 +34,7 @@ export class OrderStatusDialogComponent implements OnInit {
     ngOnInit(): void {
         this.statusList = [
             { name: 'Created', position: 0, value: 'CREATED', description: 'The order has been placed, but payment has not yet been validated.' },
-            { name: 'Authorised', position: 1, value: 'AUTHORISED', description: 'The order has been placed and payment has been successfully collected by the payment gateway.' },
+            { name: 'Authorised', position: 1, value: 'AUTHORISED', description: 'The order has been placed and payment has been successfully approved by the payment gateway.' },
             { name: 'Processing', position: 2, value: 'PROCESSING', description: 'Order has been acknowledged and stock is being allocated ready for shipping.' },
             { name: 'Dispatched', position: 3, value: 'DISPATCHED', description: 'The order has been collected by the delivery company / individual and is on its way to the customer.' },
             { name: 'Delivered', position: 4, value: 'DELIVERED', description: 'Following confirmation that the order has been received the order should be marked as delivered.' }
@@ -43,7 +43,7 @@ export class OrderStatusDialogComponent implements OnInit {
         this.selectedState = this.currentState = this.statusList.find((state) => state.value === this.data.order.status);
 
         this.dispatchForm = this.forms.group({
-            courier: ['', [Validators.maxLength(30)]],
+            courier: ['', [Validators.maxLength(50)]],
             tracking: ['', [Validators.maxLength(30)]]
         });
     }

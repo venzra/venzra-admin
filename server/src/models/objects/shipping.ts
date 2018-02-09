@@ -10,23 +10,30 @@ interface IShippingModel extends Document {
 
 const ShippingSchema: Schema = new Schema({
     reference: {
-        type: String
+        type: String,
+        trim: true
     },
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 80
     },
     courier: {
         type: String,
-        maxlength: 30
+        trim: true,
+        maxlength: 50,
     },
     tracking: {
         type: String,
+        trim: true,
         maxlength: 30
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        min: 0,
+        max: 1000000
     }
 }, { _id: false });
 

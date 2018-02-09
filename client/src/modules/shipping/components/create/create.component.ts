@@ -25,11 +25,11 @@ export class ShippingCreateComponent implements OnInit {
         this.layout.title = 'Shipping';
 
         this.shippingForm = this.forms.group({
-            displayName: ['', [Validators.required]],
-            currentPrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
-            cartMinimum: [0, [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
-            cartMaximum: [0, [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0)]],
-            shipmentTime: [48, [Validators.required, Validators.pattern(/^(\d+)$/), Validators.min(0)]],
+            displayName: ['', [Validators.required, Validators.maxLength(80)]],
+            currentPrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
+            cartMinimum: [0, [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
+            cartMaximum: [0, [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
+            shipmentTime: [48, [Validators.required, Validators.pattern(/^(\d+)$/), Validators.min(0), Validators.max(3000)]],
         });
     }
 

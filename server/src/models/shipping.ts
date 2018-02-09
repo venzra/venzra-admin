@@ -18,29 +18,34 @@ const ShippingSchema: Schema = new Schema({
     displayName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        maxlength: 80
     },
     cartMinimum: {
         type: Number,
         required: true,
         min: 0,
+        max: 1000000,
         default: 0
     },
     cartMaximum: {
         type: Number,
         required: true,
         min: 0,
+        max: 1000000,
         default: 0
     },
     currentPrice: {
         type: Number,
         required: true,
-        min: 0
+        min: 0,
+        max: 1000000
     },
     shipmentTime: {
         type: Number,
         required: true,
         min: 0,
+        max: 3000,
         default: 48
     },
     created: {

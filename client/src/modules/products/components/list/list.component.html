@@ -9,7 +9,7 @@
     <mat-toolbar-row>
         <form class="mat-body-1" fxLayout="row" fxLayoutGap="20px" [formGroup]="searchForm">
             <mat-form-field floatPlaceholder="never">
-                <input matInput autocomplete="off" placeholder="Search products" formControlName="searchQuery" />
+                <input matInput autocomplete="off" placeholder="Search by code" formControlName="searchQuery" maxlength="20" />
                 <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
         </form>

@@ -22,11 +22,13 @@ const SubscriptionSchema: Schema = new Schema({
         type: String,
         required: true,
         trim: true,
-        minlength: 3
+        minlength: 3,
+        maxlength: 40
     },
     strapline: {
         type: String,
-        trim: true
+        trim: true,
+        maxlength: 120
     },
     domainName: {
         type: String,

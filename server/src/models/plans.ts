@@ -16,19 +16,24 @@ const PlanSchema: Schema = new Schema({
     },
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 40
     },
     currency: {
         type: String,
-        required: true
+        required: true,
+        maxlength: 3
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        max: 999999999999999
     },
     interval: {
         type: Number,
-        required: true
+        required: true,
+        max: 999
     },
     frequency: {
         type: String,

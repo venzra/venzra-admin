@@ -14,16 +14,20 @@
             <mat-form-field>
                 <input matInput placeholder="Display name" formControlName="displayName" required />
                 <mat-error *ngIf="productForm.controls['displayName'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="productForm.controls['displayName'].hasError('maxlength')">Entered text is too long.</mat-error>
             </mat-form-field>
 
             <mat-form-field>
                 <input matInput placeholder="Product code" formControlName="code" required />
                 <mat-error *ngIf="productForm.controls['code'].hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="productForm.controls['code'].hasError('maxlength')">Entered text is too long.</mat-error>
             </mat-form-field>
 
             <venzra-markdown-editor>
                 <mat-form-field>
-                    <textarea matInput venzraMarkdownInput placeholder="Product description" formControlName="description" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="15" required></textarea>
+                    <textarea matInput venzraMarkdownInput placeholder="Product description" formControlName="description" matTextareaAutosize matAutosizeMinRows="12" matAutosizeMaxRows="20" required></textarea>
+                    <mat-error *ngIf="productForm.controls['description'].hasError('required')">This field is required.</mat-error>
+                    <mat-error *ngIf="productForm.controls['description'].hasError('maxlength')">Entered text is too long.</mat-error>
                 </mat-form-field>
                 <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
                     <div>
@@ -68,6 +72,7 @@
                 <input matInput placeholder="Previous retail price" formControlName="previousPrice" />
                 <mat-hint align="start">Providing this will allow customers to see the typical or a recent retail price.</mat-hint>
                 <mat-error *ngIf="productForm.controls['previousPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+                <mat-error *ngIf="productForm.controls['previousPrice'].hasError('max')">Entered value is too large.</mat-error>
             </mat-form-field>
         </mat-card-content>
 
@@ -78,6 +83,7 @@
                 <mat-hint align="start">This is the price customers will pay to purchase on the store.</mat-hint>
                 <mat-error *ngIf="productForm.controls['currentPrice'].hasError('required')">This field is required.</mat-error>
                 <mat-error *ngIf="productForm.controls['currentPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+                <mat-error *ngIf="productForm.controls['currentPrice'].hasError('max')">Entered value is too large.</mat-error>
             </mat-form-field>
         </mat-card-content>
     </mat-card>

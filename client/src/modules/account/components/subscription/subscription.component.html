@@ -65,31 +65,37 @@
                     <mat-form-field>
                         <input matInput required placeholder="Card holders name" formControlName="cardHolder" />
                         <mat-error *ngIf="addressForm.controls['cardHolder'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="addressForm.controls['cardHolder'].hasError('maxlength')">Entered text is too long.</mat-error>
                     </mat-form-field>
 
                     <mat-form-field>
                         <input matInput required placeholder="Address Line 1" formControlName="street" />
                         <mat-hint>Street address, P.O. box, etc</mat-hint>
                         <mat-error *ngIf="addressForm.controls['street'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="addressForm.controls['street'].hasError('maxlength')">Entered text is too long.</mat-error>
                     </mat-form-field>
 
                     <mat-form-field>
                         <input matInput placeholder="Address Line 2" formControlName="building" />
                         <mat-hint>Building, Floor, Suite, Apartment, etc</mat-hint>
+                        <mat-error *ngIf="addressForm.controls['building'].hasError('maxlength')">Entered text is too long.</mat-error>
                     </mat-form-field>
 
                     <mat-form-field>
                         <input matInput placeholder="Town or City" formControlName="city" />
+                        <mat-error *ngIf="addressForm.controls['city'].hasError('maxlength')">Entered text is too long.</mat-error>
                     </mat-form-field>
 
                     <mat-form-field>
                         <input matInput required placeholder="County" formControlName="county" />
                         <mat-error *ngIf="addressForm.controls['county'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="addressForm.controls['county'].hasError('maxlength')">Entered text is too long.</mat-error>
                     </mat-form-field>
 
                     <mat-form-field>
                         <input matInput required placeholder="Postal code" formControlName="postalCode" />
                         <mat-error *ngIf="addressForm.controls['postalCode'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="addressForm.controls['postalCode'].hasError('maxlength')">Entered text is too long.</mat-error>
                     </mat-form-field>
 
                     <div fxLayoutGap="20px" fxLayoutAlign="end center">

@@ -13,29 +13,43 @@ interface IAddressModel extends Document {
 const AddressSchema: Schema = new Schema({
     addressee: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 80
     },
     street: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 50
     },
     building: {
-        type: String
+        type: String,
+        trim: true,
+        maxlength: 50
     },
     city: {
-        type: String
+        type: String,
+        trim: true,
+        maxlength: 50
     },
     county: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 50
     },
     postalCode: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 12
     },
     country: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        maxlength: 50
     }
 }, { _id: false });
 

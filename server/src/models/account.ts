@@ -29,6 +29,7 @@ const AccountSchema: Schema = new Schema({
         required: true,
         trim: true,
         lowercase: true,
+        maxlength: 80,
         validate: [
             (val: string) => EMAIL_REGEX.test(val), 'Invalid email address'
         ]

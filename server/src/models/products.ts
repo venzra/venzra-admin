@@ -20,22 +20,26 @@ const ProductSchema: Schema = new Schema({
     },
     slug: {
         type: String,
-        lowercase: true
+        lowercase: true,
+        maxlength: 80
     },
     code: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        maxlength: 20
     },
     displayName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        maxlength: 80
     },
     description: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        maxlength: 2000
     },
     featureImage: {
         type: Schema.Types.ObjectId,
@@ -49,12 +53,14 @@ const ProductSchema: Schema = new Schema({
     previousPrice: {
         type: Number,
         min: 0,
+        max: 1000000,
         default: 0
     },
     currentPrice: {
         type: Number,
         required: true,
-        min: 0
+        min: 0,
+        max: 1000000
     },
     history: {
         type: [{
