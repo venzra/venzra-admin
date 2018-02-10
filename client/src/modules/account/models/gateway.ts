@@ -2,7 +2,7 @@ import { Address } from './address';
 import { BankAccount } from './bank-account';
 import { LegalEntity } from './legal-entity';
 
-export class Gateway {
+export interface Gateway {
     account: string;
     bank: Array<BankAccount>;
     address: Address;

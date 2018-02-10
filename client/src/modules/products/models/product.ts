@@ -8,7 +8,7 @@ export interface Product {
     description: string;
     featureImage: string;
     promotionalImage: string;
-    previousPrice?: number;
+    previousPrice: number;
     currentPrice: number;
     history: Array<HistoryModel>;
     status: string;

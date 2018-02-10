@@ -1,4 +1,4 @@
-export class Plan {
+export interface Plan {
     reference: string;
     name: string;
     currency: string;

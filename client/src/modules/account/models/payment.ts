@@ -1,6 +1,6 @@
 import { Pricing } from './pricing';
 
-export class Payment {
+export interface Payment {
     package: string;
     customer: string;
     subscription: string;

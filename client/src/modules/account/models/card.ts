@@ -1,4 +1,4 @@
-export class Card {
+export interface Card {
     cardHolder: string;
     cardNumber: number;
     expiryMonth: number;

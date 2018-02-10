@@ -1,7 +1,7 @@
 import { Gateway } from './gateway';
 import { Payment } from './payment';
 
-export class Subscription {
+export interface Subscription {
     _id: string;
     gateway: Gateway;
     payment: Payment;

@@ -16,7 +16,7 @@ export interface Order {
     billing: Address;
     payment: Payment;
     history: Array<HistoryModel>;
-    status?: string;
-    created?: Date;
-    updated?: Date;
+    status: string;
+    created: Date;
+    updated: Date;
 }

@@ -1,6 +1,6 @@
 import { HistoryModel } from 'models';
 
-export class Product {
+export interface Product {
     _id: string;
     slug: string;
     code: string;
