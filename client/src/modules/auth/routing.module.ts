@@ -2,16 +2,28 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ActivationComponent } from './components/activation/activation.component';
-import { LoginComponent } from './components/login/login.component';
-import { LogoutComponent } from './components/logout/logout.component';
-import { RecoveryComponent } from './components/recovery/recovery.component';
+import { ActivationComponent } from './fragments/activation/activation.component';
+import { LoginComponent } from './fragments/login/login.component';
+import { LogoutComponent } from './fragments/logout/logout.component';
+import { RecoveryComponent } from './fragments/recovery/recovery.component';
 
 const routes: Routes = [
-    { path: 'activate/:account', component: ActivationComponent },
-    { path: 'recovery', component: RecoveryComponent },
-    { path: 'logout', component: LogoutComponent },
-    { path: '', component: LoginComponent }
+    {
+        path: '',
+        component: LoginComponent
+    },
+    {
+        path: 'activate/:account',
+        component: ActivationComponent
+    },
+    {
+        path: 'logout',
+        component: LogoutComponent
+    },
+    {
+        path: 'recovery',
+        component: RecoveryComponent
+    }
 ];
 
 @NgModule({

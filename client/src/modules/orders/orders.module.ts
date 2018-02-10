@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressSpinnerModule, MatRadioModule, MatSnackBarModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { VenzraCommonModule } from '../../common/common.module';
 import { AccountRoutingModule } from './routing.module';
 
-import { OrderListComponent } from './components/list/list.component';
-import { OrderViewComponent } from './components/view/view.component';
-import { OrderStatusDialogComponent } from './components/view/status/status.component';
+import { FiltersModule } from 'filters/filters.module';
+import { PageModule } from 'components/page/page.module';
 
-import { OrderListResolve, OrderRetrieveResolve, OrderService } from '../../services/order.service';
+import { OrderListComponent } from './fragments/list/list.component';
+import { OrderViewComponent } from './fragments/view/view.component';
+import { OrderStatusDialogComponent } from './fragments/view/status/status.component';
+
+import { OrderListResolve, OrderRetrieveResolve, OrderService } from './services/order.service';
 
 @NgModule({
     declarations: [
@@ -18,8 +23,26 @@ import { OrderListResolve, OrderRetrieveResolve, OrderService } from '../../serv
     ],
     imports: [
         CommonModule,
-        VenzraCommonModule,
-        AccountRoutingModule
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatIconModule,
+        MatInputModule,
+        MatListModule,
+        MatMenuModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatRadioModule,
+        MatSnackBarModule,
+        MatSortModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatTooltipModule,
+        FlexLayoutModule,
+        AccountRoutingModule,
+        PageModule,
+        FiltersModule
     ],
     providers: [
         OrderService,

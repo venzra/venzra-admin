@@ -1,7 +1,6 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "baseUrl": "src",
         "declaration": false,
         "target": "es6",
         "lib": [

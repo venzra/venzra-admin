@@ -1,0 +1,32 @@
+<mat-card role="form">
+    <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="login()" [formGroup]="authenticationForm">
+        <h3>Account Login</h3>
+        <p class="mat-caption">Welcome to Venzra, please enter your account credentials to login. Note that repeatedly entering incorrect account details will <em matTooltip="Accounts are locked after 5 failed attempts, initially for 1 minute which increases and resets on each failure up to a maximum of 5 minutes.">lock your account</em>, we do not provide information about the state of accounts when attempting to login. If you are having issues please use the forgotten password option.</p>
+
+        <mat-form-field>
+            <input matInput
+                   placeholder="Your email address"
+                   formControlName="emailAddress"
+            />
+            <mat-error *ngIf="authenticationForm.controls['emailAddress'].hasError('required')">This field is required.</mat-error>
+            <mat-error *ngIf="authenticationForm.controls['emailAddress'].hasError('pattern')">A valid email address is required.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput
+                   type="password"
+                   placeholder="Password"
+                   formControlName="password"
+            />
+            <mat-error *ngIf="authenticationForm.controls['password'].hasError('required')">This field is required.</mat-error>
+        </mat-form-field>
+
+        <div fxLayoutAlign="end">
+            <div fxLayout="row" fxLayoutGap="10px">
+                <a mat-button routerLink="/recovery">Forgotten password?</a>
+                <button mat-raised-button color="primary" type="submit" [disabled]="authenticationForm.pristine || authenticationForm.invalid || saving">Login</button>
+            </div>
+        </div>
+        <p class="mat-caption">If you have not registered for an account, please visit our website to <a href="https://www.venzra.com" target="_blank">learn more and create a new account</a>.</p>
+    </form>
+</mat-card>

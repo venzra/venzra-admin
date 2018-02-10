@@ -62,7 +62,7 @@ export class AccountService {
     }
 
     performLogin(credentialData: AccountCredentials): Promise<boolean> {
-        const redirect = localStorage.getItem('redirect') || '/account';
+        const redirect = localStorage.getItem('redirect') || '/dashboard';
 
         return this.http.post('/api/identity/login', credentialData, { responseType: 'text' })
             .toPromise()
@@ -81,7 +81,7 @@ export class AccountService {
             .toPromise()
             .catch(() => null)
             .then(() => localStorage.clear())
-            .then(() => this.router.navigate(['/auth'], { replaceUrl: true }));
+            .then(() => this.router.navigate(['/'], { replaceUrl: true }));
     }
 
     isAuthenticated(): Observable<boolean> {

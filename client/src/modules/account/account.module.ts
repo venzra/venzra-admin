@@ -1,43 +1,37 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatSelectModule, MatSnackBarModule, MatStepperModule, MatTooltipModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { VenzraCommonModule } from '../../common/common.module';
+import { PageModule } from 'components/page/page.module';
+import { FiltersModule } from 'filters/filters.module';
+
 import { AccountRoutingModule } from './routing.module';
 
-import { SettingsComponent } from './components/settings/settings.component';
-import { SubscriptionComponent } from './components/subscription/subscription.component';
-import { GatewayComponent } from './components/gateway/gateway.component';
-
-import { StorePageComponent } from './pages/store/store.page';
-import { PaymentPageComponent } from './pages/payments/payments.page';
-
-import { CalendarService } from '../../services/calendar.service';
-import { PaymentService } from '../../services/payment.service';
-import { GatewayService } from '../../services/gateway.service';
-import { SubscriptionRetrieveResolve, SubscriptionService } from '../../services/subscription.service';
-import { PlanListResolve, PlanService } from '../../services/plan.service';
+import { GatewayComponent } from './fragments/gateway/gateway.component';
+import { SubscriptionComponent } from './fragments/subscription/subscription.component';
 
 @NgModule({
     declarations: [
-        SettingsComponent,
-        SubscriptionComponent,
         GatewayComponent,
-        StorePageComponent,
-        PaymentPageComponent
+        SubscriptionComponent
     ],
     imports: [
         CommonModule,
-        VenzraCommonModule,
-        AccountRoutingModule
-    ],
-    providers: [
-        CalendarService,
-        PaymentService,
-        GatewayService,
-        SubscriptionService,
-        SubscriptionRetrieveResolve,
-        PlanService,
-        PlanListResolve
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        MatStepperModule,
+        MatTooltipModule,
+        FlexLayoutModule,
+        AccountRoutingModule,
+        PageModule,
+        FiltersModule
     ]
 })
 export class AccountModule {

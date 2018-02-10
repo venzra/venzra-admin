@@ -1,23 +1,42 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSnackBarModule, MatSortModule, MatTableModule, MatToolbarModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { VenzraCommonModule } from '../../common/common.module';
+import { PageModule } from 'components/page/page.module';
+import { FiltersModule } from 'filters/filters.module';
+
 import { ShippingRoutingModule } from './routing.module';
 
-import { ShippingCreateComponent } from './components/create/create.component';
-import { ShippingListComponent } from './components/list/list.component';
-import { RemoveShippingDialogComponent } from './components/list/remove/remove.dialog';
+import { ShippingListComponent } from './fragments/list/list.component';
+import { ShippingCreateComponent } from './fragments/create/create.component';
+import { RemoveShippingDialogComponent } from './fragments/list/remove/remove.dialog';
 
 @NgModule({
     declarations: [
-        ShippingCreateComponent,
         ShippingListComponent,
+        ShippingCreateComponent,
         RemoveShippingDialogComponent
     ],
     imports: [
         CommonModule,
-        VenzraCommonModule,
-        ShippingRoutingModule
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatIconModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+        MatSortModule,
+        MatTableModule,
+        MatToolbarModule,
+        FlexLayoutModule,
+        ShippingRoutingModule,
+        PageModule,
+        FiltersModule
     ],
     entryComponents: [
         RemoveShippingDialogComponent

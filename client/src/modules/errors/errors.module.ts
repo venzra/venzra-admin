@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { VenzraCommonModule } from '../../common/common.module';
 import { ErrorsRoutingModule } from './routing.module';
 
-import { NotFoundComponent } from './components/not-found/not-found.component';
+import { NotFoundComponent } from './fragments/not-found/not-found.component';
 
 @NgModule({
     declarations: [
@@ -12,7 +13,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     ],
     imports: [
         CommonModule,
-        VenzraCommonModule,
+        MatCardModule,
+        FlexLayoutModule,
         ErrorsRoutingModule
     ]
 })

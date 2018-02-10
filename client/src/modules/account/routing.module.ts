@@ -1,33 +1,27 @@
 import { NgModule } from '@angular/core';
-
 import { RouterModule, Routes } from '@angular/router';
 
-import { StorePageComponent } from './pages/store/store.page';
-import { PaymentPageComponent } from './pages/payments/payments.page';
+import { GatewayComponent } from './fragments/gateway/gateway.component';
+import { SubscriptionComponent } from './fragments/subscription/subscription.component';
 
-import { SubscriptionRetrieveResolve } from '../../services/subscription.service';
-import { PlanListResolve } from '../../services/plan.service';
+import { PlanListResolve } from './services/plan.service';
+import { SubscriptionRetrieveResolve } from './services/subscription.service';
 
 const routes: Routes = [
     {
-        path: 'store',
-        component: StorePageComponent,
-        resolve: {
-            subscription: SubscriptionRetrieveResolve
-        }
-    },
-    {
-        path: 'payments',
-        component: PaymentPageComponent,
+        path: 'subscription',
+        component: SubscriptionComponent,
         resolve: {
             subscription: SubscriptionRetrieveResolve,
             plans: PlanListResolve
         }
     },
     {
-        path: '',
-        redirectTo: 'store',
-        pathMatch: 'full'
+        path: 'gateway',
+        component: GatewayComponent,
+        resolve: {
+            subscription: SubscriptionRetrieveResolve
+        }
     }
 ];
 
@@ -37,6 +31,10 @@ const routes: Routes = [
     ],
     exports: [
         RouterModule
+    ],
+    providers: [
+        PlanListResolve,
+        SubscriptionRetrieveResolve
     ]
 })
 export class AccountRoutingModule {

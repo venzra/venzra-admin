@@ -1,0 +1,47 @@
+<venzra-header>
+    <h1>Manage gateway and payouts</h1>
+    <p>A connection to a payment gateway is required to allow customers to make purchases on your store, it also is used to send payouts of money to your bank account. You may need to configure the frequency of your payouts via the payment gateway provider.</p>
+</venzra-header>
+
+<venzra-content>
+    <mat-card *ngIf="subscription.gateway">
+        <div fxLayout="row">
+            <h2 fxFlex>Connected</h2>
+            <mat-icon color="primary">check</mat-icon>
+        </div>
+
+        <mat-card-content>
+            <div fxLayout="column" fxLayoutGap="20px">
+                <p>Your gateway connection to Stripe is active and purchases made on your store are <strong>enabled</strong>. To manage your gateway you can do so via the Stripe dashboard. Please beware if you remove your connection with Venzra via your Stripe dashboard your customers to place orders until you restore the connection.</p>
+
+                <div fxLayout="row" fxLayoutGap="20px">
+                    <a mat-raised-button color="primary" href="https://dashboard.stripe.com" target="_blank">Open Stripe Dashboard</a>
+                    <button mat-raised-button color="warn" (click)="deactivate()">Deactivate Stripe</button>
+                </div>
+
+                <p class="mat-caption">Connected on {{ gateway.modified | date: 'medium' }}</p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="!subscription.gateway">
+        <div fxLayout="row">
+            <h2 fxFlex>Connection required</h2>
+            <mat-icon color="warn" matTooltip="To enable customers to place orders you need to setup your legal and banking information" matTooltipPosition="left">warning</mat-icon>
+        </div>
+
+        <mat-card-content>
+            <h3>Overview</h3>
+
+            <p>A payment gateway is required to enable customers to start using your store to place orders.</p>
+            <p>We use Stripe as a gateway for payments, to setup this gateway and start taking orders and recieving payments for orders please use the link below. If you would like more information about Stripe please visit their website at <a href="https://www.stripe.com" target="_blank">https://www.stripe.com</a>.</p>
+            <p>To process payments on your store every transaction is charged at 6% of the order value plus a 30p base charge (inclusive of any gateway fees). For example an order of £20 would incur a fee of £1.50 for processing.</p>
+            <p>Transaction fees can be reduced by setting up a monthly subscription after you have added your gateway. With an active and paid subscription the transaction fee is reduced to 3.5%, this would mean a £20 order would incur a fee of £1 saving 50p compared with a non-subscription based transaction. Note that fees can vary when customers use international cards by up to 1.5%, refer to Stripe pricing for more information.</p>
+            <p>The following information is required as part of our anti-fraud checking, if processing very large volumes of orders further information may be required in the future.</p>
+
+            <div fxLayoutAlign="center">
+                <a mat-raised-button color="primary" [href]="'https://connect.stripe.com/oauth/authorize?response_type=code&client_id=' + clientToken + '&scope=read_write'">Connect with Stripe</a>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</venzra-content>

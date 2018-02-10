@@ -1,0 +1,71 @@
+<venzra-header>
+    <h1>{{ product.displayName }}</h1>
+    <p>The details below show the current available information provided about this product.</p>
+</venzra-header>
+
+<venzra-content>
+    <mat-card>
+        <mat-card-title>Information</mat-card-title>
+        <mat-card-subtitle>This is the primary information regarding the sale of your product and its availability to customers of your store.</mat-card-subtitle>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="20px">
+            <div fxLayout="row">
+                <span fxFlex="33%">Product code</span>
+                <span fxFlex>{{ product.code }}</span>
+            </div>
+
+            <div fxLayout="row">
+                <span fxFlex="33%">Current price</span>
+                <span fxFlex>{{ product.currentPrice | price }}</span>
+            </div>
+
+            <div fxLayout="row">
+                <span fxFlex="33%">Previous price</span>
+                <span fxFlex>{{ product.previousPrice | price }}</span>
+            </div>
+
+            <div fxLayout="row">
+                <span fxFlex="33%">Availability status</span>
+                <span fxFlex><mat-slide-toggle (change)="toggleActive($event)" [checked]="product.status === 'ACTIVE'">{{ product.status }}</mat-slide-toggle></span>
+            </div>
+
+            <div fxLayout="row">
+                <span fxFlex="33%">Creation date</span>
+                <span fxFlex>{{ product.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</span>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>Advertising details</mat-card-title>
+        <mat-card-subtitle>The following are the main advertising points for this product being shown to customers. To attract customers to purchase the product, ensure images are clear and that descriptive text is concise and accurate.</mat-card-subtitle>
+
+        <mat-card-content>
+            <div fxLayout="row" fxLayoutGap="20px">
+                <div fxLayoutAlign="center center" fxFlex="40%">
+                    <img [src]="'/api/images/' + product.promotionalImage" style="max-width: 100%" />
+                </div>
+                <div fxLayout="column">
+                    <h2>{{ product.displayName }}</h2>
+                    <div [venzraMarkdown]="product.description" fxFlex="60%"></div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>History</mat-card-title>
+        <mat-card-subtitle>The following is a history of events that have occurred which modify certain information about this product, currently only pricing and status changes are recorded. Auditing history for each product is kept for 28 days.</mat-card-subtitle>
+
+        <p *ngIf="!product.history.length"><em>No recent changes have been recorded for this product.</em></p>
+
+        <mat-card-content>
+            <mat-list>
+                <mat-list-item *ngFor="let history of product.history">
+                    <h4 matLine>{{ history.account.identity }}</h4>
+                    <p matLine>Changed <strong>{{ history.field }} </strong> from {{ history.previous }} to {{ history.next }} on {{ history.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</p>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+    </mat-card>
+</venzra-content>

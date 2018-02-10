@@ -2,16 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 
-import { ListModel, RestfulService } from '../../../services/restful.service';
+import { ListModel } from 'models';
+import { RestfulService } from 'services';
 
-export interface Shipping {
-    _id: string;
-    displayName: string;
-    cartMinimum: number;
-    cartMaximum: number;
-    currentPrice: number;
-    shipmentTime: number;
-}
+import { Shipping } from '../models/shipping';
 
 @Injectable()
 export class ShippingService extends RestfulService {

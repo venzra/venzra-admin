@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
         authenticated.subscribe((res) => {
             if (!res) {
                 localStorage.setItem('redirect', url);
-                this.router.navigate(['/auth'], { replaceUrl: true });
+                this.router.navigate(['/'], { replaceUrl: true });
             }
             subject.next(res);
         });

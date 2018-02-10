@@ -1,0 +1,57 @@
+<mat-toolbar class="mat-elevation-z8" color="primary" role="heading">
+    <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center" fxFlex>
+        <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+        <a fxLayoutAlign="center" routerLink="/dashboard"><img src="/assets/logo/icon.png" title="Welcome to Venzra" /></a>
+    </div>
+    <venzra-admin-account></venzra-admin-account>
+</mat-toolbar>
+
+<div fxLayout="row" fxFlex>
+    <mat-sidenav-container>
+        <mat-sidenav #sidenav class="mat-elevation-z6" [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'over' : 'side'">
+            <mat-nav-list dense>
+                <a mat-list-item routerLink="/dashboard" routerLinkActive="active"><mat-icon>dashboard</mat-icon> Dashboard</a>
+
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader><mat-icon>apps</mat-icon> Products</h3>
+                <a mat-list-item routerLink="/products" routerLinkActive="active"><mat-icon></mat-icon>All products</a>
+
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader><mat-icon>cloud_done</mat-icon> Orders</h3>
+                <a mat-list-item routerLink="/orders" routerLinkActive="active"><mat-icon></mat-icon>All Orders</a>
+
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader><mat-icon>store</mat-icon> Store setup</h3>
+                <a mat-list-item routerLink="/store/branding" routerLinkActive="active"><mat-icon></mat-icon>Branding</a>
+
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader><mat-icon>settings</mat-icon> Configuration</h3>
+                <a mat-list-item routerLink="/shipping" routerLinkActive="active"><mat-icon></mat-icon>Shipping</a>
+
+                <mat-divider></mat-divider>
+
+                <h3 matSubheader><mat-icon>account_box</mat-icon> Account</h3>
+                <a mat-list-item routerLink="/account/gateway" routerLinkActive="active"><mat-icon></mat-icon>Gateway and payouts</a>
+                <a mat-list-item routerLink="/account/subscription" routerLinkActive="active"><mat-icon></mat-icon>Subscription</a>
+
+                <mat-divider></mat-divider>
+
+                <a mat-list-item routerLink="/logout"><mat-icon>exit_to_app</mat-icon> Logout</a>
+            </mat-nav-list>
+        </mat-sidenav>
+
+        <div fxLayout="column" class="private-container">
+            <div fxFlex="grow" class="private-content">
+                <router-outlet></router-outlet>
+            </div>
+            <mat-toolbar color="primary" role="note">
+                <span fxFlex></span>
+                <button mat-button href="javascript:void(0)" (click)="viewServiceAgreement()">Agreement terms</button>
+            </mat-toolbar>
+        </div>
+    </mat-sidenav-container>
+</div>

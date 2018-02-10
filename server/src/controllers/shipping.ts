@@ -67,7 +67,17 @@ export class ShippingController extends AuthenticationController {
         const searchParams: any = { subscription: this.account.subscription._id };
         const skip = parseInt(req.query.skip, 10) || 0;
         const limit = parseInt(req.query.limit, 10) || 20;
-        const order = { currentPrice: 1, shipmentTime: 1 };
+        let order: any = {};
+
+        switch (req.query.sort) {
+            case 'currentPrice':
+                order[req.query.sort] = (req.query.direction === 'asc') ? 1 : -1;
+                break;
+            default:
+                order = { currentPrice: req.query.direction === 'desc' ? -1 : 1 };
+        }
+
+        order.shipmentTime = 1;
 
         ShippingModel
             .count(searchParams).exec()

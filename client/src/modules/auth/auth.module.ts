@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatInputModule, MatSnackBarModule, MatTooltipModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { VenzraCommonModule } from '../../common/common.module';
 import { AuthRoutingModule } from './routing.module';
 
-import { ActivationComponent } from './components/activation/activation.component';
-import { LoginComponent } from './components/login/login.component';
-import { LogoutComponent } from './components/logout/logout.component';
-import { RecoveryComponent } from './components/recovery/recovery.component';
+import { AccountService } from 'services';
 
-import { AccountService } from '../../services/account.service';
+import { ActivationComponent } from './fragments/activation/activation.component';
+import { LoginComponent } from './fragments/login/login.component';
+import { LogoutComponent } from './fragments/logout/logout.component';
+import { RecoveryComponent } from './fragments/recovery/recovery.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +22,14 @@ import { AccountService } from '../../services/account.service';
     ],
     imports: [
         CommonModule,
-        VenzraCommonModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatSnackBarModule,
+        MatTooltipModule,
+        FlexLayoutModule,
         AuthRoutingModule
     ],
     providers: [

@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
-
 import { RouterModule, Routes } from '@angular/router';
 
-import { ShippingCreateComponent } from './components/create/create.component';
-import { ShippingListComponent } from './components/list/list.component';
+import { ShippingListComponent } from './fragments/list/list.component';
+import { ShippingCreateComponent } from './fragments/create/create.component';
 
 import { ShippingListResolve, ShippingService } from './services/shipping.service';
 
@@ -17,8 +16,11 @@ const routes: Routes = [
     },
     {
         path: 'create',
-        component: ShippingCreateComponent
-    },
+        component: ShippingCreateComponent,
+        resolve: {
+            shippingData: ShippingListResolve
+        }
+    }
 ];
 
 @NgModule({

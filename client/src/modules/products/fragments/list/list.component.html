@@ -1,0 +1,80 @@
+<venzra-header>
+    <h1>Product catalog</h1>
+    <p>The table below shows all the products available on your store, in some case you may have inactive products, click on a product to view further details or make changes to the information held.</p>
+    <button mat-raised-button color="accent" routerLink="/products/create"><mat-icon>add</mat-icon> Create new product</button>
+</venzra-header>
+
+<venzra-content>
+    <mat-toolbar>
+        <mat-toolbar-row>
+            <form class="mat-body-1" fxLayout="row" fxLayoutGap="20px" [formGroup]="searchForm">
+                <mat-form-field floatPlaceholder="never">
+                    <input matInput autocomplete="off" placeholder="Search by code" formControlName="searchQuery" maxlength="20" />
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </form>
+            <span fxFlex></span>
+            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Filter by status" [color]="status ? 'primary' : ''"><mat-icon>filter_list</mat-icon></button>
+            <button mat-icon-button matTooltip="Refresh data" (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <mat-menu #menu xPosition="before">
+        <button mat-menu-item (click)="status = null">
+            <mat-icon>{{ status === null ? 'check' : '' }}</mat-icon>
+            <span>Show All</span>
+        </button>
+        <button *ngFor="let state of statusList" mat-menu-item (click)="status = state.value">
+            <mat-icon>{{ status === state.value ? 'check' : '' }}</mat-icon>
+            <span>{{ state.name }}</span>
+        </button>
+    </mat-menu>
+
+    <div class="list-container mat-elevation-z2">
+        <div class="list-loading" *ngIf="loading">
+            <mat-spinner color="accent"></mat-spinner>
+        </div>
+
+        <mat-table #table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="created" matSortDirection="desc">
+            <ng-container matColumnDef="image">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell class="table-image" *matCellDef="let row"><img [src]="'/api/images/' + row.promotionalImage" /></mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="code">
+                <mat-header-cell *matHeaderCellDef>Code</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.code }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="displayName">
+                <mat-header-cell class="column-double" *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell class="column-double" *matCellDef="let row">{{ row.displayName }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="currentPrice">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.currentPrice | price }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.status }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="created">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Created</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.created | date }}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="availableColumns"></mat-header-row>
+            <mat-row class="table-row" *matRowDef="let row; columns: availableColumns" (click)="navigateTo(row)"></mat-row>
+        </mat-table>
+
+        <mat-card class="mat-elevation-z0" *ngIf="!products.total">
+            <mat-card-content>
+                <p class="mat-subheading-2">No products found</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-paginator [length]="products.total"
+                       [pageIndex]="products.skip / products.limit"
+                       [pageSize]="products.limit"
+                       [pageSizeOptions]="[10,20,50,100]">
+        </mat-paginator>
+    </div>
+</venzra-content>

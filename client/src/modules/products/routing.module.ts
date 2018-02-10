@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ProductCreateComponent } from './components/create/create.component';
-import { ProductListComponent } from './components/list/list.component';
-import { ProductViewComponent } from './components/view/view.component';
+import { ProductCreateComponent } from './fragments/create/create.component';
+import { ProductListComponent } from './fragments/list/list.component';
+import { ProductViewComponent } from './fragments/view/view.component';
 
-import { ProductListResolve, ProductRetrieveResolve } from '../../services/product.service';
+import { ProductListResolve, ProductRetrieveResolve } from './services/product.service';
 
 const routes: Routes = [
     {

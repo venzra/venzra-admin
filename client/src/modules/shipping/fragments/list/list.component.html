@@ -1,0 +1,65 @@
+<venzra-header>
+    <h1>Manage shipping options</h1>
+    <p>You should always have at least one shipping option available. This page shows what are the currently available options on your store, they are available during the checkout.</p>
+    <button mat-raised-button color="accent" routerLink="/shipping/create"><mat-icon>add</mat-icon> Create new option</button>
+</venzra-header>
+
+<venzra-content>
+    <mat-toolbar>
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+            <button mat-icon-button matTooltip="Refresh data" (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div class="list-container mat-elevation-z2">
+        <div class="list-loading" *ngIf="loading">
+            <mat-spinner color="accent"></mat-spinner>
+        </div>
+
+        <mat-table #table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="currentPrice" matSortDirection="asc">
+            <ng-container matColumnDef="displayName">
+                <mat-header-cell class="column-double" *matHeaderCellDef>Name</mat-header-cell>
+                <mat-cell class="column-double" *matCellDef="let row">{{ row.displayName }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="currentPrice">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.currentPrice | price }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="cartMinimum">
+                <mat-header-cell *matHeaderCellDef>Min cart</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.cartMinimum | price | none }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="cartMaximum">
+                <mat-header-cell *matHeaderCellDef>Max cart</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.cartMaximum | price | none }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="shipmentTime">
+                <mat-header-cell *matHeaderCellDef>Target</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.shipmentTime | shipping }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="created">
+                <mat-header-cell *matHeaderCellDef>Created</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.created | date }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="remove">
+                <mat-header-cell class="column-action" *matHeaderCellDef></mat-header-cell>
+                <mat-cell class="column-action" *matCellDef="let row"><button mat-icon-button (click)="remove(row)"><mat-icon color="warn">delete</mat-icon></button></mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="availableColumns"></mat-header-row>
+            <mat-row class="table-row" *matRowDef="let row; columns: availableColumns"></mat-row>
+        </mat-table>
+
+        <mat-card class="mat-elevation-z0" *ngIf="!shipping.total">
+            <mat-card-content>
+                <p class="mat-subheading-2">No shipping options available</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-paginator [length]="shipping.total"
+                       [pageIndex]="shipping.skip / shipping.limit"
+                       [pageSize]="shipping.limit"
+                       [pageSizeOptions]="[10,20,50,100]">
+        </mat-paginator>
+    </div>
+</venzra-content>

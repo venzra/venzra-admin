@@ -21,7 +21,7 @@
             "scripts": [
                 "../node_modules/marked/lib/marked.js"
             ],
-            "environmentSource": "environments/environment.ts",
+            "environmentSource": "src/environment.ts",
             "environments": {
                 "dev": "environments/environment.ts",
                 "prod": "environments/environment.prod.ts"

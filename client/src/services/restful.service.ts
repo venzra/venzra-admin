@@ -1,21 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-export class ListModel<T> {
-    list: T[];
-    skip: number;
-    limit: number;
-    total: number;
-}
-
-export class HistoryModel {
-    account?: any;
-    field: string;
-    previous: string;
-    next: string;
-    updated: Date;
-}
-
 @Injectable()
 export class RestfulService {
 

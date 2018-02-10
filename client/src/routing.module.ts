@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './services/guard.service';
-import { PrivateComponent } from './private.component';
-import { PublicComponent } from './public.component';
+import { PrivateComponent } from './site/private/private.component';
+import { PublicComponent } from './site/public/public.component';
 
 const routes: Routes = [
     {
-        path: 'auth',
+        path: '',
         component: PublicComponent,
         loadChildren: './modules/auth/auth.module#AuthModule'
     },
@@ -16,6 +16,10 @@ const routes: Routes = [
         component: PrivateComponent,
         canActivateChild: [AuthGuard],
         children: [
+            {
+                path: 'dashboard',
+                loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
+            },
             {
                 path: 'account',
                 loadChildren: './modules/account/account.module#AccountModule'
@@ -31,6 +35,10 @@ const routes: Routes = [
             {
                 path: 'shipping',
                 loadChildren: './modules/shipping/shipping.module#ShippingModule'
+            },
+            {
+                path: 'store',
+                loadChildren: './modules/store/store.module#StoreModule'
             }
         ]
     },
@@ -38,11 +46,6 @@ const routes: Routes = [
         path: 'errors',
         component: PublicComponent,
         loadChildren: './modules/errors/errors.module#ErrorsModule'
-    },
-    {
-        path: '',
-        redirectTo: '/auth',
-        pathMatch: 'full'
     },
     {
         path: '**',

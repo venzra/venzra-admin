@@ -48,3 +48,18 @@ Feature: Searching of available shipping options
       | {{ shipping[2]._id }} | Shipping B  | 450          | 72           |
       | {{ shipping[5]._id }} | Shipping E  | 500          | 36           |
       | {{ shipping[1]._id }} | Shipping A  | 900          | 24           |
+
+  Scenario: Sorting shipping options results by another column than the default
+    Given I am logged in with the "shipping-search-one@venzra-test.io" account
+    When I make a GET request to the API endpoint "/api/shipping?sort=currentPrice&direction=desc" as "shipment"
+    Then there should be a 200 response from the "shipment" request that contains:
+      | list     | total | skip | limit |
+      | ARRAY[6] | 6     | 0    | 20    |
+    And the response from the "shipment" request has a "list" that contains rows:
+      | _id                   | displayName | currentPrice | shipmentTime |
+      | {{ shipping[4]._id }} | Shipping D  | 2000         | 12           |
+      | {{ shipping[1]._id }} | Shipping A  | 900          | 24           |
+      | {{ shipping[5]._id }} | Shipping E  | 500          | 36           |
+      | {{ shipping[2]._id }} | Shipping B  | 450          | 72           |
+      | {{ shipping[3]._id }} | Shipping C  | 200          | 48           |
+      | {{ shipping[6]._id }} | Shipping F  | 200          | 168          |

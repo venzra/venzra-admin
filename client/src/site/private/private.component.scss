@@ -1,0 +1,67 @@
+@import '../../../styles';
+
+@import '../../../../node_modules/@angular/material/theming';
+@include mat-core();
+
+:host {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.mat-toolbar {
+    z-index: 2;
+
+    img {
+        height: 42px;
+
+        @media ($mat-xsmall) {
+            height: 34px;
+        }
+    }
+}
+
+.mat-drawer-container {
+    width: 100%;
+    background-color: mat-color($venzra-app-primary, 50);
+
+    .mat-drawer {
+        width: 240px;
+
+        mat-nav-list {
+            margin: 1rem 0 4rem;
+        }
+
+        .mat-nav-list {
+
+            h3 {
+                mat-icon {
+                    margin-right: 10px;
+                }
+            }
+
+            a {
+                mat-icon {
+                    margin-right: 10px;
+                }
+            }
+
+            .mat-list-item.active {
+                color: #fafafa;
+                background-color: mat-color($venzra-app-primary);
+            }
+
+            mat-divider {
+                margin: 10px 0;
+            }
+        }
+    }
+}
+
+.private-container {
+    min-height: 100%;
+}

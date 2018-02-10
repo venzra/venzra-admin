@@ -1,32 +1,47 @@
 import { NgModule } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule, MatDialogModule, MatDividerModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material';
 
-import { VenzraCommonModule } from './common/common.module';
 import { VenzraRoutingModule } from './routing.module';
 
-import { VenzraComponent } from './venzra.component';
-import { PrivateComponent } from './private.component';
-import { PublicComponent } from './public.component';
+import { AccountService, ErrorInterceptorModule, LayoutService } from 'services';
 
-import { AccountService } from './services/account.service';
-import { LayoutService } from './services/layout.service';
+import { AccountModule } from './components/account/account.module';
+import { ServiceTermsModule } from './components/service-terms/service-terms.module';
+
+import { VenzraComponent } from './venzra.component';
+import { PublicComponent } from './site/public/public.component';
+import { PrivateComponent } from './site/private/private.component';
 
 @NgModule({
     declarations: [
         VenzraComponent,
-        PrivateComponent,
-        PublicComponent
+        PublicComponent,
+        PrivateComponent
     ],
     imports: [
         CommonModule,
+        HttpClientModule,
         BrowserAnimationsModule,
-        VenzraCommonModule,
-        VenzraRoutingModule
+        VenzraRoutingModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatDividerModule,
+        MatIconModule,
+        MatListModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        FlexLayoutModule,
+        AccountModule,
+        ServiceTermsModule,
+        ErrorInterceptorModule
     ],
     exports: [
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        ErrorInterceptorModule
     ],
     providers: [
         AccountService,
