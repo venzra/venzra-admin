@@ -67,9 +67,14 @@ class World {
                 const keywords = row[hash].match(/^(\S*)\((\S*)\)$/);
                 const keyword = keywords ? keywords[1] : row[hash];
 
+
                 switch (keyword) {
+                    case 'DATE':
+                        const date = new Date();
+                        row[hash] = date.setHours(keywords[2]);
+                        break;
                     case 'DATETIME':
-                        row[hash] = Date.now();
+                        row[hash] = date.getTime();
                         break;
                     case 'PASSWORD':
                         const salt = crypto.createHash('sha1').update(uuid.v4()).digest('hex');
@@ -107,7 +112,7 @@ class World {
                 if (this.mocks.length > 0) {
                     this.mocks.forEach((mock) => {
                         mock.done();
-                    })
+                    });
                 }
 
                 let data = {
@@ -144,7 +149,7 @@ class World {
                 if (this.mocks.length > 0) {
                     this.mocks.forEach((mock) => {
                         mock.done();
-                    })
+                    });
                 }
 
                 let data = {
@@ -181,7 +186,7 @@ class World {
                 if (this.mocks.length > 0) {
                     this.mocks.forEach((mock) => {
                         mock.done();
-                    })
+                    });
                 }
 
                 let data = {
@@ -216,7 +221,7 @@ class World {
                 if (this.mocks.length > 0) {
                     this.mocks.forEach((mock) => {
                         mock.done();
-                    })
+                    });
                 }
 
                 let data = {

@@ -2,14 +2,14 @@
 @include mat-core();
 
 .content-container {
-    padding: 2em 40px 4em;
+    padding: 2em 32px 4em;
 
     @media ($mat-xsmall) {
-        padding: 2em 20px 4em;
+        padding: 2em 16px 4em;
     }
 }
 
 .content-output {
-    min-width: 420px;
+    min-width: 320px;
     max-width: 1000px;
 }

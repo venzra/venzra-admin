@@ -5,15 +5,15 @@
 
 .header-container {
     background-color: mat-color($venzra-app-primary);
-    padding: 2em 40px 2em;
+    padding: 2em 32px 2em;
 
     @media ($mat-xsmall) {
-        padding: 2em 20px 4em;
+        padding: 2em 16px 4em;
     }
 }
 
 .header-output {
     color: white;
-    min-width: 420px;
+    min-width: 320px;
     max-width: 1000px;
 }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule, MatIconModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { BarChartModule, LineChartModule } from '@swimlane/ngx-charts';
 
 import { DashboardRoutingModule } from './routing.module';
 
@@ -19,6 +20,8 @@ import { DashboardComponent } from './fragments/dashboard/dashboard.component';
         MatIconModule,
         FlexLayoutModule,
         DashboardRoutingModule,
+        BarChartModule,
+        LineChartModule,
         PageModule
     ]
 })

@@ -13,13 +13,27 @@ const checkValues = (expected, actual, exact = true) => {
     expectedKeys.map((key) => {
         let check;
         if (typeof expected[key] === 'string') {
-            check = expected[key].match(/\[(\d+)\]/) || expected[key];
+            check = expected[key].match(/\[(-?\d+)\]/) || expected[key];
             if (check instanceof Array) {
                 expected[key] = expected[key].replace(check[0], '');
             }
         }
 
+        const date = new Date();
+
         switch (expected[key]) {
+            case 'YEAR':
+                date.setHours(check[1]);
+                expect(actual[key]).to.equal(date.getFullYear());
+                break;
+            case 'MONTH':
+                date.setHours(check[1]);
+                expect(actual[key]).to.equal(date.getMonth() + 1);
+                break;
+            case 'DAY':
+                date.setHours(check[1]);
+                expect(actual[key]).to.equal(date.getDate());
+                break;
             case 'OBJECT_ID':
                 expect(actual[key]).to.match(/^[0-9A-F]{24}$/i);
                 break;

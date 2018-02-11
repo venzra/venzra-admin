@@ -23,4 +23,26 @@
             <p>While customers are not able to place orders you still have an active subscription you are paying for, you may disable this subscription if no longer required.</p>
         </div>
     </mat-card>
+
+    <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="20px">
+        <mat-card fxFlex fxFlex.gt-md="50%">
+            <h2>Monthly order value by day</h2>
+            <mat-card-content *ngIf="!orderVolumes">
+                <p>There have been no orders placed in the last 30 days.</p>
+            </mat-card-content>
+            <mat-card-content *ngIf="orderVolumes" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
+                <ngx-charts-line-chart [xAxis]="true" [yAxis]="true" [showGridLines]="false" [autoScale]="true" [view]="chartSize" [scheme]="colorScheme" [results]="[{ name: 'Total value', series: orderVolumes }, { name: 'Average value', series: orderAverages }]"></ngx-charts-line-chart>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card fxFlex fxFlex.gt-md="50%">
+            <h2>Currently open orders state</h2>
+            <mat-card-content *ngIf="!orderStates">
+                <p>You have no outstanding orders to process.</p>
+            </mat-card-content>
+            <mat-card-content *ngIf="orderStates" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
+                <ngx-charts-bar-vertical [xAxis]="true" [yAxis]="true" [showGridLines]="false" [view]="chartSize" [scheme]="colorScheme" [results]="orderStates"></ngx-charts-bar-vertical>
+            </mat-card-content>
+        </mat-card>
+    </div>
 </venzra-content>
