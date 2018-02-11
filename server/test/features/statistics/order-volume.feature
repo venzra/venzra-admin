@@ -45,6 +45,13 @@ Feature: Statistical information about orders placed and the volumes achieved
       | {{ subscriptions[2]._id }} | {{ customers[3]._id }} | 0000000012 | { "name": "Example L", "price": 500 } | { "addressee": "Mr Shipping", "street": "Street", "county": "County", "postalCode": "po57 3ox", "country": "GB" } | { "addressee": "Mr Billing", "street": "P.O. Box", "county": "Province", "postalCode": "te37 3od", "country": "GB" } | [{ "product": "{{ products[4]._id }}", "quantity": "1", "price": "300" }, { "product": "{{ products[5]._id }}", "quantity": "2", "price": "200" }]                                                                         | { "reference": "ch_xxxxxxxxxxxxxxx", "transaction": "txn_xxxxxxxxxxxxxxxxxxxxxxxx", "name": "Example Twelve", "card": "7654", "brand": "Visa", "fee": { "venzra": { "amount": 35, "currency": "gbp" }, "gateway": { "amount": 55, "currency": "gbp" }, "total": 39 }, "value": 1200 }       | DELIVERED  |            |
 
   Scenario: Sorting order results by another column than the default
+    Given I am logged in with the "statistics-order-volume-three@venzra-test.io" account
+    When I make a GET request to the API endpoint "/api/statistics/orders/volume" as "statistics"
+    Then there should be a 200 response from the "statistics" request that contains:
+      | list     | total |
+      | ARRAY[0] | 0     |
+
+  Scenario: Sorting order results by another column than the default
     Given I am logged in with the "statistics-order-volume-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/statistics/orders/volume" as "statistics"
     Then there should be a 200 response from the "statistics" request that contains:

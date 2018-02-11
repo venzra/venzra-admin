@@ -47,14 +47,16 @@ export class StatisticsController extends AuthenticationController {
             ])
             .then((result) => {
                 const orderVolumes = [];
-                for (let i = 0; i < numberOfDays; i++) {
-                    const nextDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
-                    const data = result.find((entry) => entry.year === nextDate.getFullYear() && entry.month === (nextDate.getMonth() + 1) && entry.day === nextDate.getDate());
+                if (result.length > 0) {
+                    for (let i = 0; i < numberOfDays; i++) {
+                        const nextDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
+                        const data = result.find((entry) => entry.year === nextDate.getFullYear() && entry.month === (nextDate.getMonth() + 1) && entry.day === nextDate.getDate());
 
-                    if (data) {
-                        orderVolumes.push(data);
-                    } else {
-                        orderVolumes.push({ year: nextDate.getFullYear(), month: nextDate.getMonth() + 1, day: nextDate.getDate(), value: 0, count: 0 });
+                        if (data) {
+                            orderVolumes.push(data);
+                        } else {
+                            orderVolumes.push({ year: nextDate.getFullYear(), month: nextDate.getMonth() + 1, day: nextDate.getDate(), value: 0, count: 0 });
+                        }
                     }
                 }
                 res.status(200).send({ list: orderVolumes, total: orderVolumes.length });
