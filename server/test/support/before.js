@@ -1,18 +1,14 @@
 const nock = require('nock');
 
-const { defineSupportCode } = require('cucumber');
+const { BeforeAll, Before } = require('cucumber');
 
-defineSupportCode(function ({ BeforeAll, Before }) {
+BeforeAll(function (next) {
+    nock.disableNetConnect();
+    nock.enableNetConnect(/localhost|127.0.0.1/);
+    next();
+});
 
-    BeforeAll(function (next) {
-        nock.disableNetConnect();
-        nock.enableNetConnect(/localhost|127.0.0.1/);
-        next();
-    });
-
-    Before(function (scenario, next) {
-        nock.cleanAll();
-        next();
-    });
-
+Before(function (scenario, next) {
+    nock.cleanAll();
+    next();
 });

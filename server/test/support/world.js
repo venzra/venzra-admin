@@ -1,10 +1,11 @@
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { defineSupportCode } = require('cucumber');
-
-const crypto = require('crypto');
-const supertest = require('supertest');
 const uuid = require('uuid');
+
+const supertest = require('supertest');
+
+const { setWorldConstructor, setDefaultTimeout } = require('cucumber');
 
 let history = {};
 
@@ -240,5 +241,5 @@ class World {
 
 }
 
-defineSupportCode(({ setWorldConstructor }) => setWorldConstructor(World));
-defineSupportCode(({ setDefaultTimeout }) => setDefaultTimeout(10 * 1000));
+setWorldConstructor(World);
+setDefaultTimeout(2 * 1000);

@@ -76,7 +76,7 @@ app.use(errorHandler);
  * Create the server
  */
 const server = http.createServer(app);
-const port = process.env['PORT'] || 8181;
+const port = process.env['PORT'];
 
 server.listen(port);
 server.on('listening', listening);
