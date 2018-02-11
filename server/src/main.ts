@@ -1,5 +1,6 @@
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
+import * as helmet from 'helmet';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
@@ -42,7 +43,7 @@ mongoose
  */
 const app: express.Application = express();
 app.enable('trust proxy');
-app.disable('x-powered-by');
+app.use(helmet());
 app.use(cookieParser());
 
 /*
