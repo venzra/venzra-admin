@@ -4,13 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './fragments/dashboard/dashboard.component';
 
 import { SubscriptionRetrieveResolve, SubscriptionService } from './services/subscription.service';
+import { OrderStatesResolve, OrderVolumeResolve, StatisticsService } from './services/statistics.service';
 
 const routes: Routes = [
     {
         path: '',
         component: DashboardComponent,
         resolve: {
-            subscription: SubscriptionRetrieveResolve
+            subscription: SubscriptionRetrieveResolve,
+            orderVolumes: OrderVolumeResolve,
+            orderStates: OrderStatesResolve
         }
     }
 ];
@@ -24,7 +27,10 @@ const routes: Routes = [
     ],
     providers: [
         SubscriptionService,
-        SubscriptionRetrieveResolve
+        SubscriptionRetrieveResolve,
+        StatisticsService,
+        OrderVolumeResolve,
+        OrderStatesResolve
     ]
 })
 export class DashboardRoutingModule {

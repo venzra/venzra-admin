@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -27,6 +28,32 @@ export class StatisticsService extends RestfulService {
         return this.http.get('/api/statistics/orders/status')
             .toPromise()
             .then((response) => response as ListModel<Statistics>);
+    }
+
+}
+
+@Injectable()
+export class OrderVolumeResolve implements Resolve<ListModel<Statistics>> {
+
+    constructor(
+        private statisticsService: StatisticsService
+    ) { }
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<ListModel<Statistics>> {
+        return this.statisticsService.getOrderVolumes();
+    }
+
+}
+
+@Injectable()
+export class OrderStatesResolve implements Resolve<ListModel<Statistics>> {
+
+    constructor(
+        private statisticsService: StatisticsService
+    ) { }
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<ListModel<Statistics>> {
+        return this.statisticsService.getOrderStates();
     }
 
 }
