@@ -7,7 +7,6 @@ import { LayoutService } from 'services';
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 
-
 @Component({
     templateUrl: './create.component.html'
 })

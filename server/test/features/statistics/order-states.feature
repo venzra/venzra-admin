@@ -1,5 +1,5 @@
 @Statistics @StatisticsOrderStatus
-Feature: Statistical information about orders placed and the statuss achieved
+Feature: Statistical information about orders placed and the status achieved
 
   @Seed
   Scenario: Setup test data seed for feature

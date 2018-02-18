@@ -5,9 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 
 import { RestfulService } from 'services';
-
-import { Statistics } from '../models/statistics';
 import { ListModel } from 'models';
+
+import { Highlights } from '../models/highlights';
+import { Statistics } from '../models/statistics';
 
 @Injectable()
 export class StatisticsService extends RestfulService {
@@ -16,6 +17,12 @@ export class StatisticsService extends RestfulService {
         private http: HttpClient
     ) {
         super();
+    }
+
+    getHighlights(): Promise<Highlights> {
+        return this.http.get('/api/statistics/highlights')
+            .toPromise()
+            .then((response) => response as Highlights);
     }
 
     getOrderVolumes(): Promise<ListModel<Statistics>> {
@@ -28,6 +35,19 @@ export class StatisticsService extends RestfulService {
         return this.http.get('/api/statistics/orders/status')
             .toPromise()
             .then((response) => response as ListModel<Statistics>);
+    }
+
+}
+
+@Injectable()
+export class HighlightsResolve implements Resolve<Highlights> {
+
+    constructor(
+        private statisticsService: StatisticsService
+    ) { }
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Highlights> {
+        return this.statisticsService.getHighlights();
     }
 
 }

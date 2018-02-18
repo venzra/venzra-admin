@@ -19,6 +19,11 @@
                     <button mat-raised-button color="warn" (click)="deactivate()">Deactivate Stripe</button>
                 </div>
 
+                <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="start center">
+                    <div>Customers are able to place orders on your store there is a total transaction fee in place of <strong>{{ 0.014 + subscription.transactions.rate | percent: '1.2' }} + {{ 20 + subscription.transactions.base }}p</strong></div>
+                    <mat-icon matTooltip="This includes the basic Stripe rate of 1.4% + 20p, certain payments may incur a higher rate, check Stripe for more information on gateway rates.">info_outline</mat-icon>
+                </div>
+
                 <p class="mat-caption">Connected on {{ gateway.modified | date: 'medium' }}</p>
             </div>
         </mat-card-content>

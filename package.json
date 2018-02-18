@@ -55,6 +55,7 @@
         "@angular/router": "5.2.4",
         "@swimlane/ngx-charts": "7.0.1",
         "@types/cookie-parser": "1.4.1",
+        "@types/d3-shape": "1.2.2",
         "@types/express": "4.11.1",
         "@types/helmet": "0.0.37",
         "@types/jwt-simple": "0.5.33",

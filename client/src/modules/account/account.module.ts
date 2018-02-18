@@ -20,8 +20,8 @@ import { SubscriptionComponent } from './fragments/subscription/subscription.com
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        MatCardModule,
         MatButtonModule,
+        MatCardModule,
         MatIconModule,
         MatInputModule,
         MatSelectModule,

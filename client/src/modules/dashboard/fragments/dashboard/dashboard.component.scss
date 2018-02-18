@@ -1,0 +1,24 @@
+@import '../../../../../styles';
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+.chart-container {
+    height: 320px;
+    width: 100%;
+}
+
+.number-chart-container {
+    padding: 0;
+
+    .chart-container {
+        padding-left: 15px;
+        height: 200px;
+        width: 100%;
+
+        @media ($mat-small) {
+            height: 380px;
+            max-width: 600px;
+        }
+    }
+}

@@ -1,4 +1,5 @@
-@import '../../../../../node_modules/@angular/material/theming';
+@import '~@angular/material/theming';
+
 @include mat-core();
 
 .content-container {
@@ -11,5 +12,5 @@
 
 .content-output {
     min-width: 320px;
-    max-width: 1000px;
+    max-width: 1200px;
 }

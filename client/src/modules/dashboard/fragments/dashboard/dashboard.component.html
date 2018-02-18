@@ -4,24 +4,49 @@
 </venzra-header>
 
 <venzra-content>
-    <mat-card>
+    <mat-card *ngIf="hasAction">
         <div fxLayout="row">
-            <h2>Notice</h2>
+            <h2>Store setup is not complete</h2>
             <span fxFlex></span>
-            <mat-icon color="accent" *ngIf="subscription.status !== 'ACTIVE'">info</mat-icon>
+            <mat-icon color="accent">warning</mat-icon>
         </div>
-        <p>Your account is currently in <strong>{{ subscription.status }}</strong> status.</p>
+        <p>Please ensure you have configured and setup the following on your account to ensure customers can place orders on your store.</p>
 
-        <div *ngIf="subscription.status === 'ACTIVE'">
-            <p>Customers are able to place orders on your store there is a transaction fee in place of <strong>{{ 0.014 + subscription.transactions.rate | percent: '1.2' }} + {{ 20 + subscription.transactions.base }}p</strong>.</p>
-            <p>Note that for orders placed using non european cards the fee is increased by 1.5% on orders placed.</p>
-        </div>
-        <div *ngIf="subscription.status !== 'ACTIVE'">
-            <p>An active account is required to ensure your store is available to customers. Setup a payment gateway to set your account as active and enable orders to be placed.</p>
-        </div>
-        <div *ngIf="subscription.status !== 'INACTIVE' && subscription.payment">
-            <p>While customers are not able to place orders you still have an active subscription you are paying for, you may disable this subscription if no longer required.</p>
-        </div>
+        <mat-vertical-stepper #stepper linear>
+            <ng-template matStepperIcon="edit">
+                <mat-icon>report_problem</mat-icon>
+            </ng-template>
+
+            <mat-step [editable]="!actions.products" [completed]="actions.products" label="Create or enable products">
+                <p>Products are a core feature for any online store, they are used to allow customers to purchase physical or digital goods. Products may even be services such as a pre-paid appointment or experience.</p>
+                <p>Add as many products are you are wishing to sell, the more products available to customers will improve search engine results and increase the interest and reach of your store to make sales.</p>
+                <a mat-raised-button routerLink="/products/create" color="primary">Create a product</a>
+            </mat-step>
+            <mat-step [editable]="!actions.shipping" [completed]="actions.shipping" label="Configure shipping options">
+                <p>The final delivery method is up to you to decide, this is a mechinism to configure what choices you would like to make available to customers for the typical delivery costs you would expect to incur.</p>
+                <p>Note that shipping options may also come with cart value requirements; you do not need to use this, however cart values can trigger the availability of a shipping option. Be careful to ensure there will always be at least one option available to a customer.</p>
+                <a mat-raised-button routerLink="/shipping/create" color="primary">Add shipping option</a>
+            </mat-step>
+            <mat-step [editable]="!actions.gateway" [completed]="actions.gateway" label="Setup payment gateway">
+                <p>Having a payment gateway is required to allow customers to purchase goods at the checkout. Without a gateway setup and active, customers are not able to place orders.</p>
+                <p>The payment gateway also is how you will be paid for orders placed, once a payment has been authorised the gateway will transfer money to the account you provid them with, on a schedule you have given them.</p>
+                <a mat-raised-button routerLink="/account/gateway" color="primary">Manage gateway</a>
+            </mat-step>
+        </mat-vertical-stepper>
+    </mat-card>
+
+    <mat-card *ngIf="!hasAction">
+        <mat-card-title fxLayout="row">
+            <div>Account {{ subscription.status }}</div>
+            <span fxFlex></span>
+            <mat-icon color="accent">{{ subscription.status === 'ACTIVE' ? 'check' : 'warning' }}</mat-icon>
+        </mat-card-title>
+    </mat-card>
+
+    <mat-card class="number-chart-container" fxLayout="column" fxLayoutAlign="start center">
+        <mat-card-content class="chart-container" fxLayout="row" fxLayoutAlign="center">
+            <ngx-charts-number-card cardColor="#f2f2f2" [animations]="false" [scheme]="colorScheme" [results]="highlights" [labelFormatting]="formatLabel" [valueFormatting]="formatValue"></ngx-charts-number-card>
+        </mat-card-content>
     </mat-card>
 
     <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="20px">
@@ -30,8 +55,8 @@
             <mat-card-content *ngIf="!orderVolumes.length">
                 <p>There have been no orders placed in the last 30 days.</p>
             </mat-card-content>
-            <mat-card-content *ngIf="orderVolumes.length" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
-                <ngx-charts-line-chart [xAxis]="true" [yAxis]="true" [showGridLines]="false" [autoScale]="true" [view]="chartSize" [scheme]="colorScheme" [results]="[{ name: 'Total value', series: orderVolumes }, { name: 'Average value', series: orderAverages }]"></ngx-charts-line-chart>
+            <mat-card-content class="chart-container" *ngIf="orderVolumes.length" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
+                <ngx-charts-line-chart [animations]="false" [xAxis]="true" [yAxis]="true" [showGridLines]="false" [autoScale]="true" [scheme]="colorScheme" [curve]="naturalCurve" [results]="[{ name: 'Total value', series: orderVolumes }, { name: 'Average value', series: orderAverages }]"></ngx-charts-line-chart>
             </mat-card-content>
         </mat-card>
 
@@ -40,8 +65,8 @@
             <mat-card-content *ngIf="!orderStates.length">
                 <p>You have no outstanding orders to process.</p>
             </mat-card-content>
-            <mat-card-content *ngIf="orderStates.length" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
-                <ngx-charts-bar-vertical [xAxis]="true" [yAxis]="true" [showGridLines]="false" [view]="chartSize" [scheme]="colorScheme" [results]="orderStates"></ngx-charts-bar-vertical>
+            <mat-card-content class="chart-container" *ngIf="orderStates.length" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
+                <ngx-charts-bar-vertical [animations]="false" [xAxis]="true" [yAxis]="true" [showGridLines]="false" [scheme]="colorScheme" [results]="orderStates"></ngx-charts-bar-vertical>
             </mat-card-content>
         </mat-card>
     </div>

@@ -1,23 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatStepper } from '@angular/material';
 
-import { Subscription } from '../../models/subscription';
+import * as shape from 'd3-shape';
+
+import { ListModel } from 'models';
+import { NonePipe } from 'filters/none.pipe';
+import { PricePipe } from 'filters/price.pipe';
+
 import { ChartData } from '../../models/chart-data';
-import { ListModel } from '../../../../models';
+import { Highlights } from '../../models/highlights';
+import { Overview } from '../../models/overview';
 import { Statistics } from '../../models/statistics';
+import { Subscription } from '../../models/subscription';
 
 @Component({
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
     public subscription: Subscription;
-    public orderAverages: Array<ChartData>;
-    public orderVolumes: Array<ChartData>;
-    public orderStates: Array<ChartData>;
-    public chartSize = [420, 320];
+    public actions: Overview;
+    public hasAction = false;
+    public highlights: Array<ChartData> = [];
+    public orderAverages: Array<ChartData> = [];
+    public orderVolumes: Array<ChartData> = [];
+    public orderStates: Array<ChartData> = [];
+    public naturalCurve = shape.curveNatural;
     public colorScheme = { domain: ['#5E35B1', '#9FA8DA', '#4527A0', '#5C6BC0', '#512DA8', '#7986CB'] };
+
+    @ViewChild(MatStepper) stepper: MatStepper;
 
     constructor(
         private route: ActivatedRoute
@@ -26,7 +39,39 @@ export class DashboardComponent implements OnInit {
     ngOnInit(): void {
         this.subscription = this.route.snapshot.data.subscription;
 
-        this.route.data.subscribe((data: { orderVolumes: ListModel<Statistics>, orderStates: ListModel<Statistics> }) => {
+        const highlights = <Highlights> this.route.snapshot.data.highlights;
+
+        this.actions = {
+            products: !!highlights.products,
+            shipping: !!highlights.shipping,
+            gateway: !!this.subscription.gateway
+        };
+        this.hasAction = Object.keys(this.actions).filter((key) => !this.actions[key]).length > 0;
+    }
+
+    ngAfterViewInit(): void {
+        setTimeout(_ => this.loadCharts());
+    }
+
+    loadCharts() {
+        if (this.stepper) {
+            let currentStep = -1;
+            this.stepper._steps.forEach((step, idx) => {
+                if (!step.completed && currentStep < 0) {
+                    currentStep = idx;
+                }
+            });
+            this.stepper.selectedIndex = currentStep;
+        }
+
+        this.route.data.subscribe((data: { highlights: Highlights, orderVolumes: ListModel<Statistics>, orderStates: ListModel<Statistics> }) => {
+            this.highlights = [
+                { name: 'Total Visitors', value: data.highlights.visitors },
+                { name: 'Abandoned Carts', value: data.highlights.carts },
+                { name: 'Orders placed', value: data.highlights.orders },
+                { name: 'Sales value', value: data.highlights.turnover, extra: { format: 'price' } }
+            ];
+
             this.orderAverages = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.count > 0 ? (volume.value / 100) / volume.count : 0 }));
             this.orderVolumes = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.value > 0 ? volume.value / 100 : 0 }));
 
@@ -40,6 +85,19 @@ export class DashboardComponent implements OnInit {
 
             this.orderStates = data.orderStates.list.map((state) => ({ name: state.status, value: state.count })).sort((a, b) => orderStates.find((state) => state.name === a.name).position - orderStates.find((state) => state.name === b.name).position);
         });
+    }
+
+    formatLabel(item: any) {
+        return `<p class="mat-body-2">${item.label}</p><p class="mat-caption">Last 30 days</p>`;
+    }
+
+    formatValue(item: any) {
+        switch (item.data.extra ? item.data.extra.format : '') {
+            case 'price':
+                return new NonePipe().transform(new PricePipe().transform(item.value, null, 0));
+            default:
+                return item.value;
+        }
     }
 
 }

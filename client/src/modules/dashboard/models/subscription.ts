@@ -1,4 +1,5 @@
 import { Payment } from './payment';
+import { Gateway } from './gateway';
 import { Transaction } from './transaction';
 
 export interface Subscription {
@@ -6,6 +7,7 @@ export interface Subscription {
     storeName: string;
     strapline: string;
     payment: Payment;
+    gateway: Gateway;
     transactions: Transaction;
     status: string;
     created: Date;

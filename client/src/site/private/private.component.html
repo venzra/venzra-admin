@@ -10,7 +10,8 @@
     <mat-sidenav-container>
         <mat-sidenav #sidenav class="mat-elevation-z4" [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'over' : 'side'">
             <mat-nav-list dense>
-                <a mat-list-item routerLink="/dashboard" routerLinkActive="active"><mat-icon>dashboard</mat-icon> Dashboard</a>
+                <h3 matSubheader><mat-icon>dashboard</mat-icon> Dashboards</h3>
+                <a mat-list-item routerLink="/dashboard" routerLinkActive="active"><mat-icon></mat-icon> Overview</a>
 
                 <mat-divider></mat-divider>
 
