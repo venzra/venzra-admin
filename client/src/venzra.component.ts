@@ -6,8 +6,4 @@ import { Router } from '@angular/router';
     template: '<router-outlet></router-outlet>'
 })
 export class VenzraComponent {
-
-    constructor(
-        private router: Router
-    ) { }
 }

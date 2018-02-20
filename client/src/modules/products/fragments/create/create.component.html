@@ -39,8 +39,7 @@
                             <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
                         </div>
                         <div>
-                            <button mat-icon-button venzraControl format="preview" matTooltip="Toggle preview"><mat-icon>visibility</mat-icon></button>
-                            <button mat-icon-button venzraControl format="help" matTooltip="Toggle help"><mat-icon>help_outline</mat-icon></button>
+                            <button mat-icon-button type="button" (click)="markdownHelp()"><mat-icon>help_outline</mat-icon></button>
                         </div>
                     </div>
                 </venzra-markdown-editor>

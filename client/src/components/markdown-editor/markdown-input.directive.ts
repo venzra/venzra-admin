@@ -1,4 +1,4 @@
-import { AfterContentInit, Directive, ElementRef, Host, Input, OnDestroy, Self } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, Host, OnDestroy, Self } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 import { MarkdownComponent } from './markdown.component';
@@ -45,12 +45,6 @@ export class MarkdownInputDirective implements MarkdownInputControl, AfterConten
 
     handleEvent(event) {
         switch (event) {
-            case 'help':
-                this.container.toggleHelp();
-                break;
-            case 'preview':
-                this.container.togglePreview();
-                break;
             case 'bold':
                 this.wrapText('**', '**', 'bold');
                 break;
@@ -69,5 +63,3 @@ export class MarkdownInputDirective implements MarkdownInputControl, AfterConten
     }
 
 }
-
-// textArea.prop('selectionStart');

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { MarkdownHelpComponent } from '@venzra/components/markdown-help/markdown-help.component';
 import { LayoutService } from '@venzra/services';
 
 import { Product } from '../../models/product';
@@ -17,6 +18,7 @@ export class ProductCreateComponent implements OnInit {
 
     constructor(
         private forms: FormBuilder,
+        private dialog: MatDialog,
         private snackbar: MatSnackBar,
         private productService: ProductService,
         private layout: LayoutService
@@ -44,6 +46,10 @@ export class ProductCreateComponent implements OnInit {
         this.productService
             .createProduct(productData)
             .catch((response) => this.snackbar.open(response.error.message || 'Create failed', 'OK', { duration: 5000 }));
+    }
+
+    markdownHelp() {
+        this.dialog.open(MarkdownHelpComponent, { width: '90%', maxWidth: '720px' });
     }
 
 }

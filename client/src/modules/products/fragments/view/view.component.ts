@@ -22,10 +22,7 @@ export class ProductViewComponent implements OnInit {
 
     ngOnInit(): void {
         this.layout.title = 'Products';
-
-        this.route.data.subscribe((data: { productData: Product }) => {
-            this.product = data.productData;
-        });
+        this.product = this.route.snapshot.data.productData;
     }
 
     toggleActive(event: MatSlideToggleChange) {

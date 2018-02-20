@@ -7,6 +7,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 export class MarkdownDirective implements OnChanges {
 
+    private _original: string;
     private _headers: boolean;
 
     private marked = (<any>window).marked;
@@ -27,8 +28,14 @@ export class MarkdownDirective implements OnChanges {
             sanitize: true
         });
 
+        if (!this._original) {
+            this._original = this.element.nativeElement.innerHTML;
+        }
+
         if (this.venzraMarkdown) {
             this.element.nativeElement.innerHTML = this.marked(this.venzraMarkdown, { renderer: this.materialRender() });
+        } else {
+            this.element.nativeElement.innerHTML = this._original;
         }
     }
 

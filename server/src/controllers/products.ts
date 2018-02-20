@@ -74,16 +74,17 @@ export class ProductsController extends AuthenticationController {
                     switch (operation.op) {
                         case 'replace':
                             switch (operation.path) {
+                                case 'displayName':
+                                case 'description':
+                                case 'promotionalImage':
+                                case 'featureImage':
                                 case 'previousPrice':
                                 case 'currentPrice':
                                 case 'status':
                                     const history = new ProductHistoryModel({ account: this.account._id, field: operation.path, previous: product.get(operation.path), next: operation.value });
                                     promise = promise
                                         .then(() => history.save())
-                                        .then(() => product.history.unshift(history));
-                                /* falls through */
-                                case 'displayName':
-                                    promise = promise
+                                        .then(() => product.history.unshift(history))
                                         .then(() => product.set(operation.path, operation.value));
                             }
                     }

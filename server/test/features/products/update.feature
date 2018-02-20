@@ -40,16 +40,19 @@ Feature: Updating product information
   Scenario: Update product information with values provided which can be altered
     Given I am logged in with the "product-update-one@venzra-test.io" account
     When I make a PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product" using:
-      | op      | path          | value                |
-      | replace | code          | PRODUCT-UPDATE-9999  |
-      | replace | displayName   | Product Update PATCH |
-      | replace | previousPrice | 8                    |
-      | replace | currentPrice  | 5                    |
-      | replace | status        | ACTIVE               |
-      | replace | slug          | updated-slug         |
+      | op      | path             | value                |
+      | replace | code             | PRODUCT-UPDATE-9999  |
+      | replace | displayName      | Product Update PATCH |
+      | replace | description      | Updated Description  |
+      | replace | promotionalImage | {{ images[1]._id }}  |
+      | replace | featureImage     | {{ images[2]._id }}  |
+      | replace | previousPrice    | 8                    |
+      | replace | currentPrice     | 5                    |
+      | replace | status           | ACTIVE               |
+      | replace | slug             | updated-slug         |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 8             | 5            | ARRAY[3] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
     And the "product" request that has a "history" field and row 1 contains:
       | account | field  | previous | next   | created   |
       | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
@@ -59,3 +62,15 @@ Feature: Updating product information
     And the "product" request that has a "history" field and row 3 contains:
       | account | field         | previous | next | created   |
       | OBJECT  | previousPrice | "0"      | "8"  | DATE_TIME |
+    And the "product" request that has a "history" field and row 4 contains:
+      | account | field        | previous            | next                | created   |
+      | OBJECT  | featureImage | {{ images[1]._id }} | {{ images[2]._id }} | DATE_TIME |
+    And the "product" request that has a "history" field and row 5 contains:
+      | account | field            | previous            | next                | created   |
+      | OBJECT  | promotionalImage | {{ images[2]._id }} | {{ images[1]._id }} | DATE_TIME |
+    And the "product" request that has a "history" field and row 6 contains:
+      | account | field       | previous              | next                | created   |
+      | OBJECT  | description | Automated Description | Updated Description | DATE_TIME |
+    And the "product" request that has a "history" field and row 7 contains:
+      | account | field       | previous         | next                 | created   |
+      | OBJECT  | displayName | Product Update A | Product Update PATCH | DATE_TIME |

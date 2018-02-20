@@ -1,6 +1,7 @@
 <venzra-header>
     <h1>{{ product.displayName }}</h1>
     <p>The details below show the current available information provided about this product.</p>
+    <button mat-raised-button color="accent" [routerLink]="'/products/' + product._id + '/manage'"><mat-icon>edit</mat-icon> Edit product</button>
 </venzra-header>
 
 <venzra-content>
@@ -55,7 +56,7 @@
 
     <mat-card>
         <mat-card-title>History</mat-card-title>
-        <mat-card-subtitle>The following is a history of events that have occurred which modify certain information about this product, currently only pricing and status changes are recorded. Auditing history for each product is kept for 28 days.</mat-card-subtitle>
+        <mat-card-subtitle>The following is a history of events that have occurred which modify certain information about this product. Auditing history for each product is kept for 28 days.</mat-card-subtitle>
 
         <p *ngIf="!product.history.length"><em>No recent changes have been recorded for this product.</em></p>
 

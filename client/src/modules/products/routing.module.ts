@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ProductCreateComponent } from './fragments/create/create.component';
+import { ProductManageComponent } from './fragments/manage/manage.component';
 import { ProductListComponent } from './fragments/list/list.component';
 import { ProductViewComponent } from './fragments/view/view.component';
 
@@ -23,6 +24,13 @@ const routes: Routes = [
     {
         path: ':productId',
         component: ProductViewComponent,
+        resolve: {
+            productData: ProductRetrieveResolve
+        }
+    },
+    {
+        path: ':productId/manage',
+        component: ProductManageComponent,
         resolve: {
             productData: ProductRetrieveResolve
         }

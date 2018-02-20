@@ -1,0 +1,95 @@
+<venzra-header>
+    <h1>Manage product</h1>
+    <p>If you need to change information about your product this is the place to do so, however not all data can be modified. Ensure that you are not actually wanting to create a new product record before saving changes.</p>
+</venzra-header>
+
+<venzra-content>
+    <form (ngSubmit)="updateProduct()" [formGroup]="productForm">
+        <mat-card>
+            <mat-card-title>Information</mat-card-title>
+            <mat-card-subtitle>This is the primary information regarding the sale of your product and its availability to customers of your store.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-form-field>
+                    <input matInput placeholder="Display name" formControlName="displayName" required />
+                    <mat-error *ngIf="productForm.controls['displayName'].hasError('required')">This field is required.</mat-error>
+                    <mat-error *ngIf="productForm.controls['displayName'].hasError('maxlength')">Entered text is too long.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Product code" formControlName="code" required />
+                    <mat-error *ngIf="productForm.controls['code'].hasError('required')">This field is required.</mat-error>
+                    <mat-error *ngIf="productForm.controls['code'].hasError('maxlength')">Entered text is too long.</mat-error>
+                </mat-form-field>
+
+                <venzra-markdown-editor>
+                    <mat-form-field>
+                        <textarea matInput venzraMarkdownInput placeholder="Product description" formControlName="description" matTextareaAutosize matAutosizeMinRows="12" matAutosizeMaxRows="20" required></textarea>
+                        <mat-error *ngIf="productForm.controls['description'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="productForm.controls['description'].hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+                    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
+                        <div>
+                            <button mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+                            <button mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
+                            <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
+                        </div>
+                        <div>
+                            <button mat-icon-button type="button" (click)="markdownHelp()"><mat-icon>help_outline</mat-icon></button>
+                        </div>
+                    </div>
+                </venzra-markdown-editor>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-title>Depictions</mat-card-title>
+            <mat-card-subtitle>Manage any imagery that you want to show for this product</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="40px">
+                <venzra-image-upload target="/api/images" usage="promotion" accept="image/png,image/jpeg">
+                    <p class="mat-caption">This image is the primary image customers will see of the product, used on product listing and view pages.</p>
+                    <input venzraImage placeholder="Promotional image" formControlName="promotionalImage" required />
+                </venzra-image-upload>
+
+                <venzra-image-upload target="/api/images" usage="feature" accept="image/png,image/jpeg">
+                    <p class="mat-caption">This is optional and will be used to give more impact when customers view the product.</p>
+                    <input venzraImage placeholder="Feature image" formControlName="featureImage" />
+                </venzra-image-upload>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-title>Pricing details</mat-card-title>
+            <mat-card-subtitle>Setup your current sale price, including any standard retail pricing information.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-form-field>
+                    <span matPrefix>&pound; &nbsp;</span>
+                    <input matInput placeholder="Previous retail price" formControlName="previousPrice" />
+                    <mat-hint align="start">Providing this will allow customers to see the typical or a recent retail price.</mat-hint>
+                    <mat-error *ngIf="productForm.controls['previousPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+                    <mat-error *ngIf="productForm.controls['previousPrice'].hasError('max')">Entered value is too large.</mat-error>
+                </mat-form-field>
+            </mat-card-content>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-form-field>
+                    <span matPrefix>&pound; &nbsp;</span>
+                    <input matInput placeholder="Current sale price" formControlName="currentPrice" required />
+                    <mat-hint align="start">This is the price customers will pay to purchase on the store.</mat-hint>
+                    <mat-error *ngIf="productForm.controls['currentPrice'].hasError('required')">This field is required.</mat-error>
+                    <mat-error *ngIf="productForm.controls['currentPrice'].hasError('pattern')">Must contain a positive number, maximum of two decimal places.</mat-error>
+                    <mat-error *ngIf="productForm.controls['currentPrice'].hasError('max')">Entered value is too large.</mat-error>
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" [routerLink]="'/products/' + product._id">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="productForm.pristine || productForm.invalid">Save</button>
+        </div>
+
+    </form>
+</venzra-content>

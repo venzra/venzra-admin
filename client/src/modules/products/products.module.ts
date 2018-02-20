@@ -8,11 +8,13 @@ import { AccountRoutingModule } from './routing.module';
 
 import { ImageInputModule } from '@venzra/components/image-upload/image-input.module';
 import { MarkdownModule } from '@venzra/components/markdown-editor/markdown.module';
+import { MarkdownHelpModule } from '@venzra/components/markdown-help/markdown-help.module';
 import { PageModule } from '@venzra/components/page/page.module';
 import { FiltersModule } from '@venzra/filters/filters.module';
 
 import { ProductCreateComponent } from './fragments/create/create.component';
 import { ProductListComponent } from './fragments/list/list.component';
+import { ProductManageComponent } from './fragments/manage/manage.component';
 import { ProductViewComponent } from './fragments/view/view.component';
 
 import { ProductListResolve, ProductRetrieveResolve, ProductService } from './services/product.service';
@@ -21,6 +23,7 @@ import { ProductListResolve, ProductRetrieveResolve, ProductService } from './se
     declarations: [
         ProductCreateComponent,
         ProductListComponent,
+        ProductManageComponent,
         ProductViewComponent
     ],
     imports: [
@@ -43,6 +46,7 @@ import { ProductListResolve, ProductRetrieveResolve, ProductService } from './se
         AccountRoutingModule,
         ImageInputModule,
         MarkdownModule,
+        MarkdownHelpModule,
         PageModule,
         FiltersModule
     ],

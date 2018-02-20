@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { AbstractControl } from '@angular/forms';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 
 import { ListModel } from '@venzra/models';
@@ -31,6 +32,12 @@ export class ProductService extends RestfulService {
         return this.http.post('/api/products', product)
             .toPromise()
             .then(() => this.router.navigate(['/products'], { replaceUrl: true }));
+    }
+
+    updateProduct(productId: string, formData: { [key: string]: AbstractControl }): Promise<Product> {
+        return this.http.patch(`/api/products/${productId}`, this.preparePatch(formData))
+            .toPromise()
+            .then((response: any) => response as Product);
     }
 
     changeStatus(productId: string, status: string): Promise<Product> {
