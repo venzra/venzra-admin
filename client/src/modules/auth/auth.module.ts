@@ -6,7 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AuthRoutingModule } from './routing.module';
 
-import { AccountService } from 'services';
+import { AccountService } from '@venzra/services';
 
 import { ActivationComponent } from './fragments/activation/activation.component';
 import { LoginComponent } from './fragments/login/login.component';

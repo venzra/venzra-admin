@@ -4,8 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { ImageInputModule } from 'components/image-upload/image-input.module';
-import { PageModule } from 'components/page/page.module';
+import { ImageInputModule } from '@venzra/components/image-upload/image-input.module';
+import { PageModule } from '@venzra/components/page/page.module';
 
 import { StoreRoutingModule } from './routing.module';
 

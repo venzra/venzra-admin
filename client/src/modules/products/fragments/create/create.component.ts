@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { LayoutService } from 'services';
+import { LayoutService } from '@venzra/services';
 
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';

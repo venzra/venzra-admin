@@ -1,4 +1,4 @@
-import { HistoryModel } from 'models';
+import { HistoryModel } from '@venzra/models';
 
 export interface Product {
     _id: string;

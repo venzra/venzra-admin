@@ -1,4 +1,4 @@
-import { HistoryModel } from 'models';
+import { HistoryModel } from '@venzra/models';
 
 import { Address } from './address';
 import { Customer } from './customer';

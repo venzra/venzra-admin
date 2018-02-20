@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
-import { AccountService, CalendarService } from 'services';
+import { AccountService, CalendarService } from '@venzra/services';
 
 import { Card } from '../../models/card';
 import { Plan } from '../../models/plan';

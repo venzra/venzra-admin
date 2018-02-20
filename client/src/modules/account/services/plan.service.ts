@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { ListModel } from 'models';
+import { ListModel } from '@venzra/models';
 
 import { Plan } from '../models/plan';
 

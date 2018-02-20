@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { LayoutService } from 'services';
+import { LayoutService } from '@venzra/services';
 
 @Component({
     templateUrl: './not-found.component.html',

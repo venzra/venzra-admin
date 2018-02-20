@@ -6,10 +6,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AccountRoutingModule } from './routing.module';
 
-import { ImageInputModule } from 'components/image-upload/image-input.module';
-import { MarkdownModule } from 'components/markdown-editor/markdown.module';
-import { PageModule } from 'components/page/page.module';
-import { FiltersModule } from 'filters/filters.module';
+import { ImageInputModule } from '@venzra/components/image-upload/image-input.module';
+import { MarkdownModule } from '@venzra/components/markdown-editor/markdown.module';
+import { PageModule } from '@venzra/components/page/page.module';
+import { FiltersModule } from '@venzra/filters/filters.module';
 
 import { ProductCreateComponent } from './fragments/create/create.component';
 import { ProductListComponent } from './fragments/list/list.component';

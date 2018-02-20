@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
-import { LayoutService } from 'services';
+import { LayoutService } from '@venzra/services';
 
 import { Subscription } from '../../models/subscription';
 import { SubscriptionService } from '../../services/subscription.service';

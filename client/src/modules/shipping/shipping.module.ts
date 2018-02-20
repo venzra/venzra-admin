@@ -4,8 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSnackBarModule, MatSortModule, MatTableModule, MatToolbarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { PageModule } from 'components/page/page.module';
-import { FiltersModule } from 'filters/filters.module';
+import { PageModule } from '@venzra/components/page/page.module';
+import { FiltersModule } from '@venzra/filters/filters.module';
 
 import { ShippingRoutingModule } from './routing.module';
 

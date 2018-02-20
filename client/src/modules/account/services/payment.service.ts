@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { environment } from 'environment';
+import { environment } from '@venzra/environment';
 
 import { Card } from '../models/card';
 import { Subscription } from '../models/subscription';

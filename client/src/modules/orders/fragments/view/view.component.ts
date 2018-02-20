@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 
-import { LayoutService } from 'services/index';
+import { LayoutService } from '@venzra/services';
 
 import { Order } from '../../models/order';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Account, AccountService } from 'services/account.service';
+import { Account, AccountService } from '@venzra/services/account.service';
 
 @Component({
     selector: 'venzra-admin-account',

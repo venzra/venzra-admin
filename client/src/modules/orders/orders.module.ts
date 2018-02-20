@@ -6,8 +6,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AccountRoutingModule } from './routing.module';
 
-import { FiltersModule } from 'filters/filters.module';
-import { PageModule } from 'components/page/page.module';
+import { FiltersModule } from '@venzra/filters/filters.module';
+import { PageModule } from '@venzra/components/page/page.module';
 
 import { OrderListComponent } from './fragments/list/list.component';
 import { OrderViewComponent } from './fragments/view/view.component';

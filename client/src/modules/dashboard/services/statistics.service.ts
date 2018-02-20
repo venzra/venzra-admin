@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { RestfulService } from 'services';
-import { ListModel } from 'models';
+import { RestfulService } from '@venzra/services';
+import { ListModel } from '@venzra/models';
 
 import { Highlights } from '../models/highlights';
 import { Statistics } from '../models/statistics';

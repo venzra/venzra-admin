@@ -5,9 +5,9 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 
 import 'rxjs/add/operator/debounceTime';
 
-import { AccountService, Activation, LayoutService } from 'services';
+import { AccountService, Activation, LayoutService } from '@venzra/services';
 
-import { ServiceTermsComponent } from 'components/service-terms/service-terms.component';
+import { ServiceTermsComponent } from '@venzra/components/service-terms/service-terms.component';
 
 @Component({
     templateUrl: './activation.component.html',

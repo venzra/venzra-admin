@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 
 import 'rxjs/add/operator/toPromise';
 
-import { RestfulService } from 'services';
+import { RestfulService } from '@venzra/services';
 
 import { Subscription } from '../models/subscription';
 

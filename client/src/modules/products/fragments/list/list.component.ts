@@ -15,8 +15,8 @@ import { switchMap } from 'rxjs/operators/switchMap';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 
-import { ListModel } from 'models';
-import { LayoutService } from 'services';
+import { ListModel } from '@venzra/models';
+import { LayoutService } from '@venzra/services';
 
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';

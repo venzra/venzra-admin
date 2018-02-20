@@ -3,8 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
-import { ListModel } from 'models';
-import { RestfulService } from 'services';
+import { ListModel } from '@venzra/models';
+import { RestfulService } from '@venzra/services';
 
 import { Order } from '../models/order';
 

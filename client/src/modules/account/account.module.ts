@@ -4,8 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatSelectModule, MatSnackBarModule, MatStepperModule, MatTooltipModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { PageModule } from 'components/page/page.module';
-import { FiltersModule } from 'filters/filters.module';
+import { PageModule } from '@venzra/components/page/page.module';
+import { FiltersModule } from '@venzra/filters/filters.module';
 
 import { AccountRoutingModule } from './routing.module';
 

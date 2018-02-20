@@ -4,9 +4,9 @@ import { MatStepper } from '@angular/material';
 
 import * as shape from 'd3-shape';
 
-import { ListModel } from 'models';
-import { NonePipe } from 'filters/none.pipe';
-import { PricePipe } from 'filters/price.pipe';
+import { ListModel } from '@venzra/models';
+import { NonePipe } from '@venzra/filters/none.pipe';
+import { PricePipe } from '@venzra/filters/price.pipe';
 
 import { ChartData } from '../../models/chart-data';
 import { Highlights } from '../../models/highlights';

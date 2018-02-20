@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material';
 
-import { LayoutService } from 'services';
+import { LayoutService } from '@venzra/services';
 
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';

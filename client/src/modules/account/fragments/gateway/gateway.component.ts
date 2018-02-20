@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { environment } from 'environment';
-import { AccountService } from 'services';
+import { environment } from '@venzra/environment';
+import { AccountService } from '@venzra/services';
 
 import { Gateway } from '../../models/gateway';
 import { Subscription } from '../../models/subscription';
