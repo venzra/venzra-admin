@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AbstractControl } from '@angular/forms';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 import { ListModel } from '@venzra/models';
 import { RestfulService } from '@venzra/services';
@@ -13,7 +14,8 @@ export class ProductService extends RestfulService {
 
     constructor(
         private http: HttpClient,
-        private router: Router
+        private router: Router,
+        private snackbar: MatSnackBar
     ) {
         super();
     }
@@ -25,19 +27,21 @@ export class ProductService extends RestfulService {
         ];
     }
 
-    createProduct(product: Product): Promise<boolean> {
+    createProduct(product: Product): void {
         product.previousPrice *= 100;
         product.currentPrice *= 100;
 
-        return this.http.post('/api/products', product)
+        this.http.post('/api/products', product)
             .toPromise()
-            .then(() => this.router.navigate(['/products'], { replaceUrl: true }));
+            .then(() => this.router.navigate(['/products'], { replaceUrl: true }))
+            .catch((response) => this.snackbar.open(response.error.message || 'Create failed', 'OK', { duration: 5000 }));
     }
 
-    updateProduct(productId: string, formData: { [key: string]: AbstractControl }): Promise<Product> {
-        return this.http.patch(`/api/products/${productId}`, this.preparePatch(formData))
+    updateProduct(productId: string, formData: { [key: string]: AbstractControl }): void {
+        this.http.patch(`/api/products/${productId}`, this.preparePatch(formData))
             .toPromise()
-            .then((response: any) => response as Product);
+            .then(() => this.router.navigate(['/products', productId]))
+            .catch((response) => this.snackbar.open(response.error.message || 'Update failed', 'OK', { duration: 5000 }));
     }
 
     changeStatus(productId: string, status: string): Promise<Product> {

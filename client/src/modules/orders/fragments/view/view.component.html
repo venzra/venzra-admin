@@ -161,8 +161,8 @@
         <mat-card-content>
             <mat-list>
                 <mat-list-item *ngFor="let history of order.history">
-                    <h4 matLine>{{ history.account ? history.account.identity : 'Automated Event' }}</h4>
-                    <p matLine>Changed <strong>{{ history.field }} </strong> from {{ history.previous }} to {{ history.next }} on {{ history.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</p>
+                    <h4 matLine>{{ history.account ? history.account.identity : 'Automated Event' }} <span class="mat-caption">on {{ history.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</span></h4>
+                    <p matLine>Changed <strong>{{ history.field }} </strong> from "<em>{{ history.previous }}</em>" to "<em>{{ history.next }}</em>"</p>
                 </mat-list-item>
             </mat-list>
         </mat-card-content>

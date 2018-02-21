@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
-import { LayoutService } from '@venzra/services';
 import { MarkdownHelpComponent } from '@venzra/components/markdown-help/markdown-help.component';
+import { LayoutService } from '@venzra/services';
 
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
@@ -22,7 +22,6 @@ export class ProductManageComponent implements OnInit {
         private router: Router,
         private forms: FormBuilder,
         private dialog: MatDialog,
-        private snackbar: MatSnackBar,
         private productService: ProductService,
         private layout: LayoutService
     ) { }
@@ -36,7 +35,7 @@ export class ProductManageComponent implements OnInit {
             description: ['', [Validators.required, Validators.maxLength(2000)]],
             promotionalImage: ['', [Validators.required]],
             featureImage: [null, []],
-            previousPrice: ['', [Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
+            previousPrice: [null, [Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
             currentPrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
             status: [true, []]
         });
@@ -46,10 +45,7 @@ export class ProductManageComponent implements OnInit {
     }
 
     updateProduct() {
-        this.productService
-            .updateProduct(this.product._id, this.productForm.controls)
-            .then(() => this.router.navigate(['/products', this.product._id]))
-            .catch((response) => this.snackbar.open(response.error.message || 'Update failed', 'OK', { duration: 5000 }));
+        this.productService.updateProduct(this.product._id, this.productForm.controls);
     }
 
     markdownHelp() {
