@@ -56,7 +56,21 @@
                 <p>There have been no orders placed in the last 30 days.</p>
             </mat-card-content>
             <mat-card-content class="chart-container" *ngIf="orderVolumes.length" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
-                <ngx-charts-line-chart [animations]="false" [xAxis]="true" [yAxis]="true" [showGridLines]="false" [autoScale]="true" [scheme]="colorScheme" [curve]="naturalCurve" [results]="[{ name: 'Total value', series: orderVolumes }, { name: 'Average value', series: orderAverages }]"></ngx-charts-line-chart>
+                <ngx-charts-line-chart [animations]="false" [xAxis]="true" [yAxis]="true" [showGridLines]="false" [autoScale]="true" [yAxisTickFormatting]="formatAxis" [scheme]="colorScheme" [curve]="lineCurve" [results]="[{ name: 'Total value', series: orderVolumes }, { name: 'Average value', series: orderAverages }]">
+                    <ng-template #tooltipTemplate let-model="model">
+                        <div fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="start center">
+                            <span class="mat-body-2">{{ model.series }}</span>
+                            <span class="mat-title">{{ model.value | price | none }}</span>
+                            <span class="mat-caption">{{ model.name | date }}</span>
+                        </div>
+                    </ng-template>
+                    <ng-template #seriesTooltipTemplate let-model="model">
+                        <div fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="start start">
+                            <span class="mat-body-2">{{ model[0].name | date }}</span>
+                            <span *ngFor="let row of model" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center"><mat-icon [style.color]="row.color">label</mat-icon>{{ row.series }}:&nbsp;<strong>{{ row.value | price | none }}</strong></span>
+                        </div>
+                    </ng-template>
+                </ngx-charts-line-chart>
             </mat-card-content>
         </mat-card>
 
@@ -66,7 +80,7 @@
                 <p>You have no outstanding orders to process.</p>
             </mat-card-content>
             <mat-card-content class="chart-container" *ngIf="orderStates.length" fxLayout="row" fxLayoutAlign="center start" fxLayoutAlign.sm="start start" fxLayoutAlign.md="start start">
-                <ngx-charts-bar-vertical [animations]="false" [xAxis]="true" [yAxis]="true" [showGridLines]="false" [scheme]="colorScheme" [results]="orderStates"></ngx-charts-bar-vertical>
+                <ngx-charts-bar-vertical [animations]="false" [xAxis]="true" [yAxis]="true" [showGridLines]="false" [scheme]="colorScheme" yAxisLabel="Number of orders" [showYAxisLabel]="true" [results]="orderStates"></ngx-charts-bar-vertical>
             </mat-card-content>
         </mat-card>
     </div>

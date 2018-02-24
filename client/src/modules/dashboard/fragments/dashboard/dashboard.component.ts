@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     public orderAverages: Array<ChartData> = [];
     public orderVolumes: Array<ChartData> = [];
     public orderStates: Array<ChartData> = [];
-    public naturalCurve = shape.curveNatural;
+    public lineCurve = shape.curveMonotoneX;
     public colorScheme = { domain: ['#5E35B1', '#9FA8DA', '#4527A0', '#5C6BC0', '#512DA8', '#7986CB'] };
 
     @ViewChild(MatStepper) stepper: MatStepper;
@@ -72,8 +72,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 { name: 'Sales value', value: data.highlights.turnover, extra: { format: 'price' } }
             ];
 
-            this.orderAverages = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.count > 0 ? (volume.value / 100) / volume.count : 0 }));
-            this.orderVolumes = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.value > 0 ? volume.value / 100 : 0 }));
+            this.orderAverages = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.count > 0 ? volume.value / volume.count : 0 }));
+            this.orderVolumes = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.value }));
 
             const orderStates = [
                 { name: 'CREATED', position: 0 },
@@ -87,6 +87,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         });
     }
 
+    formatAxis(label: any) {
+        if (label === 0) {
+            return '';
+        }
+        return new PricePipe().transform(label);
+    }
+
     formatLabel(item: any) {
         return `<p class="mat-body-2">${item.label}</p><p class="mat-caption">Last 30 days</p>`;
     }
@@ -94,7 +101,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     formatValue(item: any) {
         switch (item.data.extra ? item.data.extra.format : '') {
             case 'price':
-                return new NonePipe().transform(new PricePipe().transform(item.value, null, 0));
+                return new NonePipe().transform(new PricePipe().transform(item.value, undefined, 0));
             default:
                 return item.value;
         }

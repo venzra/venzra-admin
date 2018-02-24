@@ -2,8 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'none' })
 export class NonePipe implements PipeTransform {
-    transform(value: any): string {
 
+    transform(value: any): string {
         switch (value) {
             case 0:
             case 'FREE':
@@ -12,4 +12,5 @@ export class NonePipe implements PipeTransform {
                 return value;
         }
     }
+
 }

@@ -13,16 +13,16 @@ const addresses = [
     { addressee: 'Mr Kian H John', street: '34 East Street', building: '', city: 'MARGATE', county: 'Kent', postalCode: 'CT97AS', country: 'GB' }
 ];
 
-const statuses = ['AUTHORISED', 'AUTHORISED', 'PROCESSING', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED'];
+const statuses = ['AUTHORISED', 'AUTHORISED', 'PROCESSING', 'AUTHORISED', 'PROCESSING', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED'];
 
 for (let i = 0; i < days; i++) {
-    for (let j = 0; j < 3 + Math.ceil(Math.random() * 3); j++) {
+    for (let j = 0; j < 7 + Math.ceil(Math.random() * 3); j++) {
 
         const entry = {
             products: [
-                { quantity: Math.ceil(Math.random() * 5), price: 400 + Math.ceil(Math.random() * 500) },
-                { quantity: Math.ceil(Math.random() * 3), price: 700 + Math.ceil(Math.random() * 500) },
-                { quantity: Math.ceil(Math.random() * 3), price: 500 + Math.ceil(Math.random() * 500) }
+                { quantity: Math.ceil(Math.random() * 5), price: 200 + Math.ceil(Math.random() * 500) },
+                { quantity: Math.ceil(Math.random() * 3), price: 500 + Math.ceil(Math.random() * 500) },
+                { quantity: Math.ceil(Math.random() * 3), price: 300 + Math.ceil(Math.random() * 500) }
             ],
             reference: Math.floor((Math.random() * 0.9 + 0.1) * Math.pow(10, 10)),
             created: new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getDate() - i), Math.floor(Math.random() * 24), Math.floor(Math.random() * 60), Math.floor(Math.random() * 60))

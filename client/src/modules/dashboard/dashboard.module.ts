@@ -7,6 +7,7 @@ import { BarChartModule, LineChartModule, NumberCardModule } from '@swimlane/ngx
 import { DashboardRoutingModule } from './routing.module';
 
 import { PageModule } from '@venzra/components/page/page.module';
+import { FiltersModule } from '@venzra/filters/filters.module';
 
 import { DashboardComponent } from './fragments/dashboard/dashboard.component';
 
@@ -25,6 +26,7 @@ import { DashboardComponent } from './fragments/dashboard/dashboard.component';
         BarChartModule,
         LineChartModule,
         NumberCardModule,
+        FiltersModule,
         PageModule
     ]
 })
