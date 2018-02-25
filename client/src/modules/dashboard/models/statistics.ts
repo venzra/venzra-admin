@@ -5,4 +5,5 @@ export interface Statistics {
     status: string;
     count: number;
     value: number;
+    refund: number;
 }

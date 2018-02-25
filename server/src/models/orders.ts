@@ -65,7 +65,7 @@ const OrderSchema: Schema = new Schema({
     },
     status: {
         type: String,
-        enum: ['CREATED', 'AUTHORISED', 'PROCESSING', 'DISPATCHED', 'DELIVERED'],
+        enum: ['CREATED', 'AUTHORISED', 'PROCESSING', 'DISPATCHED', 'DELIVERED', 'REFUNDED'],
         required: true,
         default: 'CREATED'
     },

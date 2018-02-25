@@ -36,21 +36,26 @@
                 </div>
 
                 <div fxLayout="row">
-                    <span fxFlex>Amount</span>
-                    <div fxFlex="66%">{{ order.payment.value | price }}</div>
+                    <span fxFlex>Payment</span>
+                    <div fxFlex="66%" fxLayoutGap="8px"><span>{{ order.payment.value | price }}</span><span *ngIf="order.payment.refund">( -{{ order.payment.refund | price }} refunded )</span></div>
                 </div>
 
                 <div fxLayout="row">
                     <span fxFlex>Fees</span>
                     <span fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" fxFlex="66%">
-                        <div>{{ order.payment.fee.total | price }}</div>
-                        <mat-icon matTooltip="Venzra: {{ order.payment.fee.venzra.amount | price: order.payment.fee.venzra.currency }} &bull; Gateway: {{ order.payment.fee.gateway.amount | price: order.payment.fee.gateway.currency }}" matTooltipPosition="after">info_outline</mat-icon>
+                        <div>{{ order.payment.fee.total | price | none }}</div>
+                        <mat-icon *ngIf="order.payment.fee.total" matTooltip="Venzra: {{ order.payment.fee.venzra.amount - (order.payment.fee.venzra.refund || 0) | price: order.payment.fee.venzra.currency }} &bull; Gateway: {{ order.payment.fee.gateway.amount - (order.payment.fee.gateway.refund || 0) | price: order.payment.fee.gateway.currency }}" matTooltipPosition="after">info_outline</mat-icon>
                     </span>
                 </div>
 
                 <div fxLayout="row">
+                    <span fxFlex>Net Amount</span>
+                    <div fxFlex="66%">{{ order.payment.value - order.payment.fee.total - (order.payment.refund || 0) | price | none }}</div>
+                </div>
+
+                <div fxLayout="row">
                     <span fxFlex>Placed on</span>
-                    <span fxFlex="66%">{{ order.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</span>
+                    <span fxFlex="66%">{{ order.created | date: 'MMMM dd, yyyy HH:mm' }}</span>
                 </div>
             </div>
             <div fxLayout="column" fxLayoutGap="20px" fxFlex>

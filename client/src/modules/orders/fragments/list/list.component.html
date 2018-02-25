@@ -49,7 +49,7 @@
             </ng-container>
             <ng-container matColumnDef="value">
                 <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row.payment.value | price }}</mat-cell>
+                <mat-cell *matCellDef="let row">{{ row.payment.value - (row.payment.refund || 0) | price | none }}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="status">
                 <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>

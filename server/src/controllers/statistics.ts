@@ -59,9 +59,9 @@ export class StatisticsController extends AuthenticationController {
                 ]),
                 OrderModel
                     .aggregate([
-                        { $match: { subscription, created: { $gte: startDate } } },
-                        { $group: { _id: '$subscription', count: { $sum: 1 }, value: { $sum: '$payment.value' } } },
-                        { $project: { _id: 0, count: 1, value: 1 } }
+                        { $match: { subscription, status: { $ne: 'REFUNDED' }, created: { $gte: startDate } } },
+                        { $group: { _id: '$subscription', count: { $sum: 1 }, value: { $sum: '$payment.value' }, refund: { $sum: '$payment.refund' }, fees: { $sum: '$payment.fee.total' } } },
+                        { $project: { _id: 0, count: 1, value: 1, refund: 1, fees: 1 } }
                     ])
             ])
             .then((results) => res.status(200).send({
@@ -70,7 +70,7 @@ export class StatisticsController extends AuthenticationController {
                 visitors: results[2][0] ? results[2][0].count : 0,
                 carts: results[3][0] ? results[3][0].count : 0,
                 orders: results[4][0] ? results[4][0].count : 0,
-                turnover: results[4][0] ? results[4][0].value : 0,
+                turnover: results[4][0] ? results[4][0].value - (results[4][0].fees || 0) - (results[4][0].refund || 0) : 0
             }))
             .catch((error) => next(error));
     }
@@ -82,12 +82,13 @@ export class StatisticsController extends AuthenticationController {
 
         OrderModel
             .aggregate([
-                { $match: { subscription, created: { $gte: startDate } } },
+                { $match: { subscription, status: { $ne: 'REFUNDED' }, created: { $gte: startDate } } },
                 {
                     $group: {
                         _id: { year: { $year: '$created' }, month: { $month: '$created' }, day: { $dayOfMonth: '$created' } },
                         count: { $sum: 1 },
-                        value: { $sum: '$payment.value' }
+                        value: { $sum: '$payment.value' },
+                        refund: { $sum: '$payment.refund' }
                     }
                 },
                 {
@@ -97,7 +98,7 @@ export class StatisticsController extends AuthenticationController {
                         '_id.day': 1
                     }
                 },
-                { $project: { _id: 0, year: '$_id.year', month: '$_id.month', day: '$_id.day', count: 1, value: 1 } }
+                { $project: { _id: 0, year: '$_id.year', month: '$_id.month', day: '$_id.day', count: 1, value: 1, refund: 1 } }
             ])
             .then((result) => {
                 const orderVolumes = [];
@@ -109,7 +110,7 @@ export class StatisticsController extends AuthenticationController {
                         if (data) {
                             orderVolumes.push(data);
                         } else {
-                            orderVolumes.push({ year: nextDate.getFullYear(), month: nextDate.getMonth() + 1, day: nextDate.getDate(), value: 0, count: 0 });
+                            orderVolumes.push({ year: nextDate.getFullYear(), month: nextDate.getMonth() + 1, day: nextDate.getDate(), value: 0, refund: 0, count: 0 });
                         }
                     }
                 }
@@ -123,7 +124,7 @@ export class StatisticsController extends AuthenticationController {
 
         OrderModel
             .aggregate([
-                { $match: { subscription, status: { $ne: 'DELIVERED' } } },
+                { $match: { subscription, status: { $nin: ['DELIVERED', 'REFUNDED'] } } },
                 {
                     $group: {
                         _id: { status: '$status' },

@@ -68,19 +68,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             this.highlights = [
                 { name: 'Total Visitors', value: data.highlights.visitors },
                 { name: 'Abandoned Carts', value: data.highlights.carts },
-                { name: 'Orders placed', value: data.highlights.orders },
-                { name: 'Sales value', value: data.highlights.turnover, extra: { format: 'price' } }
+                { name: 'Orders', value: data.highlights.orders },
+                { name: 'Net Sales', value: data.highlights.turnover, extra: { format: 'price' } }
             ];
 
             this.orderAverages = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.count > 0 ? volume.value / volume.count : 0 }));
-            this.orderVolumes = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.value }));
+            this.orderVolumes = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.value - volume.refund }));
 
             const orderStates = [
                 { name: 'CREATED', position: 0 },
                 { name: 'AUTHORISED', position: 1 },
                 { name: 'PROCESSING', position: 2 },
                 { name: 'DISPATCHED', position: 3 },
-                { name: 'DELIVERED', position: 4 }
+                { name: 'DELIVERED', position: 4 },
+                { name: 'REFUNDED', position: 5 }
             ];
 
             this.orderStates = data.orderStates.list.map((state) => ({ name: state.status, value: state.count })).sort((a, b) => orderStates.find((state) => state.name === a.name).position - orderStates.find((state) => state.name === b.name).position);

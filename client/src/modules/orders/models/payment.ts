@@ -6,4 +6,5 @@ export interface Payment {
     brand: string;
     fee: Fee;
     value: number;
+    refund: number;
 }

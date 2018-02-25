@@ -9,6 +9,7 @@ interface IOrderPaymentModel extends Document {
     brand: string;
     fee: IFeeModel;
     value: number;
+    refund: number;
 }
 
 const OrderPaymentSchema: Schema = new Schema({
@@ -39,6 +40,9 @@ const OrderPaymentSchema: Schema = new Schema({
     value: {
         type: Number,
         required: true
+    },
+    refund: {
+        type: Number
     }
 }, { _id: false });
 

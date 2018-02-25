@@ -33,7 +33,8 @@ export class OrderStatusDialogComponent implements OnInit {
             { name: 'Authorised', position: 1, value: 'AUTHORISED', description: 'The order has been placed and payment has been successfully approved by the payment gateway.' },
             { name: 'Processing', position: 2, value: 'PROCESSING', description: 'Order has been acknowledged and stock is being allocated ready for shipping.' },
             { name: 'Dispatched', position: 3, value: 'DISPATCHED', description: 'The order has been collected by the delivery company / individual and is on its way to the customer.' },
-            { name: 'Delivered', position: 4, value: 'DELIVERED', description: 'Following confirmation that the order has been received the order should be marked as delivered.' }
+            { name: 'Delivered', position: 4, value: 'DELIVERED', description: 'Following confirmation that the order has been received the order should be marked as delivered.' },
+            { name: 'Refunded', position: 5, value: 'REFUNDED', description: 'The order has been refunded and no further actions are possible. Funds may take 5-10 days to appear in the card holders account.', disable: true }
         ];
 
         this.selectedState = this.currentState = this.statusList.find((state) => state.value === this.data.order.status);

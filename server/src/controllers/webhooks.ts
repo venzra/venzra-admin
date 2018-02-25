@@ -140,6 +140,54 @@ export class WebhookController {
                                 }
                             });
 
+                    case 'charge.refunded':
+                        return OrderModel.findOne({ 'payment.reference': payload.data.id })
+                            .populate({ path: 'history' })
+                            .then((order) => {
+                                if (!order) {
+                                    throw new NotFoundError();
+                                }
+
+                                if (order.status !== 'REFUNDED') {
+                                    return Promise.resolve()
+                                        .then(() => {
+                                            if (payload.data.amount === payload.data.amount_refunded) {
+                                                const history = new OrderHistoryModel({ field: 'status', previous: order.status, next: 'REFUNDED' });
+                                                return history.save()
+                                                    .then(() => order.history.unshift(history))
+                                                    .then(() => order.set('status', 'REFUNDED'));
+                                            }
+                                        })
+                                        .then(() => order.set('payment.refund', payload.data.amount_refunded))
+                                        .then(() => order.save())
+                                        .then(() => SubscriptionModel.findById(order.subscription))
+                                        .then((subscription) => {
+                                            const stripeConnect = new Stripe(subscription.gateway.privateKey);
+
+                                            return Promise.resolve()
+                                                .then(() => {
+                                                    if (payload.data.amount === payload.data.amount_refunded) {
+                                                        return stripe.applicationFees.createRefund(payload.data.application_fee);
+                                                    } else {
+                                                        const amount = Math.round(payload.data.refunds.data[0].amount * subscription.transactions.rate);
+                                                        return stripe.applicationFees.createRefund(payload.data.application_fee, { amount }).catch((error) => console.log(error.message));
+                                                    }
+                                                })
+                                                .then((fee) => stripeConnect.balance.retrieveTransaction(<string> payload.data.refunds.data[0].balance_transaction).then((transaction) => ({ transaction, fee })))
+                                                .then(({ transaction, fee }) => order.update({
+                                                    $inc: {
+                                                        'payment.fee.total': transaction.fee + (fee ? -fee.amount : 0),
+                                                        'payment.fee.venzra.refund': fee ? fee.amount : 0,
+                                                        'payment.fee.gateway.refund': -transaction.fee
+                                                    }
+                                                }));
+                                        })
+                                        .then(() => order.save());
+                                } else {
+                                    return order;
+                                }
+                            });
+
                     default:
                         console.log(`Ignored connect hook for "${payload.type}"`);
                 }

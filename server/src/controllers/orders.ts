@@ -60,11 +60,13 @@ export class OrdersController extends AuthenticationController {
                         case 'replace':
                             switch (operation.path) {
                                 case 'status':
-                                    const history = new OrderHistoryModel({ account: this.account._id, field: operation.path, previous: order.get(operation.path), next: operation.value });
-                                    promise = promise
-                                        .then(() => history.save())
-                                        .then(() => order.history.unshift(history))
-                                        .then(() => order.set(operation.path, operation.value));
+                                    if (order.status !== 'REFUNDED') {
+                                        const history = new OrderHistoryModel({ account: this.account._id, field: operation.path, previous: order.get(operation.path), next: operation.value });
+                                        promise = promise
+                                            .then(() => history.save())
+                                            .then(() => order.history.unshift(history))
+                                            .then(() => order.set(operation.path, operation.value));
+                                    }
                                     break;
                                 case 'courier':
                                 case 'tracking':
@@ -137,7 +139,7 @@ export class OrdersController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        { $project: { customer: 1, reference: 1, shipping: 1, destination: 1, payment: { name: 1, card: 1, brand: 1, fee: 1, value: 1 }, items: 1, status: 1, created: 1 } }
+                        { $project: { customer: 1, reference: 1, shipping: 1, destination: 1, payment: { name: 1, card: 1, brand: 1, fee: 1, value: 1, refund: 1 }, items: 1, status: 1, created: 1 } }
                     ])
                     .then((result) => CustomerModel.populate(result, {
                         path: 'customer',

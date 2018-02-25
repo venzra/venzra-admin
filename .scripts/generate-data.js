@@ -13,7 +13,7 @@ const addresses = [
     { addressee: 'Mr Kian H John', street: '34 East Street', building: '', city: 'MARGATE', county: 'Kent', postalCode: 'CT97AS', country: 'GB' }
 ];
 
-const statuses = ['AUTHORISED', 'AUTHORISED', 'PROCESSING', 'AUTHORISED', 'PROCESSING', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED'];
+const statuses = ['AUTHORISED', 'AUTHORISED', 'AUTHORISED', 'PROCESSING', 'PROCESSING', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DISPATCHED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED', 'REFUNDED'];
 
 for (let i = 0; i < days; i++) {
     for (let j = 0; j < 7 + Math.ceil(Math.random() * 3); j++) {

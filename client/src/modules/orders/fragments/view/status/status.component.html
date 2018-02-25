@@ -2,7 +2,7 @@
 
 <div mat-dialog-content fxLayout="row">
     <mat-radio-group (change)="updateStatus($event)" fxLayout="column" fxLayoutGap="20px" fxFlex="33%">
-        <mat-radio-button *ngFor="let progress of statusList" [checked]="progress.value === selectedState.value" [disabled]="progress.position < currentState.position" [value]="progress">{{ progress.name }}</mat-radio-button>
+        <mat-radio-button *ngFor="let progress of statusList" [checked]="progress.value === selectedState.value" [disabled]="progress.disable || progress.position < currentState.position" [value]="progress">{{ progress.name }}</mat-radio-button>
     </mat-radio-group>
 
     <div class="status-review mat-elevation-z2" fxLayout="column" fxLayoutGap="20px" fxFlex="66%">
@@ -34,5 +34,5 @@
 
 <div fxLayoutAlign="end" mat-dialog-actions>
     <button mat-button (click)="cancel()" color="warn">Cancel</button>
-    <button mat-raised-button (click)="save()" color="primary">Save</button>
+    <button mat-raised-button (click)="save()" color="primary"  [disabled]="!(selectedState && selectedState.value !== currentState.value)">Save</button>
 </div>

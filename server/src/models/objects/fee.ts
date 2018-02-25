@@ -10,14 +10,16 @@ const FeeSchema: Schema = new Schema({
     venzra: {
         type: {
             amount: Number,
-            currency: String
+            currency: String,
+            refund: Number
         },
         required: true
     },
     gateway: {
         type: {
             amount: Number,
-            currency: String
+            currency: String,
+            refund: Number
         },
         required: true
     },
