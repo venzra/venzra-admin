@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 { name: 'Net Sales', value: data.highlights.turnover, extra: { format: 'price' } }
             ];
 
-            this.orderAverages = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.count > 0 ? volume.value / volume.count : 0 }));
+            this.orderAverages = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.count > 0 ? (volume.value - volume.refund) / volume.count : 0 }));
             this.orderVolumes = data.orderVolumes.list.map((volume) => ({ name: new Date(volume.year, volume.month - 1, volume.day), value: volume.value - volume.refund }));
 
             const orderStates = [
