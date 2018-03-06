@@ -35,13 +35,14 @@
             </ng-container>
         </div>
 
-        <div *ngSwitchCase="'error'" class="message">
-            <div fxLayout="column" fxLayoutAlign="center center">
+        <div *ngSwitchCase="'error'" class="message" fxLayout="column" fxFlex>
+            <div fxLayout="column" fxLayoutAlign="center center" fxFlex="grow">
                 <mat-icon class="required">close</mat-icon>
                 <strong>{{ detail }}</strong>
                 <span class="mat-caption">Please try again</span>
             </div>
         </div>
     </div>
-    <label class="mat-caption">or <span>click here</span> to browse for a file</label>
+    <input [id]="name" type="file" [accept]="accept" (change)="onDrop($event)" />
+    <label [for]="name" class="mat-caption">or <span>click here</span> to browse for a file</label>
 </div>

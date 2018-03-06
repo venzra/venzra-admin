@@ -25,7 +25,7 @@ require('mongoose').Promise = global.Promise;
  * Database connection
  */
 const mongo = {
-    uri: process.env['DB_URI'] as string,
+    uri: process.env['DB_URI'],
     options: {
         socketTimeoutMS: 0,
         keepAlive: 120,

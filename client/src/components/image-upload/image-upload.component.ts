@@ -15,6 +15,7 @@ export class ImageUploadComponent implements AfterContentInit {
 
     protected _accept: Array<string> = [];
 
+    public name = 'media';
     public touched = false;
     public state: 'info' | 'success' | 'error' = 'info';
     public detail: any;
@@ -69,6 +70,7 @@ export class ImageUploadComponent implements AfterContentInit {
     }
 
     ngAfterContentInit(): void {
+        this.name = this.control.ngControl.name;
         const value = this.control.ngControl.value;
 
         if (value) {
