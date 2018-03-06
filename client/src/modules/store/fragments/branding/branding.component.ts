@@ -28,25 +28,21 @@ export class BrandingComponent implements OnInit {
 
     ngOnInit(): void {
         this.layout.title = 'Settings';
+        this.subscription = this.route.snapshot.data.subscription;
 
         this.settingsForm = this.forms.group({
-            storeName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-            strapline: ['', [Validators.maxLength(120)]],
-            icon: ['', []],
-            logo: ['', []]
+            storeName: [this.subscription.storeName, [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+            domain: [{ value: this.getDomain(this.subscription.storeName), disabled: true }, []],
+            strapline: [this.subscription.strapline, [Validators.maxLength(120)]],
+            icon: [this.subscription.icon, []],
+            logo: [this.subscription.logo, []]
         });
 
-        this.route.data.subscribe((data: { subscription: Subscription }) => {
-            this.subscription = data.subscription;
-            this.settingsForm.reset(this.subscription);
-        });
+        this.settingsForm.get('storeName').valueChanges.subscribe((value) => this.settingsForm.get('domain').reset(this.getDomain(value)));
     }
 
-    getDomain(): string {
-        const settings = this.settingsForm.getRawValue();
-        const storeName = settings.storeName as string;
-
-        return `https://${storeName.replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-').toLowerCase()}.venzra.io`;
+    getDomain(subDomain: string): string {
+        return `https://${subDomain.replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-').toLowerCase()}.venzra.io`;
     }
 
     updateSettings() {

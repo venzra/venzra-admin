@@ -41,6 +41,9 @@
             <span fxFlex></span>
             <mat-icon color="accent">{{ subscription.status === 'ACTIVE' ? 'check' : 'warning' }}</mat-icon>
         </mat-card-title>
+        <mat-card-content>
+            <a mat-raised-button [href]="getDomain()" target="_blank" color="accent">Open Store <mat-icon>open_in_new</mat-icon></a>
+        </mat-card-content>
     </mat-card>
 
     <mat-card class="number-chart-container" fxLayout="column" fxLayoutAlign="start center">

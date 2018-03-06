@@ -108,4 +108,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
     }
 
+    getDomain() {
+        return `https://${this.subscription.storeName.replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-').toLowerCase()}.venzra.io`;
+    }
+
 }
