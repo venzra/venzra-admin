@@ -38,6 +38,10 @@ const CartSchema: Schema = new Schema({
     shipping: {
         type: ShippingSchema
     },
+    ip: {
+        type: String,
+        required: true
+    },
     created: {
         type: Date,
         required: true,

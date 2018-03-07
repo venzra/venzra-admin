@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 
 import { GatewaySchema, IGatewayModel } from './objects/gateway';
 import { FeeSchema, IFeeModel } from './objects/transaction';
+import { IThemeModel, ThemeSchema } from './objects/theme';
 import { ISubscriptionPaymentModel, SubscriptionPaymentSchema } from './objects/subscription-payment';
 
 interface ISubscriptionModel extends Document {
@@ -11,6 +12,7 @@ interface ISubscriptionModel extends Document {
     domainName?: string;
     icon?: string;
     logo?: string;
+    theme?: IThemeModel;
     payment?: ISubscriptionPaymentModel;
     gateway?: IGatewayModel;
     transactions: IFeeModel;
@@ -42,6 +44,9 @@ const SubscriptionSchema: Schema = new Schema({
     logo: {
         type: Schema.Types.ObjectId,
         ref: 'images'
+    },
+    theme: {
+        type: ThemeSchema
     },
     payment: {
         type: SubscriptionPaymentSchema

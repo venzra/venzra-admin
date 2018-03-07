@@ -7,7 +7,7 @@
     <form (ngSubmit)="updateSettings()" [formGroup]="settingsForm">
         <mat-card>
             <mat-card-title>Domain and logos</mat-card-title>
-            <mat-card-subtitle>Specify details about your store, set logo, name, domain options here.</mat-card-subtitle>
+            <mat-card-subtitle>Specify details about your store and domain options here.</mat-card-subtitle>
 
             <mat-card-content fxLayout="column" fxLayoutGap="20px">
                 <mat-form-field>
@@ -29,6 +29,21 @@
                     <input matInput placeholder="Strapline" formControlName="strapline" />
                     <mat-error *ngIf="settingsForm.controls['strapline'].hasError('maxlength')">Entered text is too long.</mat-error>
                 </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-title>Store images and theme</mat-card-title>
+            <mat-card-subtitle>Configure your store brand with site theme choices.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <ng-container formGroupName="theme">
+                    <mat-form-field>
+                        <mat-select placeholder="Theme colour" formControlName="color" [value]="subscription.theme.color">
+                            <mat-option *ngFor="let color of colorOptions" [value]="color.value">{{ color.name }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
 
                 <mat-card-content fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="40px">
                     <venzra-image-upload target="/api/images" usage="icon" accept="image/png,image/jpeg" fxFlex.gt-xs="40%" fxFlex="initial">

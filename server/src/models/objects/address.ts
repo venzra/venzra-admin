@@ -53,4 +53,9 @@ const AddressSchema: Schema = new Schema({
     }
 }, { _id: false });
 
+AddressSchema.pre('validate', function (next) {
+    this.postalCode = this.postalCode.trim().replace(/\s+/g, '');
+    next();
+});
+
 export { IAddressModel, AddressSchema };

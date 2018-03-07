@@ -47,6 +47,10 @@ Feature: Updating a new subscription via patch requests
       | replace | strapline | Updated subscription entry  |
       | replace | icon      | {{ images[1]._id }}         |
       | replace | logo      | {{ images[2]._id }}         |
+      | replace | theme     | { "color": "Orange" }       |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName                  | storeName                   | strapline                  | icon                | logo                | transactions                  | status |
-      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | {{ images[1]._id }} | {{ images[2]._id }} | { "base": 10, "rate": 0.046 } | TRIAL  |
+      | _id       | domainName                  | storeName                   | strapline                  | icon                | logo                | theme  | transactions                  | status |
+      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | {{ images[1]._id }} | {{ images[2]._id }} | OBJECT | { "base": 10, "rate": 0.046 } | TRIAL  |
+    And the response path "theme" from the "subscription" request contains:
+      | color  |
+      | orange |

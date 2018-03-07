@@ -174,6 +174,7 @@ export class SubscriptionController extends AuthenticationController {
                                 return next(new ValidationError([{ path: 'storeName', kind: 'required' }]));
                             }
                         /* falls through */
+                        case 'theme':
                         case 'strapline':
                         case 'icon':
                         case 'logo':

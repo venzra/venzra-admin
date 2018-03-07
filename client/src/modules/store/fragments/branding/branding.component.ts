@@ -15,8 +15,28 @@ import { SubscriptionService } from '../../services/subscription.service';
 })
 export class BrandingComponent implements OnInit {
 
-    subscription: Subscription;
-    settingsForm: FormGroup;
+    public subscription: Subscription;
+    public settingsForm: FormGroup;
+    public colorOptions = [
+        { name: 'Amber', value: 'amber' },
+        { name: 'Blue', value: 'blue' },
+        { name: 'Steel', value: 'blue-grey' },
+        { name: 'Brown', value: 'brown' },
+        { name: 'Cyan', value: 'cyan' },
+        { name: 'Deep Orange', value: 'deep-orange' },
+        { name: 'Deep Purple', value: 'deep-purple' },
+        { name: 'Green', value: 'green' },
+        { name: 'Grey', value: 'grey' },
+        { name: 'Indigo', value: 'indigo' },
+        { name: 'Light Blue', value: 'light-blue' },
+        { name: 'Light Green', value: 'light-green' },
+        { name: 'Lime', value: 'lime' },
+        { name: 'Orange', value: 'orange' },
+        { name: 'Pink', value: 'pink' },
+        { name: 'Purple', value: 'purple' },
+        { name: 'Teal', value: 'teal' },
+        { name: 'Yellow', value: 'yellow' }
+    ];
 
     constructor(
         private route: ActivatedRoute,
@@ -30,12 +50,17 @@ export class BrandingComponent implements OnInit {
         this.layout.title = 'Settings';
         this.subscription = this.route.snapshot.data.subscription;
 
+        const themeColor = this.subscription.theme ? this.subscription.theme.color || 'indigo' : 'indigo';
+
         this.settingsForm = this.forms.group({
             storeName: [this.subscription.storeName, [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
             domain: [{ value: this.getDomain(this.subscription.storeName), disabled: true }, []],
             strapline: [this.subscription.strapline, [Validators.maxLength(120)]],
             icon: [this.subscription.icon, []],
-            logo: [this.subscription.logo, []]
+            logo: [this.subscription.logo, []],
+            theme: this.forms.group({
+                color: [themeColor, []]
+            })
         });
 
         this.settingsForm.get('storeName').valueChanges.subscribe((value) => this.settingsForm.get('domain').reset(this.getDomain(value)));
