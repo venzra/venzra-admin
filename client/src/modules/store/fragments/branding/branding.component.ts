@@ -27,7 +27,7 @@ export class BrandingComponent implements OnInit {
         { name: 'Deep Purple', value: 'deep-purple' },
         { name: 'Green', value: 'green' },
         { name: 'Grey', value: 'grey' },
-        { name: 'Indigo', value: 'indigo' },
+        { name: 'Indigo (default)', value: 'indigo' },
         { name: 'Light Blue', value: 'light-blue' },
         { name: 'Light Green', value: 'light-green' },
         { name: 'Lime', value: 'lime' },
@@ -50,7 +50,11 @@ export class BrandingComponent implements OnInit {
         this.layout.title = 'Settings';
         this.subscription = this.route.snapshot.data.subscription;
 
-        const themeColor = this.subscription.theme ? this.subscription.theme.color || 'indigo' : 'indigo';
+        if (!this.subscription.theme) {
+            this.subscription.theme = { color: 'indigo' };
+        } else if (!this.subscription.theme.color) {
+            this.subscription.theme.color = 'indigo';
+        }
 
         this.settingsForm = this.forms.group({
             storeName: [this.subscription.storeName, [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
@@ -59,7 +63,7 @@ export class BrandingComponent implements OnInit {
             icon: [this.subscription.icon, []],
             logo: [this.subscription.logo, []],
             theme: this.forms.group({
-                color: [themeColor, []]
+                color: [this.subscription.theme.color, []]
             })
         });
 
