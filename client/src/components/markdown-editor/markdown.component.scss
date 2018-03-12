@@ -5,12 +5,14 @@
 
 .markdown-preview {
     position: relative;
-    padding: 15px;
+    padding: 24px 8px 14px;
     max-height: 320px;
     overflow: scroll;
     background-color: mat-color($venzra-app-accent, 'default', 0.04);
 
     &::before {
+        font-size: 12px;
+        line-height: 12px;
         color: mat-color($venzra-app-accent, 'default', 0.48);
         content: 'LIVE PREVIEW';
         position: absolute;

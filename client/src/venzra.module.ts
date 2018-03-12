@@ -7,7 +7,7 @@ import { MatButtonModule, MatDialogModule, MatDividerModule, MatIconModule, MatL
 
 import { VenzraRoutingModule } from './routing.module';
 
-import { AccountService, ErrorInterceptorModule, LayoutService } from '@venzra/services';
+import { AccountService, ErrorInterceptorModule, LayoutService, RouteReuseModule } from '@venzra/services';
 
 import { AccountModule } from './components/account/account.module';
 import { ServiceTermsModule } from './components/service-terms/service-terms.module';
@@ -37,10 +37,12 @@ import { PrivateComponent } from './site/private/private.component';
         FlexLayoutModule,
         AccountModule,
         ServiceTermsModule,
+        RouteReuseModule,
         ErrorInterceptorModule
     ],
     exports: [
         BrowserAnimationsModule,
+        RouteReuseModule,
         ErrorInterceptorModule
     ],
     providers: [

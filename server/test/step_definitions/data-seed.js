@@ -25,3 +25,20 @@ Given(/^there are the following "([^"]*)" records in the database(?: (in series)
     }
 
 });
+
+Given(/^the following "([^"]*)" records are updated in the database$/, function (collection, dataset) {
+    dataset = this.getHashes(dataset);
+
+    if (mongoose.models[collection]) {
+        return Promise
+            .all(dataset.map((row) => mongoose.models[collection].findOne({ _id: row._id })
+                .then((record) => {
+                    Object.keys(row).forEach((key) => (row[key] == null) && delete row[key]);
+                    return record.update(row);
+                }))
+            );
+    } else {
+        throw new Error(`No model known for collection ${collection}`);
+    }
+
+});

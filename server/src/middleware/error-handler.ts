@@ -100,6 +100,7 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
         case 'PayloadTooLargeError':
             res.status(413).send({ message: `Request limit is: ${Math.floor(err.limit / 1024)} KiB`, detail: [`Received: ${Math.ceil(err.length / 1024)} KiB`] });
             break;
+        case 'MongoError':
         case 'BulkWriteError':
             logger.info(err.message);
             switch (err.code) {

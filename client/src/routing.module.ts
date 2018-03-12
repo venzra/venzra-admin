@@ -33,6 +33,10 @@ const routes: Routes = [
                 loadChildren: './modules/products/products.module#ProductsModule'
             },
             {
+                path: 'categories',
+                loadChildren: './modules/categories/categories.module#CategoryModule'
+            },
+            {
                 path: 'shipping',
                 loadChildren: './modules/shipping/shipping.module#ShippingModule'
             },

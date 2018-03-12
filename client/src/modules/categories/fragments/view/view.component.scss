@@ -1,0 +1,43 @@
+@import '../../../../../styles';
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+.banner {
+    position: relative;
+    margin: 0 -24px 16px;
+
+    &:first-child {
+        margin-top: -24px;
+    }
+
+    .banner-image {
+        width: 100%;
+        height: 300px;
+        background: mat-color($venzra-app-accent, 200) no-repeat center center;
+        background-size: cover;
+    }
+
+    .mat-display-3 {
+        color: white;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0 0 24px;
+        padding: 12px 24px 20px;
+        background-color: mat-color($venzra-app-accent, 'default', 0.9);
+    }
+
+    @media ($mat-xsmall) {
+        margin: 0 -16px 10px;
+        .mat-display-3 {
+            margin: 0 0 16px;
+            padding: 8px 16px 14px;
+        }
+    }
+}
+
+.category-link {
+    margin-bottom: 10px;
+}

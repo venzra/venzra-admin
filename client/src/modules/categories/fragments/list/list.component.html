@@ -1,0 +1,66 @@
+<venzra-header>
+    <h1>Categories</h1>
+    <p>The table below shows all the categories available on your store, categories provide navigation for customers and can be made available on your primary navigation. Primary navigation categories with subcategories cannot have products attached.</p>
+    <button mat-raised-button color="accent" routerLink="/categories/create"><mat-icon>add</mat-icon> Create new category</button>
+</venzra-header>
+
+<venzra-content>
+    <mat-toolbar>
+        <mat-toolbar-row>
+            <form class="mat-body-1" fxLayout="row" fxLayoutGap="20px" [formGroup]="searchForm">
+                <mat-form-field floatPlaceholder="never">
+                    <input matInput autocomplete="off" placeholder="Search by code" formControlName="searchQuery" maxlength="20" />
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </form>
+            <span fxFlex></span>
+            <button mat-icon-button matTooltip="Refresh data" (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div class="list-container mat-elevation-z2">
+        <div class="list-loading" *ngIf="loading">
+            <mat-spinner color="accent"></mat-spinner>
+        </div>
+
+        <mat-table #table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="name" matSortDirection="asc">
+            <ng-container matColumnDef="image">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell class="table-image" *matCellDef="let row">
+                    <ng-container *ngIf="row.featureImage"><img [src]="'/api/images/' + row.featureImage" /></ng-container>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="name">
+                <mat-header-cell class="column-double" *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell class="column-double" *matCellDef="let row">{{ row.name }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="children">
+                <mat-header-cell *matHeaderCellDef>Subcategories</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.parent ? 'n/a' : row.children }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="products">
+                <mat-header-cell *matHeaderCellDef>Products</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.primary && row.children ? 'n/a' : 69 }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="primary">
+                <mat-header-cell *matHeaderCellDef>Primary</mat-header-cell>
+                <mat-cell *matCellDef="let row"><mat-icon [matTooltip]="!row.parent && !row.primary ? 'This is a hidden parent category and any attached subcategories may not be easy for customers to find. Consider putting on your primary navigation or moving attached categories. You may also want to consider deleting the category.' : null">{{ row.primary ? 'check' : row.parent ? '' : 'info_outline' }}</mat-icon></mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="availableColumns"></mat-header-row>
+            <mat-row class="table-row" *matRowDef="let row; columns: availableColumns" (click)="navigateTo(row)"></mat-row>
+        </mat-table>
+
+        <mat-card class="mat-elevation-z0" *ngIf="!categories.total">
+            <mat-card-content>
+                <p class="mat-subheading-2">No categories found</p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-paginator [length]="categories.total"
+                       [pageIndex]="categories.skip / categories.limit"
+                       [pageSize]="categories.limit"
+                       [pageSizeOptions]="[10,20,50,100]">
+        </mat-paginator>
+    </div>
+</venzra-content>

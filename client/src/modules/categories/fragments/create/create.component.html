@@ -1,0 +1,60 @@
+<venzra-header>
+    <h1>Create product category</h1>
+    <p>Categorisation of products is optional, categories can be attached to parent categories to provide a navigation hierarchy.</p>
+</venzra-header>
+
+<venzra-content>
+    <form (ngSubmit)="createCategory()" [formGroup]="categoryForm">
+        <mat-card>
+            <mat-card-title>Details</mat-card-title>
+            <mat-card-subtitle>The form below allows for the creation of a category for which products can then be added.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-checkbox formControlName="primary">Display this category as a primary navigation item</mat-checkbox>
+
+                <mat-form-field>
+                    <input matInput placeholder="Category name" formControlName="name" required />
+                    <mat-error *ngIf="categoryForm.controls['name'].hasError('required')">This field is required.</mat-error>
+                    <mat-error *ngIf="categoryForm.controls['name'].hasError('maxlength')">Entered text is too long.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-select placeholder="Select an existing category to associate with" formControlName="parent">
+                        <mat-option *ngFor="let category of categories.list" [value]="category._id">{{ category.name }} {{ category.primary ? '(primary)' : '' }}</mat-option>
+                    </mat-select>
+                    <mat-hint *ngIf="!categoryForm.controls['parent'].disabled">This allows for building a navigation hierarchy, currently only possible to link with a top level category</mat-hint>
+                    <mat-hint *ngIf="categoryForm.controls['parent'].disabled">Primary navigation items cannot be linked to other categories</mat-hint>
+                </mat-form-field>
+
+                <venzra-markdown-editor>
+                    <mat-form-field>
+                        <textarea matInput venzraMarkdownInput placeholder="Descriptive introduction" formControlName="description" matTextareaAutosize matAutosizeMinRows="12" matAutosizeMaxRows="20" required></textarea>
+                        <mat-error *ngIf="categoryForm.controls['description'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="categoryForm.controls['description'].hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+                    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
+                        <div>
+                            <button mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+                            <button mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
+                            <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
+                        </div>
+                        <div>
+                            <button mat-icon-button type="button" (click)="markdownHelp()"><mat-icon>help_outline</mat-icon></button>
+                        </div>
+                    </div>
+                </venzra-markdown-editor>
+
+                <venzra-image-upload target="/api/images" usage="feature" accept="image/png,image/jpeg">
+                    <p class="mat-caption">This is an optional image to give additional impact when customers view the category.</p>
+                    <input venzraImage placeholder="Feature image" formControlName="featureImage" />
+                </venzra-image-upload>
+            </mat-card-content>
+        </mat-card>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" routerLink="/categories">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.pristine || categoryForm.invalid">Save</button>
+        </div>
+    </form>
+</venzra-content>

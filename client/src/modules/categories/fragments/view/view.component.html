@@ -1,0 +1,49 @@
+<venzra-header>
+    <h1>{{ category.name }}</h1>
+    <p>Below is the information about this category.</p>
+    <button mat-raised-button color="accent" [routerLink]="'/categories/' + category._id + '/manage'"><mat-icon>edit</mat-icon> Edit category</button>
+</venzra-header>
+
+<venzra-content>
+    <mat-card>
+        <div class="banner">
+            <div class="banner-image" [style.backgroundImage]="image"></div>
+            <h2 class="mat-display-3">{{ category.name }}</h2>
+        </div>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="20px">
+            <div [venzraMarkdown]="category.description"></div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>Configuration</mat-card-title>
+        <mat-card-subtitle>Additional information about how this category has been configured on the store.</mat-card-subtitle>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="20px">
+            <div fxLayout="row" *ngIf="!category.parent">
+                <span fxFlex="33%">Primary navigation</span>
+                <span fxFlex><mat-icon>{{ category.primary ? 'check' : 'close' }}</mat-icon></span>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center" *ngIf="category.parent">
+                <span fxFlex="33%">Category parent</span>
+                <span fxFlex><a mat-raised-button [routerLink]="'/categories/' + category.parent._id" color="accent">{{ category.parent.name }}</a></span>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center" *ngIf="!category.parent">
+                <span fxFlex="33%">Subcategories</span>
+                <span fxLayout="row wrap" fxLayoutGap="10px" fxFlex>
+                    <button mat-raised-button disableRipple="true" *ngIf="!category.children.length" color="warn">None</button>
+                    <a mat-raised-button class="category-link" *ngFor="let child of category.children" [routerLink]="'/categories/' + child._id" color="accent">{{ child.name }}</a>
+                    <a mat-icon-button routerLink="/categories/create" [queryParams]="{ parent: category._id }"><mat-icon>add</mat-icon></a>
+                </span>
+            </div>
+
+            <div fxLayout="row">
+                <span fxFlex="33%">Creation date</span>
+                <span fxFlex>{{ category.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</span>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</venzra-content>
