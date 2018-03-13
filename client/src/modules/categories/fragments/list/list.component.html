@@ -34,17 +34,21 @@
                 <mat-header-cell class="column-double" *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
                 <mat-cell class="column-double" *matCellDef="let row">{{ row.name }}</mat-cell>
             </ng-container>
+            <ng-container matColumnDef="parent">
+                <mat-header-cell *matHeaderCellDef>Subcategory</mat-header-cell>
+                <mat-cell *matCellDef="let row"><mat-icon>{{ row.parent ? 'check' : 'remove' }}</mat-icon></mat-cell>
+            </ng-container>
             <ng-container matColumnDef="children">
                 <mat-header-cell *matHeaderCellDef>Subcategories</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row.parent ? 'n/a' : row.children }}</mat-cell>
+                <mat-cell *matCellDef="let row">{{ row.parent ? '0' : row.children }}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="products">
                 <mat-header-cell *matHeaderCellDef>Products</mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row.primary && row.children ? 'n/a' : 69 }}</mat-cell>
+                <mat-cell *matCellDef="let row">{{ row.primary || row.children ? '0' : 99 }}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="primary">
                 <mat-header-cell *matHeaderCellDef>Primary</mat-header-cell>
-                <mat-cell *matCellDef="let row"><mat-icon [matTooltip]="!row.parent && !row.primary ? 'This is a hidden parent category and any attached subcategories may not be easy for customers to find. Consider putting on your primary navigation or moving attached categories. You may also want to consider deleting the category.' : null">{{ row.primary ? 'check' : row.parent ? '' : 'info_outline' }}</mat-icon></mat-cell>
+                <mat-cell *matCellDef="let row"><mat-icon [matTooltip]="!row.parent && !row.primary ? 'This is a hidden parent category and any attached subcategories may not be easy for customers to find. Consider putting on your primary navigation or moving attached categories. You may also want to consider deleting the category.' : null">{{ row.primary ? 'check' : row.parent ? 'remove' : 'info_outline' }}</mat-icon></mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="availableColumns"></mat-header-row>

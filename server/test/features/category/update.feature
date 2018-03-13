@@ -1,5 +1,5 @@
 @Category @CategoryUpdate
-Feature: Creation of a new category
+Feature: Update information about a new category
 
   @Seed
   Scenario: Setup test data seed for feature

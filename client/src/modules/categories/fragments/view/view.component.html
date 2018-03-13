@@ -1,7 +1,10 @@
 <venzra-header>
     <h1>{{ category.name }}</h1>
     <p>Below is the information about this category.</p>
-    <button mat-raised-button color="accent" [routerLink]="'/categories/' + category._id + '/manage'"><mat-icon>edit</mat-icon> Edit category</button>
+    <div fxLayout="row" fxLayoutGap="20px">
+        <button mat-raised-button color="accent" [routerLink]="'/categories/' + category._id + '/manage'"><mat-icon>edit</mat-icon> Edit category</button>
+        <button mat-raised-button color="warn" (click)="deleteCategory()"><mat-icon>delete</mat-icon> Delete</button>
+    </div>
 </venzra-header>
 
 <venzra-content>

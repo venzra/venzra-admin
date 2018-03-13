@@ -7,7 +7,7 @@ import { NotFoundError } from '../middleware/error-handler';
 import { AuthenticationController } from './authentication';
 
 import { IRestOperation } from '../models/rest';
-import { CategoryModel, ICategoryModel } from '../models/category';
+import { CategoryModel } from '../models/category';
 
 export class CategoryController extends AuthenticationController {
 
@@ -26,6 +26,7 @@ export class CategoryController extends AuthenticationController {
         this.router.post('/', this.validate.bind(this), this.createCategory.bind(this), this.findOne.bind(this));
         this.router.get('/:categoryId', this.validate.bind(this), this.findOne.bind(this));
         this.router.patch('/:categoryId', this.validate.bind(this), this.updateCategory.bind(this), this.findOne.bind(this));
+        this.router.delete('/:categoryId', this.validate.bind(this), this.removeOne.bind(this));
     }
 
     createCategory(req: Request, res: Response, next: NextFunction) {
@@ -69,7 +70,7 @@ export class CategoryController extends AuthenticationController {
                 req.params.categoryId = result._id;
                 next();
             })
-            .catch((categoryError) => next(categoryError));
+            .catch((error) => next(error));
     }
 
     updateCategory(req: Request, res: Response, next: NextFunction) {
@@ -112,8 +113,10 @@ export class CategoryController extends AuthenticationController {
                                                 })
                                             )
                                             .then(() => {
-                                                const parent = category.parent;
-                                                return parent.update({ $pull: { children: category._id } });
+                                                if (category.parent) {
+                                                    const parent = category.parent;
+                                                    return parent.update({ $pull: { children: category._id } });
+                                                }
                                             })
                                             .then(() => category.set(operation.path, operation.value));
                                     }
@@ -132,6 +135,29 @@ export class CategoryController extends AuthenticationController {
             .catch((error) => next(error));
     }
 
+    removeOne(req: Request, res: Response, next: NextFunction) {
+        const _id = req.params.categoryId;
+        const subscription = this.account.subscription._id;
+
+        CategoryModel.findOne({ _id, subscription })
+            .then((category) => {
+                if (!category) {
+                    throw new NotFoundError();
+                }
+
+                if (category.parent) {
+                    return CategoryModel.findOneAndUpdate({ _id: category.parent, subscription }, { $pull: { children: category._id } }).then(() => category);
+                } else if (category.children.length) {
+                    return Promise.all(category.children.map((child) => CategoryModel.findOneAndUpdate({ _id: child, subscription }, { $unset: { parent: 1 } }))).then(() => category);
+                } else {
+                    return category;
+                }
+            })
+            .then((category) => category.remove())
+            .then(() => res.status(202).send())
+            .catch((error) => next(error));
+    }
+
     findOne(req: Request, res: Response, next: NextFunction) {
         const _id = req.params.categoryId;
         const subscription = this.account.subscription._id;
@@ -147,7 +173,8 @@ export class CategoryController extends AuthenticationController {
                 path: 'children',
                 select: 'slug name featureImage primary created updated'
             })
-            .then((category) => category ? res.status(200).send(category) : next(new NotFoundError()));
+            .then((category) => category ? res.status(200).send(category) : next(new NotFoundError()))
+            .catch((error) => next(error));
     }
 
     findAll(req: Request, res: Response, next: NextFunction) {
@@ -186,7 +213,7 @@ export class CategoryController extends AuthenticationController {
                     ])
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )
-            .catch((categoryError) => next(categoryError));
+            .catch((error) => next(error));
     }
 
 }

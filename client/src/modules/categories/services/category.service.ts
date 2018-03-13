@@ -23,7 +23,7 @@ export class CategoryService extends RestfulService {
     createCategory(category: Category): void {
         this.http.post('/api/categories', category)
             .toPromise()
-            .then(() => this.router.navigate(['/categories'], { replaceUrl: true }))
+            .then((result: Category) => this.router.navigate(['/categories/', result._id], { replaceUrl: true }))
             .catch((response) => this.snackbar.open(response.error.message || 'Create failed', 'OK', { duration: 5000 }));
     }
 
@@ -32,6 +32,10 @@ export class CategoryService extends RestfulService {
             .toPromise()
             .then(() => this.router.navigate(['/categories', categoryId]))
             .catch((response) => this.snackbar.open(response.error.message || 'Update failed', 'OK', { duration: 5000 }));
+    }
+
+    removeCategory(categoryId): Promise<boolean> {
+        return this.http.delete<boolean>(`/api/categories/${categoryId}`).toPromise();
     }
 
     findOne(categoryId): Promise<Category> {

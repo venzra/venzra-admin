@@ -18,13 +18,15 @@ import { CategoryCreateComponent } from './fragments/create/create.component';
 import { CategoryListComponent } from './fragments/list/list.component';
 import { CategoryManageComponent } from './fragments/manage/manage.component';
 import { CategoryViewComponent } from './fragments/view/view.component';
+import { RemoveCategoryDialogComponent } from './fragments/view/remove/remove.dialog';
 
 @NgModule({
     declarations: [
         CategoryCreateComponent,
         CategoryListComponent,
         CategoryManageComponent,
-        CategoryViewComponent
+        CategoryViewComponent,
+        RemoveCategoryDialogComponent
     ],
     imports: [
         CommonModule,
@@ -54,6 +56,9 @@ import { CategoryViewComponent } from './fragments/view/view.component';
         CategoryService,
         CategoryListResolve,
         CategoryRetrieveResolve
+    ],
+    entryComponents: [
+        RemoveCategoryDialogComponent
     ]
 })
 export class CategoryModule {

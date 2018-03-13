@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
 
 import { LayoutService } from '@venzra/services';
 
 import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
+
+import { RemoveCategoryDialogComponent } from './remove/remove.dialog';
 
 @Component({
     templateUrl: './view.component.html',
@@ -19,6 +22,7 @@ export class CategoryViewComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
+        private dialog: MatDialog,
         private sanitizer: DomSanitizer,
         private categoryService: CategoryService,
         private layout: LayoutService
@@ -31,6 +35,11 @@ export class CategoryViewComponent implements OnInit {
         if (this.category.featureImage) {
             this.image = this.sanitizer.bypassSecurityTrustStyle(`url(/api/images/${this.category.featureImage})`);
         }
+    }
+
+    deleteCategory(): void {
+        const dialogRef = this.dialog.open(RemoveCategoryDialogComponent, { width: '640px', disableClose: true, data: { category: this.category } });
+        dialogRef.afterClosed().subscribe((removed) => removed ? this.router.navigate(['/categories']) : null);
     }
 
 }

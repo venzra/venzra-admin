@@ -50,7 +50,8 @@ export class ShippingController extends AuthenticationController {
         const subscription = this.account.subscription._id;
 
         ShippingModel.findOneAndRemove({ _id, subscription })
-            .then((result) => result ? res.status(202).send() : next(new NotFoundError()));
+            .then((result) => result ? res.status(202).send() : next(new NotFoundError()))
+            .catch((error) => next(error));
     }
 
     findOne(req: Request, res: Response, next: NextFunction) {
@@ -60,7 +61,8 @@ export class ShippingController extends AuthenticationController {
         ShippingModel
             .findOne({ _id, subscription })
             .select('displayName cartMinimum cartMaximum currentPrice shipmentTime created updated')
-            .then((shipping) => shipping ? res.status(200).send(shipping) : next(new NotFoundError()));
+            .then((shipping) => shipping ? res.status(200).send(shipping) : next(new NotFoundError()))
+            .catch((error) => next(error));
     }
 
     findAll(req: Request, res: Response, next: NextFunction) {

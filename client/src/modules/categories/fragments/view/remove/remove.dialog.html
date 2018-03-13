@@ -1,0 +1,18 @@
+<form (ngSubmit)="confirmRemoval()" [formGroup]="removalForm">
+    <h1 mat-dialog-title>Confirm removal</h1>
+    <div mat-dialog-content>
+        <p>Are you sure you want to remove the category called <strong>{{ category.name }}</strong>?</p>
+
+        <p>This cannot be undone, any products linked to this category will no longer be associated. Any child categories will not be removed.</p>
+
+        <mat-form-field>
+            <input matInput placeholder="Enter category name for confirmation" formControlName="confirm" required />
+            <mat-error *ngIf="removalForm.controls['confirm'].hasError('required')">This field is required to confirm.</mat-error>
+            <mat-error *ngIf="removalForm.controls['confirm'].hasError('pattern')">Confirmation must match display name value.</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="20px">
+        <button mat-button type="button" (click)="close()" color="warn">Cancel</button>
+        <button mat-raised-button type="submit" [disabled]="removalForm.pristine || removalForm.invalid" color="warn">Confirm</button>
+    </div>
+</form>
