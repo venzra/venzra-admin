@@ -210,7 +210,7 @@ export class CategoryController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        { $project: { slug: 1, name: 1, featureImage: 1, primary: 1, parent: 1, children: { $size: '$children' }, created: 1 } }
+                        { $project: { slug: 1, name: 1, featureImage: 1, primary: 1, parent: 1, children: { $size: { '$ifNull': ['$children', []] } }, products: { $size: { '$ifNull': ['$products', []] } }, created: 1 } }
                     ])
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )

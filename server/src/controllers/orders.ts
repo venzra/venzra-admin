@@ -99,7 +99,7 @@ export class OrdersController extends AuthenticationController {
             })
             .populate({
                 path: 'history',
-                select: '-_id -table -__v',
+                select: '-_id -__v',
                 populate: {
                     path: 'account',
                     select: 'identity'

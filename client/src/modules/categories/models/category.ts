@@ -5,6 +5,7 @@ export interface CategoryChild {
     description: string;
     featureImage: string;
     parent?: Category | string;
+    products?: number;
     created: Date;
     updated: Date;
 }

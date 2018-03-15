@@ -48,7 +48,7 @@
             <ng-container matColumnDef="products">
                 <mat-header-cell *matHeaderCellDef>Products</mat-header-cell>
                 <mat-cell *matCellDef="let row">
-                    <ng-container *ngIf="row.parent">99</ng-container>
+                    <ng-container *ngIf="row.parent">{{ row.products }}</ng-container>
                     <ng-container *ngIf="!row.parent"><mat-icon>remove</mat-icon></ng-container>
                 </mat-cell>
             </ng-container>

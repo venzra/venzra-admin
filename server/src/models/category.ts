@@ -52,6 +52,13 @@ const CategorySchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'images'
     },
+    products: {
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'products'
+        }],
+        default: []
+    },
     created: {
         type: Date,
         required: true,

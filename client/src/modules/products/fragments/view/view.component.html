@@ -47,10 +47,9 @@
 
         <mat-card-content fxLayout="column" fxLayoutGap="20px">
             <mat-list>
-                <mat-list-item>
-                    <h4 matLine>Bobs category</h4>
-                    <p matLine>Its a good one</p>
-                    <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+                <mat-list-item *ngFor="let category of product.categories">
+                    <h4 matLine>{{ category.parent.name }}</h4>
+                    <p matLine>{{ category.name }}</p>
                 </mat-list-item>
             </mat-list>
         </mat-card-content>

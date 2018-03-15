@@ -1,6 +1,7 @@
 import { Schema, Document, Model, model } from 'mongoose';
 
 import { IHistoryModel } from './product-history';
+import { ICategoryModel } from './category';
 
 interface IProductModel extends Document {
     subscription?: string;
@@ -8,6 +9,7 @@ interface IProductModel extends Document {
     displayName: string;
     previousPrice: number;
     currentPrice: number;
+    categories: ICategoryModel[];
     history?: IHistoryModel[];
     status?: string;
 }
@@ -61,6 +63,13 @@ const ProductSchema: Schema = new Schema({
         required: true,
         min: 0,
         max: 1000000
+    },
+    categories: {
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'categories'
+        }],
+        default: []
     },
     history: {
         type: [{

@@ -11,6 +11,19 @@ Feature: Updating product information
       | identity                          | password | status | subscription               |
       | product-update-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
       | product-update-two@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
+    And there are the following "categories" records in the database
+      | subscription               | name              | description           | primary |
+      | {{ subscriptions[1]._id }} | Products Update A | Automated description | true    |
+      | {{ subscriptions[1]._id }} | Products Update B | Automated description | false   |
+      | {{ subscriptions[1]._id }} | Products Update C | Automated description | false   |
+      | {{ subscriptions[1]._id }} | Products Update D | Automated description | false   |
+      | {{ subscriptions[2]._id }} | Products Update A | Automated description | false   |
+    And the following "categories" records are updated in the database
+      | _id                     | parent                  | children                                                                          |
+      | {{ categories[1]._id }} | null                    | ["{{ categories[2]._id }}", "{{ categories[3]._id }}", "{{ categories[4]._id }}"] |
+      | {{ categories[2]._id }} | {{ categories[1]._id }} | []                                                                                |
+      | {{ categories[3]._id }} | {{ categories[1]._id }} | []                                                                                |
+      | {{ categories[4]._id }} | {{ categories[1]._id }} | []                                                                                |
     And there are the following "images" records in the database
       | subscription               | name                   | usage   | size |
       | {{ subscriptions[1]._id }} | ProductsUpdate Image A | feature | 1024 |
@@ -27,8 +40,8 @@ Feature: Updating product information
     Given I am logged in with the "product-update-one@venzra-test.io" account
     When I make an empty PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product"
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code                | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | history  | status   | created   | updated   |
-      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | Product Update A | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 0             | 9            | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code                | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
+      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | Product Update A | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 0             | 9            | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Attempting to update a product that does not belong to the account subscription is rejected
     Given I am logged in with the "product-update-two@venzra-test.io" account
@@ -51,8 +64,8 @@ Feature: Updating product information
       | replace | status           | ACTIVE               |
       | replace | slug             | updated-slug         |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
     And the "product" request that has a "history" field and row 1 contains:
       | account | field  | previous | next   | created   |
       | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
@@ -74,3 +87,55 @@ Feature: Updating product information
     And the "product" request that has a "history" field and row 7 contains:
       | account | field       | previous         | next                 | created   |
       | OBJECT  | displayName | Product Update A | Product Update PATCH | DATE_TIME |
+
+  Scenario: Assigning a single category vs an array is ignored
+    Given I am logged in with the "product-update-one@venzra-test.io" account
+    When I make a PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product" using:
+      | op      | path       | value                   |
+      | replace | categories | {{ categories[2]._id }} |
+    Then there should be a 200 response from the "product" request that contains:
+      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+
+  Scenario: Assign categories to a product
+    Given I am logged in with the "product-update-one@venzra-test.io" account
+    When I make a PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product" using:
+      | op      | path       | value                                                                                                         |
+      | replace | categories | ["{{ categories[1]._id }}", "{{ categories[2]._id }}", "{{ categories[3]._id }}", "{{ categories[4]._id }}" ] |
+    Then there should be a 200 response from the "product" request that contains:
+      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[3]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+    And the response path "categories" from the "product" request contains:
+      | _id                     | name              | parent                                                            |
+      | {{ categories[2]._id }} | Products Update B | { "_id": "{{ categories[1]._id }}", "name": "Products Update A" } |
+      | {{ categories[3]._id }} | Products Update C | { "_id": "{{ categories[1]._id }}", "name": "Products Update A" } |
+      | {{ categories[4]._id }} | Products Update D | { "_id": "{{ categories[1]._id }}", "name": "Products Update A" } |
+    When I make a GET request to the API endpoint "/api/categories" as "category"
+    Then there should be a 200 response from the "category" request that contains:
+      | list     | total | skip | limit |
+      | ARRAY[4] | 4     | 0    | 20    |
+    And the response from the "category" request has a "list" that contains rows:
+      | _id                     | name              | products |
+      | {{ categories[1]._id }} | Products Update A | 0        |
+      | {{ categories[2]._id }} | Products Update B | 1        |
+      | {{ categories[3]._id }} | Products Update C | 1        |
+      | {{ categories[4]._id }} | Products Update D | 1        |
+
+  Scenario: Removal of products from a category updates the categories
+    Given I am logged in with the "product-update-one@venzra-test.io" account
+    When I make a PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product" using:
+      | op      | path       | value                       |
+      | replace | categories | ["{{ categories[3]._id }}"] |
+    Then there should be a 200 response from the "product" request that contains:
+      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[1]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+    When I make a GET request to the API endpoint "/api/categories" as "category"
+    Then there should be a 200 response from the "category" request that contains:
+      | list     | total | skip | limit |
+      | ARRAY[4] | 4     | 0    | 20    |
+    And the response from the "category" request has a "list" that contains rows:
+      | _id                     | name              | products |
+      | {{ categories[1]._id }} | Products Update A | 0        |
+      | {{ categories[2]._id }} | Products Update B | 0        |
+      | {{ categories[3]._id }} | Products Update C | 1        |
+      | {{ categories[4]._id }} | Products Update D | 0        |

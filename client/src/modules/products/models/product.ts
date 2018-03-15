@@ -1,4 +1,5 @@
 import { HistoryModel } from '@venzra/models';
+import { Category } from './category';
 
 export interface Product {
     _id: string;
@@ -10,6 +11,7 @@ export interface Product {
     promotionalImage: string;
     previousPrice: number;
     currentPrice: number;
+    categories: Array<Category>;
     history: Array<HistoryModel>;
     status: string;
     created: Date;

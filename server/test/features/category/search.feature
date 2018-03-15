@@ -41,11 +41,11 @@ Feature: Search information for a category
       | list     | total | skip | limit |
       | ARRAY[7] | 7     | 0    | 20    |
     And the "category" request that has a "list" field and row 1 contains:
-      | _id       | slug              | name              | featureImage        | primary | children | created   |
-      | OBJECT_ID | category-search-a | Category Search A | {{ images[1]._id }} | true    | 2        | DATE_TIME |
+      | _id       | slug              | name              | featureImage        | primary | children | products | created   |
+      | OBJECT_ID | category-search-a | Category Search A | {{ images[1]._id }} | true    | 2        | 0        | DATE_TIME |
     And the "category" request that has a "list" field and row 2 contains:
-      | _id       | slug               | name               | primary | children | created   |
-      | OBJECT_ID | category-search-aa | Category Search AA | true    | 0        | DATE_TIME |
+      | _id       | slug               | name               | primary | children | products | created   |
+      | OBJECT_ID | category-search-aa | Category Search AA | true    | 0        | 0        | DATE_TIME |
 
   Scenario: Requesting a list of categories should return only records for that subscription (subscription two)
     Given I am logged in with the "category-search-two@venzra-test.io" account
@@ -54,8 +54,8 @@ Feature: Search information for a category
       | list     | total | skip | limit |
       | ARRAY[2] | 2     | 0    | 20    |
     And the "category" request that has a "list" field and row 1 contains:
-      | _id       | slug              | name              | primary | children | created   |
-      | OBJECT_ID | category-search-a | Category Search A | false   | 0        | DATE_TIME |
+      | _id       | slug              | name              | primary | children | products | created   |
+      | OBJECT_ID | category-search-a | Category Search A | false   | 0        | 0        | DATE_TIME |
 
   Scenario: Requesting a list of categories adheres to pagination values for skip and limit
     Given I am logged in with the "category-search-one@venzra-test.io" account
@@ -64,8 +64,8 @@ Feature: Search information for a category
       | list     | total | skip | limit |
       | ARRAY[4] | 7     | 3    | 4     |
     And the "category" request that has a "list" field and row 1 contains:
-      | _id       | slug                | name                | primary | children | created   |
-      | OBJECT_ID | category-search-abc | Category Search ABC | true    | 0        | DATE_TIME |
+      | _id       | slug                | name                | primary | children | products | created   |
+      | OBJECT_ID | category-search-abc | Category Search ABC | true    | 0        | 0        | DATE_TIME |
 
   Scenario: Filtering category results by name returns based on partial matching
     Given I am logged in with the "category-search-one@venzra-test.io" account
@@ -87,8 +87,8 @@ Feature: Search information for a category
       | list     | total | skip | limit |
       | ARRAY[5] | 5     | 0    | 20    |
     And the "category" request that has a "list" field and row 1 contains:
-      | _id       | slug              | name              | featureImage        | primary | children | created   |
-      | OBJECT_ID | category-search-a | Category Search A | {{ images[1]._id }} | true    | 2        | DATE_TIME |
+      | _id       | slug              | name              | featureImage        | primary | children | products | created   |
+      | OBJECT_ID | category-search-a | Category Search A | {{ images[1]._id }} | true    | 2        | 0        | DATE_TIME |
 
   Scenario: Sorting category results in reverse
     Given I am logged in with the "category-search-one@venzra-test.io" account

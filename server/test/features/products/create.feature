@@ -51,8 +51,8 @@ Feature: Creation of a new product entry
       | code       | displayName      | description           | featureImage        | promotionalImage    | currentPrice |
       | CREATE-002 | Product Create B | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 99.99        |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code       | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | history  | status   | created   | updated   |
-      | OBJECT_ID | product-create-b | CREATE-002 | Product Create B | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 0             | 99           | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code       | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
+      | OBJECT_ID | product-create-b | CREATE-002 | Product Create B | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 0             | 99           | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: An account linked to another subscription can use the same product code and name already used by a different subscription, also allows for setting of status
     Given I am logged in with the "products-create-two@venzra-test.io" account
@@ -60,5 +60,5 @@ Feature: Creation of a new product entry
       | code                   | displayName                   | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | status |
       | {{ products[1].code }} | {{ products[1].displayName }} | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 104.99        | 99.49        | ACTIVE |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code       | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | history  | status | created   | updated   |
-      | OBJECT_ID | product-create-a | CREATE-001 | Product Create A | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 104           | 99           | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code       | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-create-a | CREATE-001 | Product Create A | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 104           | 99           | ARRAY[0]   | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |

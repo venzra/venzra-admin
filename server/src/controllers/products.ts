@@ -9,6 +9,7 @@ import { AuthenticationController } from './authentication';
 import { ProductModel } from '../models/products';
 import { ProductHistoryModel } from '../models/product-history';
 import { IRestOperation } from '../models/rest';
+import { CategoryModel } from '../models/category';
 
 export class ProductsController extends AuthenticationController {
 
@@ -57,6 +58,9 @@ export class ProductsController extends AuthenticationController {
         ProductModel
             .findOne({ _id, subscription })
             .populate({
+                path: 'categories'
+            })
+            .populate({
                 path: 'history'
             })
             .then((product) => {
@@ -86,6 +90,20 @@ export class ProductsController extends AuthenticationController {
                                         .then(() => history.save())
                                         .then(() => product.history.unshift(history))
                                         .then(() => product.set(operation.path, operation.value));
+                                    break;
+                                case 'categories':
+                                    if (operation.value instanceof Array) {
+                                        const removeCategories = product.categories.filter((category) => !operation.value.includes(category._id));
+                                        promise = promise
+                                            .then(() => Promise.all(removeCategories.map((category) => category.update({ $pull: { products: product._id } }))))
+                                            .then(() => Promise.all(
+                                                operation.value
+                                                    .map((categoryId) => CategoryModel.findOneAndUpdate({ _id: categoryId, subscription, parent: { $ne: null } }, { $addToSet: { products: product._id } })
+                                                        .then((category) => category ? category._id : false))
+                                                )
+                                            )
+                                            .then((result) => product.set(operation.path, result.filter(Boolean)));
+                                    }
                             }
                     }
                 });
@@ -104,8 +122,16 @@ export class ProductsController extends AuthenticationController {
             .findOne({ _id, subscription })
             .select('slug code displayName description featureImage promotionalImage previousPrice currentPrice status created updated')
             .populate({
+                path: 'categories',
+                select: '_id name',
+                populate: {
+                    path: 'parent',
+                    select: '_id name'
+                }
+            })
+            .populate({
                 path: 'history',
-                select: '-_id -table -__v',
+                select: '-_id -__v',
                 populate: {
                     path: 'account',
                     select: 'identity'
