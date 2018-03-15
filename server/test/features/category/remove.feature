@@ -45,27 +45,27 @@ Feature: Remove a category from the database
     Given I am logged in with the "category-remove-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/categories/{{ categories[3]._id }}" as "check"
     Then there should be a 200 response from the "check" request that contains:
-      | _id       | slug              | name              | description           | primary | parent | children | created   | updated   |
-      | OBJECT_ID | category-remove-c | Category Remove C | Automated description | false   | OBJECT | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | parent | children | products | created   | updated   |
+      | OBJECT_ID | category-remove-c | Category Remove C | Automated description | false   | OBJECT | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
     When I make a DELETE request to the API endpoint "/api/categories/{{ categories[2]._id }}" as "category"
     Then the status returned from the "category" request should be 202
     When I make a GET request to the API endpoint "/api/categories/{{ categories[3]._id }}" as "check"
     Then there should be a 200 response from the "check" request that contains:
-      | _id       | slug              | name              | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-remove-c | Category Remove C | Automated description | false   | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-remove-c | Category Remove C | Automated description | false   | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
 
   Scenario: Removal of a child category updates parent to remove association
     Given I am logged in with the "category-remove-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/categories/{{ categories[4]._id }}" as "check"
     Then there should be a 200 response from the "check" request that contains:
-      | _id       | slug              | name              | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-remove-d | Category Remove D | Automated description | false   | ARRAY[2] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-remove-d | Category Remove D | Automated description | false   | ARRAY[2] | ARRAY[0] | DATE_TIME | DATE_TIME |
     When I make a DELETE request to the API endpoint "/api/categories/{{ categories[5]._id }}" as "category"
     Then the status returned from the "category" request should be 202
     When I make a GET request to the API endpoint "/api/categories/{{ categories[4]._id }}" as "check"
     Then there should be a 200 response from the "check" request that contains:
-      | _id       | slug              | name              | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-remove-d | Category Remove D | Automated description | false   | ARRAY[1] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-remove-d | Category Remove D | Automated description | false   | ARRAY[1] | ARRAY[0] | DATE_TIME | DATE_TIME |
     And the response path "children" from the "check" request contains:
       | _id       | slug              | name              | primary | created   | updated   |
       | OBJECT_ID | category-remove-f | Category Remove F | false   | DATE_TIME | DATE_TIME |

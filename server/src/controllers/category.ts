@@ -174,6 +174,10 @@ export class CategoryController extends AuthenticationController {
                 path: 'children',
                 select: 'slug name featureImage primary created updated'
             })
+            .populate({
+                path: 'products',
+                select: '_id code displayName promotionalImage status created updated'
+            })
             .then((category) => category ? res.status(200).send(category) : next(new NotFoundError()))
             .catch((error) => next(error));
     }

@@ -12,14 +12,19 @@ Feature: Retrieve information for a category
       | category-retrieve-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
       | category-retrieve-two@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
     And there are the following "images" records in the database
-      | subscription               | name                     | usage   | size |
-      | {{ subscriptions[1]._id }} | CategoryRetrieve Image A | feature | 1024 |
+      | subscription               | name                     | usage     | size |
+      | {{ subscriptions[1]._id }} | CategoryRetrieve Image A | feature   | 1024 |
+      | {{ subscriptions[1]._id }} | CategoryRetrieve Image B | promotion | 1024 |
+    And there are the following "products" records in the database in series
+      | subscription               | code            | displayName         | description           | featureImage        | promotionalImage    | currentPrice | status |
+      | {{ subscriptions[1]._id }} | RETRIEVE-01-001 | Category Retrieve A | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 9            | ACTIVE |
+      | {{ subscriptions[1]._id }} | RETRIEVE-01-002 | Category Retrieve B | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 99           | ACTIVE |
     And there are the following "categories" records in the database in series
-      | subscription               | name                | description           | primary |
-      | {{ subscriptions[1]._id }} | Category Retrieve A | Automated description | true    |
-      | {{ subscriptions[1]._id }} | Category Retrieve B | Automated description | false   |
-      | {{ subscriptions[1]._id }} | Category Retrieve C | Automated description | false   |
-      | {{ subscriptions[2]._id }} | Category Retrieve A | Automated description | false   |
+      | subscription               | name                | description           | primary | products                                           |
+      | {{ subscriptions[1]._id }} | Category Retrieve A | Automated description | true    | ["{{ products[1]._id }}", "{{ products[2]._id }}"] |
+      | {{ subscriptions[1]._id }} | Category Retrieve B | Automated description | false   | ["{{ products[1]._id }}"]                          |
+      | {{ subscriptions[1]._id }} | Category Retrieve C | Automated description | false   |                                                    |
+      | {{ subscriptions[2]._id }} | Category Retrieve A | Automated description | false   |                                                    |
     And the following "categories" records are updated in the database
       | _id                     | parent                  | children                    |
       | {{ categories[2]._id }} | null                    | ["{{ categories[3]._id }}"] |
@@ -29,15 +34,19 @@ Feature: Retrieve information for a category
     Given I am logged in with the "category-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/categories/{{ categories[1]._id }}" as "category"
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug                | name                | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-retrieve-a | Category Retrieve A | Automated description | true    | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug                | name                | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-retrieve-a | Category Retrieve A | Automated description | true    | ARRAY[0] | ARRAY[2] | DATE_TIME | DATE_TIME |
+    And the response path "products" from the "category" request contains:
+      | _id       | code            | displayName         | promotionalImage    | status | created   | updated   |
+      | OBJECT_ID | RETRIEVE-01-001 | Category Retrieve A | {{ images[2]._id }} | ACTIVE | DATE_TIME | DATE_TIME |
+      | OBJECT_ID | RETRIEVE-01-002 | Category Retrieve B | {{ images[2]._id }} | ACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Retrieval of a category contains correct data
     Given I am logged in with the "category-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/categories/{{ categories[2]._id }}" as "category"
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug                | name                | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-retrieve-b | Category Retrieve B | Automated description | false   | ARRAY[1] | DATE_TIME | DATE_TIME |
+      | _id       | slug                | name                | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-retrieve-b | Category Retrieve B | Automated description | false   | ARRAY[1] | ARRAY[1] | DATE_TIME | DATE_TIME |
     And the response path "children" from the "category" request contains:
       | _id       | slug                | name                | primary | created   | updated   |
       | OBJECT_ID | category-retrieve-c | Category Retrieve C | false   | DATE_TIME | DATE_TIME |
@@ -46,8 +55,8 @@ Feature: Retrieve information for a category
     Given I am logged in with the "category-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/categories/{{ categories[3]._id }}" as "category"
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug                | name                | description           | primary | parent | children | created   | updated   |
-      | OBJECT_ID | category-retrieve-c | Category Retrieve C | Automated description | false   | OBJECT | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug                | name                | description           | primary | parent | children | products | created   | updated   |
+      | OBJECT_ID | category-retrieve-c | Category Retrieve C | Automated description | false   | OBJECT | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
     And the response path "parent" from the "category" request contains:
       | _id       | slug                | name                | primary | created   | updated   |
       | OBJECT_ID | category-retrieve-b | Category Retrieve B | false   | DATE_TIME | DATE_TIME |

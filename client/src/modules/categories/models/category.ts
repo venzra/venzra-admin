@@ -1,3 +1,5 @@
+import { Product } from './product';
+
 export interface CategoryChild {
     _id: string;
     slug: string;
@@ -5,7 +7,7 @@ export interface CategoryChild {
     description: string;
     featureImage: string;
     parent?: Category | string;
-    products?: number;
+    products?: Product[];
     created: Date;
     updated: Date;
 }

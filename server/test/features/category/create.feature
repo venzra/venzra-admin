@@ -40,8 +40,8 @@ Feature: Creation of a new category
       | name              | description           |
       | Category Create B | Automated description |
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug              | name              | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-create-b | Category Create B | Automated description | false   | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-create-b | Category Create B | Automated description | false   | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
 
   Scenario: A valid request to create a new category record is successful (when setting to primary parent is ignored)
     Given I am logged in with the "category-create-one@venzra-test.io" account
@@ -49,8 +49,8 @@ Feature: Creation of a new category
       | parent                  | name              | description           | primary |
       | {{ categories[1]._id }} | Category Create C | Automated description | true    |
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug              | name              | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-create-c | Category Create C | Automated description | true    | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-create-c | Category Create C | Automated description | true    | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
 
   Scenario: A valid request to create a subcategory record is successful
     Given I am logged in with the "category-create-one@venzra-test.io" account
@@ -58,12 +58,12 @@ Feature: Creation of a new category
       | parent                  | name              | description           | featureImage        |
       | {{ categories[1]._id }} | Category Create D | Automated description | {{ images[1]._id }} |
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug              | name              | description           | featureImage        | primary | parent | children | created   | updated   |
-      | OBJECT_ID | category-create-d | Category Create D | Automated description | {{ images[1]._id }} | false   | OBJECT | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | featureImage        | primary | parent | children | products | created   | updated   |
+      | OBJECT_ID | category-create-d | Category Create D | Automated description | {{ images[1]._id }} | false   | OBJECT | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
     When I make a GET request to the API endpoint "/api/categories/{{ categories[1]._id }}" as "check"
     Then there should be a 200 response from the "check" request that contains:
-      | _id       | slug              | name              | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-create-a | Category Create A | Automated description | false   | ARRAY[1] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-create-a | Category Create A | Automated description | false   | ARRAY[1] | ARRAY[0] | DATE_TIME | DATE_TIME |
 
   Scenario: It should not be possible for another account to reference a category that belongs to another account
     Given I am logged in with the "category-create-two@venzra-test.io" account
@@ -78,5 +78,5 @@ Feature: Creation of a new category
       | name                     | description           |
       | {{ categories[1].name }} | Automated description |
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug              | name              | description           | primary | children | created   | updated   |
-      | OBJECT_ID | category-create-a | Category Create A | Automated description | false   | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | primary | children | products | created   | updated   |
+      | OBJECT_ID | category-create-a | Category Create A | Automated description | false   | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
