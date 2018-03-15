@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { ListModel } from '@venzra/models';
 import { LayoutService } from '@venzra/services';
@@ -13,11 +15,13 @@ import { CategoryService } from '../../services/category.service';
 @Component({
     templateUrl: './manage.component.html'
 })
-export class CategoryManageComponent implements OnInit {
+export class CategoryManageComponent implements OnInit, OnDestroy {
 
     public category: Category;
     public categoryForm: FormGroup;
     public categories: ListModel<Category>;
+
+    private changeListener: Subscription;
 
     constructor(
         private route: ActivatedRoute,
@@ -51,6 +55,12 @@ export class CategoryManageComponent implements OnInit {
         }
 
         this.categoryForm.reset(this.category);
+
+        this.changeListener = this.categoryForm.get('primary').valueChanges.subscribe((isParent) => isParent ? this.categoryForm.get('parent').disable() : this.categoryForm.get('parent').enable());
+    }
+
+    ngOnDestroy(): void {
+        this.changeListener.unsubscribe();
     }
 
     updateCategory() {

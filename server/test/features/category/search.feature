@@ -34,8 +34,6 @@ Feature: Search information for a category
       | {{ categories[3]._id }} | {{ categories[1]._id }} | []                                                     |
       | {{ categories[4]._id }} | {{ categories[1]._id }} | []                                                     |
 
-  # TODO: Look into an update database option to assign children and parent information (then apply and update checks below)
-
   Scenario: Requesting a list of categories should return only records for that subscription (subscription one)
     Given I am logged in with the "category-search-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/categories" as "category"

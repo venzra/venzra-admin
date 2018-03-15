@@ -1,7 +1,11 @@
 <venzra-header>
     <h1>{{ product.displayName }}</h1>
     <p>The details below show the current available information provided about this product.</p>
-    <button mat-raised-button color="accent" [routerLink]="'/products/' + product._id + '/manage'"><mat-icon>edit</mat-icon> Edit product</button>
+
+    <div fxLayout="row" fxLayoutGap="20px">
+        <button mat-raised-button color="accent" [routerLink]="'/products/' + product._id + '/manage'"><mat-icon>edit</mat-icon> Edit product</button>
+        <button mat-raised-button color="accent" [routerLink]="'/products/' + product._id + '/categories'"><mat-icon>list</mat-icon> Categories</button>
+    </div>
 </venzra-header>
 
 <venzra-content>
@@ -34,6 +38,21 @@
                 <span fxFlex="33%">Creation date</span>
                 <span fxFlex>{{ product.created | date: 'MMMM dd, yyyy HH:mm:ss' }}</span>
             </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>Categorisation</mat-card-title>
+        <mat-card-subtitle>The following are the categories for which this product is attached and can be found on your store.</mat-card-subtitle>
+
+        <mat-card-content fxLayout="column" fxLayoutGap="20px">
+            <mat-list>
+                <mat-list-item>
+                    <h4 matLine>Bobs category</h4>
+                    <p matLine>Its a good one</p>
+                    <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+                </mat-list-item>
+            </mat-list>
         </mat-card-content>
     </mat-card>
 

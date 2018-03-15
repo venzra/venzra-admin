@@ -25,7 +25,7 @@ import { CategoryService } from '../../services/category.service';
 })
 export class CategoryListComponent implements OnInit, AfterViewInit {
 
-    public availableColumns = ['image', 'name', 'parent', 'children', 'products', 'primary'];
+    public availableColumns = ['image', 'name', 'primary', 'children', 'products'];
     public dataSource = new MatTableDataSource();
     public loading = false;
     public categories: ListModel<Category>;

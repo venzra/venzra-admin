@@ -25,8 +25,6 @@ Feature: Retrieve information for a category
       | {{ categories[2]._id }} | null                    | ["{{ categories[3]._id }}"] |
       | {{ categories[3]._id }} | {{ categories[2]._id }} | []                          |
 
-  # TODO: Look into an update database option to assign children and parent information (then uncomment and fix the below steps)
-
   Scenario: Retrieval of a category contains correct data
     Given I am logged in with the "category-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/categories/{{ categories[1]._id }}" as "category"

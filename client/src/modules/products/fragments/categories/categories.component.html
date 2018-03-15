@@ -1,0 +1,40 @@
+<venzra-header>
+    <h2>Categories for {{ product.displayName }}</h2>
+    <p>From here you can assign and remove categories for a product, make sure to check changes before saving updates.</p>
+</venzra-header>
+
+<venzra-content>
+    <form *ngIf="categories.list.length" (ngSubmit)="assignCategories()" [formGroup]="categoryForm">
+        <mat-card>
+            <mat-card-title>Assign categories</mat-card-title>
+            <mat-card-subtitle>You can place a product into as many categories as you like, however we recommend only selecting one subcategory per categorisation segment.</mat-card-subtitle>
+
+            <mat-selection-list formControlName="categories">
+                <ng-container *ngFor="let parent of categories.list">
+                    <h3 matSubheader>{{ parent.name }}</h3>
+                    <ng-container *ngIf="!parent.children.length">
+                        <mat-list-item>No subcategories available</mat-list-item>
+                    </ng-container>
+                    <ng-container *ngIf="parent.children.length">
+                        <mat-list-option *ngFor="let child of parent.children" [value]="child._id">{{ child.name }}</mat-list-option>
+                    </ng-container>
+                </ng-container>
+            </mat-selection-list>
+        </mat-card>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" [routerLink]="'/products/' + product._id">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.pristine || categoryForm.invalid">Save</button>
+        </div>
+    </form>
+
+    <ng-container *ngIf="!categories.list.length">
+        <mat-card>
+            <p class="mat-subheading-2">No categories available, you can create and manage categories from the menu.</p>
+        </mat-card>
+
+        <div fxLayoutAlign="end">
+            <button mat-raised-button color="primary" type="button" [routerLink]="'/products/' + product._id"><mat-icon>arrow_back</mat-icon> Back</button>
+        </div>
+    </ng-container>
+</venzra-content>

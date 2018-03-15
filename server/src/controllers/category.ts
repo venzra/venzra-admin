@@ -24,6 +24,7 @@ export class CategoryController extends AuthenticationController {
 
         this.router.get('/', this.validate.bind(this), this.findAll.bind(this));
         this.router.post('/', this.validate.bind(this), this.createCategory.bind(this), this.findOne.bind(this));
+        this.router.get('/summary', this.validate.bind(this), this.getSummary.bind(this));
         this.router.get('/:categoryId', this.validate.bind(this), this.findOne.bind(this));
         this.router.patch('/:categoryId', this.validate.bind(this), this.updateCategory.bind(this), this.findOne.bind(this));
         this.router.delete('/:categoryId', this.validate.bind(this), this.removeOne.bind(this));
@@ -213,6 +214,21 @@ export class CategoryController extends AuthenticationController {
                     ])
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )
+            .catch((error) => next(error));
+    }
+
+    getSummary(req: Request, res: Response, next: NextFunction) {
+        const searchParams = { subscription: this.account.subscription._id, parent: { $eq: null } };
+
+        CategoryModel.find(searchParams)
+            .select('_id name')
+            .populate({
+                path: 'children',
+                select: '_id name',
+                options: { sort: { name: 1 } }
+            })
+            .sort({ name: 1 })
+            .then((categories) => res.status(200).send({ list: categories }))
             .catch((error) => next(error));
     }
 
