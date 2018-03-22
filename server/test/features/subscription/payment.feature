@@ -35,8 +35,8 @@ Feature: Creation of a new subscription payment
       | email                                       | plan | token                                    |
       | subscription-payment-success@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
     Then there should be a 200 response from the "payment" request that contains:
-      | _id       | domainName               | storeName                | payment | transactions                  | status |
-      | OBJECT_ID | subscription-payment-one | Subscription Payment One | OBJECT  | { "base": 10, "rate": 0.021 } | TRIAL  |
+      | _id       | domainName               | storeName                | payment | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-payment-one | Subscription Payment One | OBJECT  | { "base": 10, "rate": 0.021 } | ARRAY[0] | TRIAL  |
     And the response path "payment" from the "payment" request contains:
       | customer           | subscription       | package | price  | term      | status |
       | cus_xxxxxxxxxxxxxx | sub_xxxxxxxxxxxxxx | TEST    | OBJECT | DATE_TIME | ACTIVE |
@@ -51,8 +51,8 @@ Feature: Creation of a new subscription payment
       | email                                       | plan | token                                    |
       | subscription-payment-restore@venzra-test.io | TEST | { "id": "tok_xxxxxxxxxxxxxxxxxxxxxxxx" } |
     Then there should be a 200 response from the "payment" request that contains:
-      | _id       | domainName               | storeName                | payment | transactions                  | status |
-      | OBJECT_ID | subscription-payment-two | Subscription Payment Two | OBJECT  | { "base": 10, "rate": 0.021 } | ACTIVE |
+      | _id       | domainName               | storeName                | payment | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-payment-two | Subscription Payment Two | OBJECT  | { "base": 10, "rate": 0.021 } | ARRAY[0] | ACTIVE |
     And the response path "payment" from the "payment" request contains:
       | customer           | subscription       | package | price  | term      | status |
       | cus_yyyyyyyyyyyyyy | sub_yyyyyyyyyyyyyy | TEST    | OBJECT | DATE_TIME | ACTIVE |

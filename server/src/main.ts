@@ -8,6 +8,7 @@ import * as path from 'path';
 
 import AccountController from './controllers/account';
 import CategoryController from './controllers/category';
+import ContentController from './controllers/content';
 import IdentityController from './controllers/identity';
 import ImagesController from './controllers/images';
 import OrdersController from './controllers/orders';
@@ -54,6 +55,7 @@ app.use('/api', morgan(':remote-addr - BASIC LOG - [:date[iso]] - ":method :url"
 
 app.use('/api/account', AccountController);
 app.use('/api/categories', CategoryController);
+app.use('/api/content', ContentController);
 app.use('/api/identity', IdentityController);
 app.use('/api/images', ImagesController);
 app.use('/api/orders', OrdersController);

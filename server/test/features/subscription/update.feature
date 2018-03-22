@@ -18,8 +18,8 @@ Feature: Updating a new subscription via patch requests
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
     When I make an empty PATCH request to the API endpoint "/api/subscription" as "subscription"
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | strapline                    | transactions                  | status |
-      | OBJECT_ID | subscription-update-one | Subscription Update One | Automated subscription entry | { "base": 10, "rate": 0.046 } | TRIAL  |
+      | _id       | domainName              | storeName               | strapline                    | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-update-one | Subscription Update One | Automated subscription entry | { "base": 10, "rate": 0.046 } | ARRAY[0] | TRIAL  |
 
   Scenario: It should not be possible to set an empty store name value
     Given I am logged in with the "subscription-update-one@venzra-test.io" account
@@ -49,8 +49,8 @@ Feature: Updating a new subscription via patch requests
       | replace | logo      | {{ images[2]._id }}         |
       | replace | theme     | { "color": "Orange" }       |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName                  | storeName                   | strapline                  | icon                | logo                | theme  | transactions                  | status |
-      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | {{ images[1]._id }} | {{ images[2]._id }} | OBJECT | { "base": 10, "rate": 0.046 } | TRIAL  |
+      | _id       | domainName                  | storeName                   | strapline                  | icon                | logo                | theme  | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | {{ images[1]._id }} | {{ images[2]._id }} | OBJECT | { "base": 10, "rate": 0.046 } | ARRAY[0] | TRIAL  |
     And the response path "theme" from the "subscription" request contains:
       | color  |
       | orange |

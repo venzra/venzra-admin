@@ -1,6 +1,6 @@
-<div fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="20px">
-    <div fxFlex="initial" fxFlex.gt-xs="50%">
+<div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="20px">
+    <div fxFlex="initial" fxFlex.gt-sm="50%">
         <ng-content></ng-content>
     </div>
-    <div class="markdown-preview" [venzraMarkdown]="content" headers="false" fxFlex="initial" fxFlex.gt-xs="50%"><span class="waiting">Awaiting input...</span></div>
+    <div class="markdown-preview" [venzraMarkdown]="content" [headers]="headers" fxFlex="initial" fxFlex.gt-sm="50%"><span class="waiting">Awaiting input...</span></div>
 </div>

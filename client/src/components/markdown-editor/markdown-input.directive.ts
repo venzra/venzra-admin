@@ -45,6 +45,15 @@ export class MarkdownInputDirective implements MarkdownInputControl, AfterConten
 
     handleEvent(event) {
         switch (event) {
+            case 'title':
+                this.wrapText('# ', '', 'heading');
+                break;
+            case 'heading':
+                this.wrapText('## ', '', 'heading');
+                break;
+            case 'subheading':
+                this.wrapText('### ', '', 'heading');
+                break;
             case 'bold':
                 this.wrapText('**', '**', 'bold');
                 break;

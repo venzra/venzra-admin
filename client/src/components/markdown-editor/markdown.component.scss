@@ -6,7 +6,7 @@
 .markdown-preview {
     position: relative;
     padding: 24px 8px 14px;
-    max-height: 320px;
+    min-height: 100px;
     overflow: scroll;
     background-color: mat-color($venzra-app-accent, 'default', 0.04);
 

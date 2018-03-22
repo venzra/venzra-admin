@@ -9,7 +9,10 @@ $venzra-app-theme:   mat-light-theme($venzra-app-primary, $venzra-app-accent, $v
 
 @include angular-material-theme($venzra-app-theme);
 
-//content items
+form {
+    margin-bottom: 20px;
+}
+
 .mat-toolbar {
     background-color: inherit;
 }

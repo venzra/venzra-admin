@@ -1,0 +1,57 @@
+<venzra-header>
+    <h1>Content Management</h1>
+    <p>The following pages allow for content to be included on your store, such as information about your company, importantly from here you can manage any terms and conditions for your customers. Only the pages with a tick against them in the list below are currently enabled.</p>
+</venzra-header>
+
+<venzra-content>
+    <mat-card>
+        <mat-card-title>Available content pages</mat-card-title>
+        <mat-card-subtitle>Pages below can be enabled or disabled unless otherwise stated, click a row to manage what information is shown and configure how it is displayed.</mat-card-subtitle>
+
+        <mat-card-content>
+            <mat-nav-list>
+                <mat-list-item routerLink="/content/about">
+                    <h2 matLine>About Us</h2>
+                    <p matLine>Tell customers about your company background, people or the reason you are selling specific products online.</p>
+                    <mat-icon *ngIf="hasAddon('ABOUT')" color="primary">check</mat-icon>
+                    <mat-icon *ngIf="!hasAddon('ABOUT')" color="accent">close</mat-icon>
+                </mat-list-item>
+
+                <mat-list-item routerLink="/content/careers">
+                    <h2 matLine>Careers</h2>
+                    <p matLine>Advertise any job openings that you might be looking to fill, or simply provide information how to get in touch.</p>
+                    <mat-icon *ngIf="hasAddon('CAREERS')" color="primary">check</mat-icon>
+                    <mat-icon *ngIf="!hasAddon('CAREERS')" color="accent">close</mat-icon>
+                </mat-list-item>
+
+                <mat-list-item routerLink="/content/contact">
+                    <h2 matLine>Contact Us</h2>
+                    <p matLine>Enable a simple contact form with the ability to add additional fields for data collection and setup the destination of any messages.</p>
+                    <mat-icon *ngIf="hasAddon('CONTACT')" color="primary">check</mat-icon>
+                    <mat-icon *ngIf="!hasAddon('CONTACT')" color="accent">close</mat-icon>
+                </mat-list-item>
+
+                <mat-list-item routerLink="/content/locations">
+                    <h2 matLine>Find Us</h2>
+                    <p matLine>Tell customers where they can find you, or provide address information for your head office.</p>
+                    <mat-icon *ngIf="hasAddon('LOCATION')" color="primary">check</mat-icon>
+                    <mat-icon *ngIf="!hasAddon('LOCATION')" color="accent">close</mat-icon>
+                </mat-list-item>
+
+                <!--
+                <mat-list-item routerLink="/content/privacy">
+                    <h2 matLine>Privacy Policy</h2>
+                    <p matLine>This page is required, this is managed by us to be a compliant platform in how we handle data, use the terms and conditions page to provide any further privacy notices.</p>
+                    <mat-icon color="primary">check</mat-icon>
+                </mat-list-item>
+                -->
+
+                <mat-list-item routerLink="/content/terms">
+                    <h2 matLine>Terms and Conditions</h2>
+                    <p matLine>This page is required, and comes with a basic set of terms and conditions that should be changed to fit your business.</p>
+                    <mat-icon color="primary">check</mat-icon>
+                </mat-list-item>
+            </mat-nav-list>
+        </mat-card-content>
+    </mat-card>
+</venzra-content>

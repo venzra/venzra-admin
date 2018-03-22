@@ -28,7 +28,8 @@ export class AuthenticationController {
     getSubscription(req: Request, res: Response) {
         SubscriptionModel
             .findById(this.account.subscription._id)
-            .select('storeName domainName strapline icon logo theme payment gateway.account gateway.modified transactions status')
+            .select('storeName domainName strapline icon logo theme payment gateway.account gateway.modified transactions addons status')
+            .sort({ addons: 1 })
             .then((subscription) => res.status(200).send(subscription));
     }
 

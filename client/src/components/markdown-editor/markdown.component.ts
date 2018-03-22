@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChild } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, Input } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
 import { MarkdownInputControl } from './markdown-input.control';
@@ -12,6 +12,8 @@ export class MarkdownComponent implements AfterContentInit {
 
     public content;
     public changeHandler: Subject<any> = new Subject<any>();
+
+    @Input() headers: 'none' | 'simple' | 'full' = 'none';
 
     @ContentChild(MarkdownInputControl) control: MarkdownInputControl;
 

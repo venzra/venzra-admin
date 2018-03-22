@@ -1,0 +1,39 @@
+<venzra-header>
+    <h1>About Us</h1>
+    <p>A common usage of this page is to inform people why your business is important and why it came to be, you may also want to provide information about key employees.</p>
+</venzra-header>
+
+<venzra-content>
+    <form (ngSubmit)="saveContent()" [formGroup]="contentForm">
+        <mat-card>
+            <mat-card-title>About us module</mat-card-title>
+            <mat-card-subtitle>Tell customers about your company background, people or the reason you are selling specific products online.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-checkbox formControlName="enabled">Enable this feature on your site.</mat-checkbox>
+
+                <venzra-markdown-editor headers="simple">
+                    <mat-form-field>
+                        <textarea matInput venzraMarkdownInput placeholder="Page content" formControlName="content" matTextareaAutosize matAutosizeMinRows="20" matAutosizeMaxRows="30" [required]="contentForm.controls['enabled'].value"></textarea>
+                        <mat-error *ngIf="contentForm.controls['content'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="contentForm.controls['content'].hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+                    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
+                        <div>
+                            <button mat-icon-button venzraControl format="subheading" matTooltip="Header text"><mat-icon>format_size</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+                            <button mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
+                            <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
+                        </div>
+                    </div>
+                </venzra-markdown-editor>
+            </mat-card-content>
+        </mat-card>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" routerLink="/content">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="contentForm.pristine || contentForm.invalid">Save</button>
+        </div>
+    </form>
+</venzra-content>

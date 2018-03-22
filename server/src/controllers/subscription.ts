@@ -31,6 +31,7 @@ export class SubscriptionController extends AuthenticationController {
         this.router.get('/', this.validate.bind(this), this.getSubscription.bind(this));
         this.router.patch('/', this.validate.bind(this), this.updateSettings.bind(this), this.getSubscription.bind(this));
         this.router.get('/plans', this.validate.bind(this), this.getPlans.bind(this));
+        this.router.patch('/add-ons', this.validate.bind(this), this.enableAddon.bind(this), this.getSubscription.bind(this));
         this.router.post('/payment', this.validate.bind(this), this.attachPayment.bind(this), this.getSubscription.bind(this));
         this.router.post('/gateway', this.validate.bind(this), this.attachGateway.bind(this), this.getSubscription.bind(this));
     }
@@ -48,6 +49,34 @@ export class SubscriptionController extends AuthenticationController {
                     .then((list) => res.status(200).send({ list, total }))
             )
             .catch((planError) => next(planError));
+    }
+
+    enableAddon(req: Request, res: Response, next: NextFunction) {
+        if (req.body instanceof Array === false) {
+            return next();
+        }
+
+        const subscription = this.account.subscription;
+
+        (<Array<IRestOperation>>req.body).forEach((operation) => {
+            switch (operation.op) {
+                case 'add':
+                    if (!subscription.addons.find((addon) => addon.name === operation.value)) {
+                        subscription.addons.push({
+                            name: operation.value,
+                            value: 0
+                        });
+                    }
+                    break;
+                case 'remove':
+                    subscription.addons = subscription.addons.filter((addon) => addon.name !== operation.value);
+            }
+        });
+
+        subscription.save()
+            .then(() => subscription.update({ $push: { addons: { $each: [], $sort: { name: 1 } } } }))
+            .then(() => next())
+            .catch((error) => next(error));
     }
 
     attachPayment(req: Request, res: Response, next: NextFunction) {

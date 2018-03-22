@@ -1,0 +1,57 @@
+<venzra-header>
+    <h1>Customise contact form</h1>
+    <p>Configure where contact emails are sent, and the options available. Be careful not to enable too many fields on your contact form as this can become a barrier to customers sending you a message. Any additional fields will be offered to customers as optional fields unless otherwise stated.</p>
+</venzra-header>
+
+<venzra-content>
+    <form (ngSubmit)="updateContact()" [formGroup]="contactForm">
+        <mat-card>
+            <mat-card-title>Configuration options</mat-card-title>
+            <mat-card-subtitle>Additional information capture options for your site when customers are using the contact form.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-form-field>
+                    <input matInput type="email" placeholder="Recipient address" formControlName="recipient" />
+                    <mat-hint>This should be an email address on a domain owned by you where messages sent by your customers will be received and processed.</mat-hint>
+                    <mat-error *ngIf="contactForm.controls['recipient'].hasError('pattern')">A valid email address is required.</mat-error>
+                </mat-form-field>
+
+                <mat-selection-list formControlName="fields">
+                    <mat-list-option value="NAME" disabled>
+                        <h2 matLine>Full name</h2>
+                        <p matLine>The full name to be provided by the customer. Required field.</p>
+                    </mat-list-option>
+                    <mat-list-option value="COMPANY">
+                        <h2 matLine>Company name</h2>
+                        <p matLine>Ask for the customer to provide a company name if they are a business.</p>
+                    </mat-list-option>
+                    <mat-list-option value="EMAIL" disabled>
+                        <h2 matLine>Email address</h2>
+                        <p matLine>The email address provided by the customer to respond to them with. Required field.</p>
+                    </mat-list-option>
+                    <mat-list-option value="PHONE">
+                        <h2 matLine>Phone number</h2>
+                        <p matLine>You may prefer to contact customers by phone when they contact you, this optionally ask customers to provide a phone number.</p>
+                    </mat-list-option>
+                    <mat-list-option value="SUBJECT">
+                        <h2 matLine>Subject</h2>
+                        <p matLine>Allow customer to provide a subject line for their message.</p>
+                    </mat-list-option>
+                    <mat-list-option value="REASON">
+                        <h2 matLine>Reason for contact</h2>
+                        <p matLine>Ask why the customer is contacting you, we will provide customers a list of common reasons to contact you.</p>
+                    </mat-list-option>
+                    <mat-list-option value="MESSAGE" disabled>
+                        <h2 matLine>Message content</h2>
+                        <p matLine>A free text field from which the customer can provide details. Required field.</p>
+                    </mat-list-option>
+                </mat-selection-list>
+            </mat-card-content>
+        </mat-card>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" routerLink="/content/contact">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="contactForm.pristine || contactForm.invalid">Save</button>
+        </div>
+    </form>
+</venzra-content>
