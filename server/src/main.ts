@@ -7,6 +7,7 @@ import * as morgan from 'morgan';
 import * as path from 'path';
 
 import AccountController from './controllers/account';
+import CareerController from './controllers/careers';
 import CategoryController from './controllers/category';
 import ContentController from './controllers/content';
 import IdentityController from './controllers/identity';
@@ -54,6 +55,7 @@ app.use(cookieParser());
 app.use('/api', morgan(':remote-addr - BASIC LOG - [:date[iso]] - ":method :url" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms'));
 
 app.use('/api/account', AccountController);
+app.use('/api/careers', CareerController);
 app.use('/api/categories', CategoryController);
 app.use('/api/content', ContentController);
 app.use('/api/identity', IdentityController);

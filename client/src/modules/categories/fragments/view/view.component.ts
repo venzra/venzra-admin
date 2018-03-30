@@ -38,7 +38,7 @@ export class CategoryViewComponent implements OnInit {
     }
 
     deleteCategory(): void {
-        const dialogRef = this.dialog.open(RemoveCategoryDialogComponent, { width: '640px', disableClose: true, data: { category: this.category } });
+        const dialogRef = this.dialog.open(RemoveCategoryDialogComponent, { width: '90%', maxWidth: '640px', disableClose: true, data: { category: this.category } });
         dialogRef.afterClosed().subscribe((removed) => removed ? this.router.navigate(['/categories']) : null);
     }
 

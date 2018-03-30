@@ -38,7 +38,7 @@ export class OrderViewComponent implements OnInit {
     }
 
     changeStatus() {
-        const dialogRef = this.dialog.open(OrderStatusDialogComponent, { width: '640px', disableClose: true, data: { order: this.order } });
+        const dialogRef = this.dialog.open(OrderStatusDialogComponent, { width: '90%', maxWidth: '640px', disableClose: true, data: { order: this.order } });
         dialogRef.afterClosed().subscribe((order) => this.order = order);
     }
 

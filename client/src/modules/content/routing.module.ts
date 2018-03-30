@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ContentRetrieveService, ContentService } from './services/content.service';
+import { CareerListResolve, CareerRetrieveResolve, CareerService } from './services/career.service';
+import { ContentRetrieveResolve, ContentService } from './services/content.service';
 import { SubscriptionRetrieveResolve } from './services/subscription.service';
 
 import { ContentListComponent } from './fragments/list/list.component';
 import { ContentAboutComponent } from './fragments/about/about.component';
 import { ContentCareersComponent } from './fragments/careers/careers.component';
-import { ContentCareersManageComponent } from './fragments/careers/manage.component';
+import { ContentCareersCreateComponent } from './fragments/careers/create/create.component';
+import { ContentCareersManageComponent } from './fragments/careers/manage/manage.component';
 import { ContentContactComponent } from './fragments/contact/contact.component';
 import { ContentContactManageComponent } from './fragments/contact/manage.component';
 import { ContentLocationComponent } from './fragments/location/location.component';
@@ -28,7 +30,7 @@ const routes: Routes = [
         component: ContentAboutComponent,
         data: { usage: 'about' },
         resolve: {
-            content: ContentRetrieveService,
+            content: ContentRetrieveResolve,
             subscription: SubscriptionRetrieveResolve
         }
     },
@@ -37,23 +39,28 @@ const routes: Routes = [
         component: ContentCareersComponent,
         data: { usage: 'careers' },
         resolve: {
-            content: ContentRetrieveService,
+            careers: CareerListResolve,
+            content: ContentRetrieveResolve,
             subscription: SubscriptionRetrieveResolve
         }
     },
-    // {
-    //     path: 'careers/manage',
-    //     component: ContentCareersManageComponent,
-    //     resolve: {
-    //         subscription: SubscriptionRetrieveResolve
-    //     }
-    // },
+    {
+        path: 'careers/create',
+        component: ContentCareersCreateComponent
+    },
+    {
+        path: 'careers/:careerId',
+        component: ContentCareersManageComponent,
+        resolve: {
+            career: CareerRetrieveResolve
+        }
+    },
     {
         path: 'contact',
         component: ContentContactComponent,
         data: { usage: 'contact' },
         resolve: {
-            content: ContentRetrieveService,
+            content: ContentRetrieveResolve,
             subscription: SubscriptionRetrieveResolve
         }
     },
@@ -69,7 +76,7 @@ const routes: Routes = [
         component: ContentLocationComponent,
         data: { usage: 'location' },
         resolve: {
-            content: ContentRetrieveService,
+            content: ContentRetrieveResolve,
             subscription: SubscriptionRetrieveResolve
         }
     },
@@ -92,7 +99,7 @@ const routes: Routes = [
         component: ContentTermsComponent,
         data: { usage: 'terms' },
         resolve: {
-            content: ContentRetrieveService,
+            content: ContentRetrieveResolve,
             subscription: SubscriptionRetrieveResolve
         }
     }
@@ -106,8 +113,11 @@ const routes: Routes = [
         RouterModule
     ],
     providers: [
+        CareerService,
+        CareerRetrieveResolve,
+        CareerListResolve,
         ContentService,
-        ContentRetrieveService,
+        ContentRetrieveResolve,
         SubscriptionRetrieveResolve
     ]
 })

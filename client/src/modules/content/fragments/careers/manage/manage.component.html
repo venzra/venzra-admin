@@ -1,0 +1,53 @@
+<venzra-header>
+    <h1>Manage position</h1>
+    <p>Make any required changes to your advert, perhaps add more information about the role or remuneration. Also change the closing date if required, this can extend or reduce how long the position will be advertised.</p>
+</venzra-header>
+
+<venzra-content>
+    <form (ngSubmit)="updateCareer()" [formGroup]="careerForm">
+        <mat-card>
+            <mat-card-title>Position information</mat-card-title>
+            <mat-card-subtitle>Provide some information about the position you are hiring for.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-form-field>
+                    <input matInput placeholder="Position / Job title" formControlName="position" required />
+                    <mat-error *ngIf="careerForm.controls['position'].hasError('required')">This field is required.</mat-error>
+                    <mat-error *ngIf="careerForm.controls['position'].hasError('maxlength')">Entered text is too long.</mat-error>
+                </mat-form-field>
+
+                <venzra-markdown-editor headers="simple">
+                    <mat-form-field>
+                        <textarea matInput venzraMarkdownInput placeholder="Job description" formControlName="description" matTextareaAutosize matAutosizeMinRows="12" matAutosizeMaxRows="16" required></textarea>
+                        <mat-error *ngIf="careerForm.controls['description'].hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="careerForm.controls['description'].hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+                    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
+                        <div>
+                            <button mat-icon-button venzraControl format="subheading" matTooltip="Header text"><mat-icon>format_size</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+                            <button mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
+                            <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
+                        </div>
+                    </div>
+                </venzra-markdown-editor>
+
+                <mat-form-field class="datepicker">
+                    <input matInput [matDatepicker]="expiryDate" [min]="minDate" [max]="maxDate" placeholder="Application closing date" formControlName="expires" required />
+                    <mat-datepicker-toggle matSuffix [for]="expiryDate"></mat-datepicker-toggle>
+                    <mat-datepicker #expiryDate></mat-datepicker>
+                    <mat-hint>Advert will be automatically removed 7 days after closing date.</mat-hint>
+                    <mat-error *ngIf="careerForm.controls['expires'].hasError('required')">Valid date is required e.g. {{ maxDate | date: 'MMMM dd, yyyy' }}</mat-error>
+                    <mat-error *ngIf="careerForm.controls['expires'].hasError('matDatepickerMin')">Must be greater than or equal to today.</mat-error>
+                    <mat-error *ngIf="careerForm.controls['expires'].hasError('matDatepickerMax')">Must be a date within next 3 months.</mat-error>
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" routerLink="/content/careers">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="careerForm.pristine || careerForm.invalid">Save</button>
+        </div>
+    </form>
+</venzra-content>

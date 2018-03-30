@@ -1,10 +1,29 @@
 <venzra-header>
     <h1>Careers</h1>
     <p>A careers page is a great way to show your business growing and allow potential employees to contact you, use the content section to provide information on how prospective employees can contact you, and create positions that are currently available to apply for.</p>
-    <!--<button mat-raised-button color="accent" routerLink="/content/careers/manage"><mat-icon>people</mat-icon> Manage positions</button>-->
+    <button mat-raised-button type="button" color="accent" routerLink="/content/careers/create"><mat-icon>add</mat-icon> Create new position</button>
 </venzra-header>
 
 <venzra-content>
+    <mat-expansion-panel (opened)="positionsOpen = true" (closed)="positionsOpen = false" [expanded]="positionsOpen && contentForm.controls['enabled'].value" [disabled]="!contentForm.controls['enabled'].value">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Available positions ({{ careers.total }})</mat-panel-title>
+            <mat-panel-description>Click to {{ positionsOpen ? 'collapse' : 'expand' }} and {{ positionsOpen ? 'hide' : 'view' }} advertised positions</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <p class="mat-subheading-2" *ngIf="!careers.total">No positions are currently being advertised.</p>
+
+        <mat-nav-list *ngIf="careers.total">
+            <mat-list-item [routerLink]="'/content/careers/' + career._id" *ngFor="let career of careers.list">
+                <mat-icon matListIcon *ngIf="hasExpired(career)" matTooltip="This position has closed and will be automatically removed 7 days after the specified closing date" matTooltipPosition="right" color="warn">assignment_turned_in</mat-icon>
+                <mat-icon matListIcon *ngIf="!hasExpired(career)" color="accent">assignment</mat-icon>
+                <h2 matLine>{{ career.position }}</h2>
+                <p matLine>Added on: {{ career.created | date }} | Closing date: {{ career.expires | date }}</p>
+                <button mat-icon-button type="button" (click)="removeCareer($event, career)" color="warn"><mat-icon>delete</mat-icon></button>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-expansion-panel>
+
     <form (ngSubmit)="saveContent()" [formGroup]="contentForm">
         <mat-card>
             <mat-card-title>Careers advertising module</mat-card-title>

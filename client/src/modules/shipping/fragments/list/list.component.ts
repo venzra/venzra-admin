@@ -96,7 +96,7 @@ export class ShippingListComponent implements OnInit, AfterViewInit {
     }
 
     remove(shipping) {
-        const dialogRef = this.dialog.open(RemoveShippingDialogComponent, { width: '640px', disableClose: true, data: { shipping } });
+        const dialogRef = this.dialog.open(RemoveShippingDialogComponent, { width: '90%', maxWidth: '640px', disableClose: true, data: { shipping } });
         dialogRef.afterClosed().subscribe((reload = false) => reload ? this.refresh() : null);
     }
 }

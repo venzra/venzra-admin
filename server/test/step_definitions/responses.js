@@ -1,4 +1,5 @@
 const cookieParser = require('cookie');
+const moment = require('moment');
 const sharp = require('sharp');
 
 const { Given, When, Then } = require('cucumber');
@@ -19,20 +20,24 @@ const checkValues = (expected, actual, exact = true) => {
             }
         }
 
-        const date = new Date();
+        let date = new Date();
 
         switch (expected[key]) {
             case 'YEAR':
-                date.setHours(check[1]);
+                date = moment().utc().add(check[1], 'hours').toDate();
                 expect(actual[key]).to.equal(date.getFullYear());
                 break;
             case 'MONTH':
-                date.setHours(check[1]);
+                date = moment().utc().add(check[1], 'hours').toDate();
                 expect(actual[key]).to.equal(date.getMonth() + 1);
                 break;
             case 'DAY':
-                date.setHours(check[1]);
+                date = moment().utc().add(check[1], 'hours').toDate();
                 expect(actual[key]).to.equal(date.getDate());
+                break;
+            case 'DATE':
+                date = moment().utc().endOf('day').add(check[1], 'hours').toDate();
+                expect(actual[key]).to.equal(date.toISOString());
                 break;
             case 'OBJECT_ID':
                 expect(actual[key]).to.match(/^[0-9A-F]{24}$/i);

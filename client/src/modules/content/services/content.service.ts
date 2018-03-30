@@ -27,7 +27,7 @@ export class ContentService extends RestfulService {
 }
 
 @Injectable()
-export class ContentRetrieveService implements Resolve<Content> {
+export class ContentRetrieveResolve implements Resolve<Content> {
 
     constructor(
         private contentService: ContentService

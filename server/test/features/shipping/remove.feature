@@ -21,6 +21,8 @@ Feature: Remove a shipping option from the database
     Given I am logged in with the "shipping-remove-one@venzra-test.io" account
     When I make a DELETE request to the API endpoint "/api/shipping/{{ shipping[1]._id }}" as "shipment"
     Then the status returned from the "shipment" request should be 202
+    When I make a GET request to the API endpoint "/api/shipping/{{ shipping[1]._id }}" as "check"
+    Then the status returned from the "check" request should be a 404 error
 
   Scenario: It is not possible to remove a record for another subscription
     Given I am logged in with the "shipping-remove-two@venzra-test.io" account

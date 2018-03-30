@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MAT_DATE_FORMATS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, NativeDateModule } from '@angular/material';
+import { MAT_DATE_FORMATS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatSnackBarModule, MatTooltipModule, NativeDateModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { ContentRoutingModule } from './routing.module';
@@ -12,14 +12,22 @@ import { PageModule } from '@venzra/components/page/page.module';
 import { FiltersModule } from '@venzra/filters/filters.module';
 
 import { ContentListComponent } from './fragments/list/list.component';
+
 import { ContentAboutComponent } from './fragments/about/about.component';
+
 import { ContentCareersComponent } from './fragments/careers/careers.component';
-import { ContentCareersManageComponent } from './fragments/careers/manage.component';
+import { ContentCareersCreateComponent } from './fragments/careers/create/create.component';
+import { ContentCareersManageComponent } from './fragments/careers/manage/manage.component';
+import { RemoveCareerDialogComponent } from './fragments/careers/remove/remove.dialog';
+
 import { ContentContactComponent } from './fragments/contact/contact.component';
 import { ContentContactManageComponent } from './fragments/contact/manage.component';
+
 import { ContentLocationComponent } from './fragments/location/location.component';
 import { ContentLocationManageComponent } from './fragments/location/manage.component';
+
 import { ContentPrivacyComponent } from './fragments/privacy/privacy.component';
+
 import { ContentTermsComponent } from './fragments/terms/terms.component';
 
 const VENZRA_FORMAT = {
@@ -39,13 +47,15 @@ const VENZRA_FORMAT = {
         ContentListComponent,
         ContentAboutComponent,
         ContentCareersComponent,
+        ContentCareersCreateComponent,
         ContentCareersManageComponent,
         ContentContactComponent,
         ContentContactManageComponent,
         ContentLocationComponent,
         ContentLocationManageComponent,
         ContentPrivacyComponent,
-        ContentTermsComponent
+        ContentTermsComponent,
+        RemoveCareerDialogComponent
     ],
     imports: [
         CommonModule,
@@ -54,10 +64,13 @@ const VENZRA_FORMAT = {
         MatCardModule,
         MatCheckboxModule,
         MatDatepickerModule,
+        MatExpansionModule,
         MatIconModule,
         MatInputModule,
         MatListModule,
         MatMenuModule,
+        MatSnackBarModule,
+        MatTooltipModule,
         NativeDateModule,
         FlexLayoutModule,
         ImageInputModule,
@@ -68,6 +81,9 @@ const VENZRA_FORMAT = {
     ],
     providers: [
         { provide: MAT_DATE_FORMATS, useValue: VENZRA_FORMAT }
+    ],
+    entryComponents: [
+        RemoveCareerDialogComponent
     ]
 })
 export class ContentModule {

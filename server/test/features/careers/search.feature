@@ -1,0 +1,38 @@
+@Careers @CareersSearch
+Feature: Searching of available careers options
+
+  @Seed
+  Scenario: Setup test data seed for feature
+    Given there are the following "subscriptions" records in the database
+      | storeName          | status |
+      | Careers Search One | ACTIVE |
+      | Careers Search Two | ACTIVE |
+    And there are the following "accounts" records in the database
+      | identity                          | password | status | subscription               |
+      | careers-search-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
+      | careers-search-two@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
+    And there are the following "careers" records in the database
+      | position                    | description        | expires    | subscription               |
+      | Careers Search Position A   | Automated position | DATE(120)  | {{ subscriptions[1]._id }} |
+      | Careers Search Position AA  | Automated position | DATE(0)    | {{ subscriptions[1]._id }} |
+      | Careers Search Position AAA | Automated position | DATE(-120) | {{ subscriptions[1]._id }} |
+      | Careers Search Position B   | Automated position | DATE(120)  | {{ subscriptions[1]._id }} |
+      | Careers Search Position C   | Automated position | DATE(240)  | {{ subscriptions[1]._id }} |
+      | Careers Search Position D   | Automated position | DATE(720)  | {{ subscriptions[1]._id }} |
+      | Careers Search Position A   | Automated position | DATE(240)  | {{ subscriptions[2]._id }} |
+      | Careers Search Position B   | Automated position | DATE(120)  | {{ subscriptions[2]._id }} |
+
+  Scenario: Requesting a list of careers options should return only records for that subscription
+    Given I am logged in with the "careers-search-one@venzra-test.io" account
+    When I make a GET request to the API endpoint "/api/careers" as "career"
+    Then there should be a 200 response from the "career" request that contains:
+      | list     | total |
+      | ARRAY[6] | 6     |
+    And the response from the "career" request has a "list" that contains rows:
+      | _id                  | position                    | description        | expires    | created   |
+      | {{ careers[3]._id }} | Careers Search Position AAA | Automated position | DATE[-120] | DATE_TIME |
+      | {{ careers[2]._id }} | Careers Search Position AA  | Automated position | DATE[0]    | DATE_TIME |
+      | {{ careers[1]._id }} | Careers Search Position A   | Automated position | DATE[120]  | DATE_TIME |
+      | {{ careers[4]._id }} | Careers Search Position B   | Automated position | DATE[120]  | DATE_TIME |
+      | {{ careers[5]._id }} | Careers Search Position C   | Automated position | DATE[240]  | DATE_TIME |
+      | {{ careers[6]._id }} | Careers Search Position D   | Automated position | DATE[720]  | DATE_TIME |

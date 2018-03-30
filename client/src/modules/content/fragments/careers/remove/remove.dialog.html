@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Confirm removal</h1>
+
+<div mat-dialog-content>
+    <p>Are you sure you want to remove the advertised position for <strong>{{ career.position }}</strong>?</p>
+</div>
+
+<div mat-dialog-actions fxLayoutAlign="end center">
+    <button mat-button (click)="close()" color="warn">Cancel</button>
+    <button mat-raised-button (click)="confirmRemoval()" color="warn">Confirm</button>
+</div>

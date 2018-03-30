@@ -1,0 +1,13 @@
+@import '~@angular/material/theming';
+
+.datepicker {
+    width: 33%;
+
+    @media ($mat-small) {
+        width: 50%;
+    }
+
+    @media ($mat-xsmall) {
+        width: 100%;
+    }
+}

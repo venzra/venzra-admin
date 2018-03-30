@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const fs = require('fs');
+const moment = require('moment');
 const path = require('path');
 const uuid = require('uuid');
 
@@ -67,14 +68,13 @@ class World {
                 const keywords = row[hash].match(/^(\S*)\((\S*)\)$/);
                 const keyword = keywords ? keywords[1] : row[hash];
 
-
                 switch (keyword) {
                     case 'DATE':
-                        const date = new Date();
-                        row[hash] = date.setHours(keywords[2]);
+                        row[hash] = moment().utc().add(keywords[2], 'hours').toISOString();
                         break;
                     case 'DATETIME':
-                        row[hash] = date.getTime();
+                        const date = new Date();
+                        row[hash] = date.toISOString();
                         break;
                     case 'PASSWORD':
                         const salt = crypto.createHash('sha1').update(uuid.v4()).digest('hex');
