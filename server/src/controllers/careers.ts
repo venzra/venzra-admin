@@ -29,7 +29,6 @@ export class CareerController extends AuthenticationController {
     }
 
     createCareer(req: Request, res: Response, next: NextFunction) {
-        console.log(req.body.expires);
         const career = new CareerModel({
             subscription: this.account.subscription._id,
             position: req.body.position,
@@ -120,7 +119,7 @@ export class CareerController extends AuthenticationController {
                     .aggregate([
                         { $match: searchParams },
                         { $sort: order },
-                        { $project: { position: 1, description: 1, expires: 1, created: 1 } }
+                        { $project: { position: 1, expires: 1, created: 1 } }
                     ])
                     .then((list) => res.status(200).send({ list, total }))
             )

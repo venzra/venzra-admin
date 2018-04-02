@@ -7,12 +7,12 @@ import { CareerService } from '../../../services/career.service';
 @Component({
     templateUrl: './remove.dialog.html'
 })
-export class RemoveCareerDialogComponent implements OnInit {
+export class CareerRemoveDialogComponent implements OnInit {
 
     public career: Career;
 
     constructor(
-        private dialogRef: MatDialogRef<RemoveCareerDialogComponent>,
+        private dialogRef: MatDialogRef<CareerRemoveDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private data: { career: Career },
         private snackbar: MatSnackBar,
         private careerService: CareerService

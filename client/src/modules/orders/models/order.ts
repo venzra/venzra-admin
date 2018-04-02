@@ -1,6 +1,5 @@
-import { HistoryModel } from '@venzra/models';
+import { Address, HistoryModel } from '@venzra/models';
 
-import { Address } from './address';
 import { Customer } from './customer';
 import { Item } from './item';
 import { Payment } from './payment';

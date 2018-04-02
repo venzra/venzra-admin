@@ -1,10 +1,31 @@
 <venzra-header>
     <h1>Find Us</h1>
     <p>Provide information to customers on where you are based and if you have any locations they are able to come and see your products.</p>
-    <!--<button mat-raised-button color="accent" routerLink="/content/locations/manage"><mat-icon>place</mat-icon> Locations</button>-->
+    <button mat-raised-button color="accent" routerLink="/content/locations/create"><mat-icon>add</mat-icon> Create new location</button>
 </venzra-header>
 
 <venzra-content>
+    <mat-expansion-panel (opened)="locationsOpen = true" (closed)="locationsOpen = false" [expanded]="locationsOpen && contentForm.controls['enabled'].value" [disabled]="!contentForm.controls['enabled'].value">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Displayed locations ({{ locations.total }})</mat-panel-title>
+            <mat-panel-description>Click to {{ locationsOpen ? 'collapse' : 'expand' }} and {{ locationsOpen ? 'hide' : 'view' }} location details</mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <p class="mat-subheading-2" *ngIf="!locations.total">No locations have been added.</p>
+
+        <mat-nav-list *ngIf="locations.total">
+            <mat-list-item [routerLink]="'/content/locations/' + location._id" *ngFor="let location of locations.list">
+                <mat-icon matListIcon color="accent" [ngSwitch]="location.usage">
+                    <ng-container *ngSwitchCase="'BUSINESS'">business</ng-container>
+                    <ng-container *ngSwitchCase="'STORE'">store</ng-container>
+                </mat-icon>
+                <h2 matLine>{{ location.displayName }}</h2>
+                <p matLine>{{ location.address | address }}</p>
+                <button mat-icon-button type="button" (click)="removeLocation($event, location)" color="warn"><mat-icon>delete</mat-icon></button>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-expansion-panel>
+
     <form (ngSubmit)="saveContent()" [formGroup]="contentForm">
         <mat-card>
             <mat-card-title>Find us location module</mat-card-title>

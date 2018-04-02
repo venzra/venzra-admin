@@ -14,8 +14,8 @@ Feature: Creation of a new career entry
 
   Scenario: An empty request to create a careers record fails validation
     Given I am logged in with the "careers-create-one@venzra-test.io" account
-    When I make an empty POST request to the API endpoint "/api/careers" as "careers"
-    Then there should be a 400 error from the "careers" request that contains:
+    When I make an empty POST request to the API endpoint "/api/careers" as "career"
+    Then there should be a 400 error from the "career" request that contains:
       | message           | detail                                                            |
       | Validation failed | ["position required", "description required", "expires required"] |
 

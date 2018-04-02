@@ -1,4 +1,5 @@
-import { Address } from './address';
+import { Address } from '@venzra/models';
+
 import { BankAccount } from './bank-account';
 import { LegalEntity } from './legal-entity';
 

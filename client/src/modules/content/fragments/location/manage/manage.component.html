@@ -1,0 +1,94 @@
+<venzra-header>
+    <h1>Manage positions</h1>
+    <p>Add or remove currently available positions from your careers page.</p>
+</venzra-header>
+
+<venzra-content>
+    <form (ngSubmit)="updateLocation()" [formGroup]="locationForm">
+        <mat-card>
+            <mat-card-title>Add a location</mat-card-title>
+            <mat-card-subtitle>Give customers some information about the location of your store or office.</mat-card-subtitle>
+
+            <mat-card-content fxLayout="column" fxLayoutGap="20px">
+                <mat-form-field>
+                    <input matInput placeholder="Display name" formControlName="displayName" required />
+                    <mat-error *ngIf="locationForm.get(['displayName']).hasError('required')">This field is required.</mat-error>
+                    <mat-error *ngIf="locationForm.get(['displayName']).hasError('maxlength')">Entered text is too long.</mat-error>
+                </mat-form-field>
+
+                <venzra-markdown-editor headers="simple">
+                    <mat-form-field>
+                        <textarea matInput venzraMarkdownInput placeholder="Description" formControlName="description" matTextareaAutosize matAutosizeMinRows="12" matAutosizeMaxRows="16" required></textarea>
+                        <mat-error *ngIf="locationForm.get(['description']).hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="locationForm.get(['description']).hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+                    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
+                        <div>
+                            <button mat-icon-button venzraControl format="subheading" matTooltip="Header text"><mat-icon>format_size</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+                            <button mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
+                            <button mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
+                            <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
+                        </div>
+                    </div>
+                </venzra-markdown-editor>
+
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <p>What kind of location is this best described as?</p>
+                    <mat-radio-group fxLayout="column" fxLayoutGap="10px" formControlName="usage">
+                        <mat-radio-button value="BUSINESS">A <strong>business office</strong> or warehouse, which would not be intended for customers to visit.</mat-radio-button>
+                        <mat-radio-button value="STORE">A high street <strong>store</strong> or permanent premise, allowing for sale and / or collection of goods.</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <ng-container formGroupName="address">
+                    <mat-form-field>
+                        <input matInput required placeholder="Location contact / manager" formControlName="addressee" />
+                        <mat-error *ngIf="locationForm.get(['address', 'addressee']).hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="locationForm.get(['address', 'addressee']).hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required placeholder="Address Line 1" formControlName="street" />
+                        <mat-hint>Street address, P.O. box, etc</mat-hint>
+                        <mat-error *ngIf="locationForm.get(['address', 'street']).hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="locationForm.get(['address', 'street']).hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput placeholder="Address Line 2" formControlName="building" />
+                        <mat-hint>Building, Floor, Suite, Apartment, etc</mat-hint>
+                        <mat-error *ngIf="locationForm.get(['address', 'building']).hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput placeholder="Town or City" formControlName="city" />
+                        <mat-error *ngIf="locationForm.get(['address', 'city']).hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required placeholder="County" formControlName="county" />
+                        <mat-error *ngIf="locationForm.get(['address', 'county']).hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="locationForm.get(['address', 'county']).hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput required placeholder="Postal code" formControlName="postalCode" />
+                        <mat-error *ngIf="locationForm.get(['address', 'postalCode']).hasError('required')">This field is required.</mat-error>
+                        <mat-error *ngIf="locationForm.get(['address', 'postalCode']).hasError('maxlength')">Entered text is too long.</mat-error>
+                    </mat-form-field>
+                </ng-container>
+
+                <venzra-image-upload target="/api/images" usage="feature" accept="image/png,image/jpeg">
+                    <p class="mat-caption">This is an optional image that can show visually the location customers can expect to see if they visit.</p>
+                    <input venzraImage placeholder="Feature image" formControlName="featureImage" />
+                </venzra-image-upload>
+            </mat-card-content>
+        </mat-card>
+
+        <div fxLayoutGap="20px" fxLayoutAlign="end">
+            <button mat-button color="warn" type="button" routerLink="/content/locations">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="locationForm.pristine || locationForm.invalid">Save</button>
+        </div>
+    </form>
+</venzra-content>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MAT_DATE_FORMATS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatSnackBarModule, MatTooltipModule, NativeDateModule } from '@angular/material';
+import { MAT_DATE_FORMATS, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatRadioModule, MatSnackBarModule, MatTooltipModule, NativeDateModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { ContentRoutingModule } from './routing.module';
@@ -18,13 +18,15 @@ import { ContentAboutComponent } from './fragments/about/about.component';
 import { ContentCareersComponent } from './fragments/careers/careers.component';
 import { ContentCareersCreateComponent } from './fragments/careers/create/create.component';
 import { ContentCareersManageComponent } from './fragments/careers/manage/manage.component';
-import { RemoveCareerDialogComponent } from './fragments/careers/remove/remove.dialog';
+import { CareerRemoveDialogComponent } from './fragments/careers/remove/remove.dialog';
 
 import { ContentContactComponent } from './fragments/contact/contact.component';
 import { ContentContactManageComponent } from './fragments/contact/manage.component';
 
 import { ContentLocationComponent } from './fragments/location/location.component';
-import { ContentLocationManageComponent } from './fragments/location/manage.component';
+import { ContentLocationCreateComponent } from './fragments/location/create/create.component';
+import { ContentLocationManageComponent } from './fragments/location/manage/manage.component';
+import { LocationRemoveDialogComponent } from './fragments/location/remove/remove.dialog';
 
 import { ContentPrivacyComponent } from './fragments/privacy/privacy.component';
 
@@ -52,10 +54,12 @@ const VENZRA_FORMAT = {
         ContentContactComponent,
         ContentContactManageComponent,
         ContentLocationComponent,
+        ContentLocationCreateComponent,
         ContentLocationManageComponent,
         ContentPrivacyComponent,
         ContentTermsComponent,
-        RemoveCareerDialogComponent
+        CareerRemoveDialogComponent,
+        LocationRemoveDialogComponent
     ],
     imports: [
         CommonModule,
@@ -69,6 +73,7 @@ const VENZRA_FORMAT = {
         MatInputModule,
         MatListModule,
         MatMenuModule,
+        MatRadioModule,
         MatSnackBarModule,
         MatTooltipModule,
         NativeDateModule,
@@ -83,7 +88,8 @@ const VENZRA_FORMAT = {
         { provide: MAT_DATE_FORMATS, useValue: VENZRA_FORMAT }
     ],
     entryComponents: [
-        RemoveCareerDialogComponent
+        CareerRemoveDialogComponent,
+        LocationRemoveDialogComponent
     ]
 })
 export class ContentModule {

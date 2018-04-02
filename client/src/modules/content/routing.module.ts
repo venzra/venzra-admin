@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { CareerListResolve, CareerRetrieveResolve, CareerService } from './services/career.service';
 import { ContentRetrieveResolve, ContentService } from './services/content.service';
+import { LocationListResolve, LocationRetrieveResolve, LocationService } from './services/location.service';
 import { SubscriptionRetrieveResolve } from './services/subscription.service';
 
 import { ContentListComponent } from './fragments/list/list.component';
@@ -13,7 +14,8 @@ import { ContentCareersManageComponent } from './fragments/careers/manage/manage
 import { ContentContactComponent } from './fragments/contact/contact.component';
 import { ContentContactManageComponent } from './fragments/contact/manage.component';
 import { ContentLocationComponent } from './fragments/location/location.component';
-import { ContentLocationManageComponent } from './fragments/location/manage.component';
+import { ContentLocationCreateComponent } from './fragments/location/create/create.component';
+import { ContentLocationManageComponent } from './fragments/location/manage/manage.component';
 import { ContentPrivacyComponent } from './fragments/privacy/privacy.component';
 import { ContentTermsComponent } from './fragments/terms/terms.component';
 
@@ -76,17 +78,22 @@ const routes: Routes = [
         component: ContentLocationComponent,
         data: { usage: 'location' },
         resolve: {
+            locations: LocationListResolve,
             content: ContentRetrieveResolve,
             subscription: SubscriptionRetrieveResolve
         }
     },
-    // {
-    //     path: 'locations/manage',
-    //     component: ContentLocationManageComponent,
-    //     resolve: {
-    //         subscription: SubscriptionRetrieveResolve
-    //     }
-    // },
+    {
+        path: 'locations/create',
+        component: ContentLocationCreateComponent
+    },
+    {
+        path: 'locations/:locationId',
+        component: ContentLocationManageComponent,
+        resolve: {
+            location: LocationRetrieveResolve
+        }
+    },
     // {
     //     path: 'privacy',
     //     component: ContentPrivacyComponent,
@@ -118,6 +125,9 @@ const routes: Routes = [
         CareerListResolve,
         ContentService,
         ContentRetrieveResolve,
+        LocationService,
+        LocationRetrieveResolve,
+        LocationListResolve,
         SubscriptionRetrieveResolve
     ]
 })

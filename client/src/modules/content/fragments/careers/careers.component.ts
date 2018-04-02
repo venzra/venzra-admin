@@ -11,7 +11,7 @@ import { AddonService } from '../../services/addon.service';
 import { CareerService } from '../../services/career.service';
 import { ContentService } from '../../services/content.service';
 
-import { RemoveCareerDialogComponent } from './remove/remove.dialog';
+import { CareerRemoveDialogComponent } from './remove/remove.dialog';
 
 @Component({
     templateUrl: './careers.component.html',
@@ -65,7 +65,7 @@ export class ContentCareersComponent implements OnInit {
 
     removeCareer(event: Event, career: Career) {
         event.stopPropagation();
-        const dialogRef = this.dialog.open(RemoveCareerDialogComponent, { width: '90%', maxWidth: '640px', disableClose: true, data: { career } });
+        const dialogRef = this.dialog.open(CareerRemoveDialogComponent, { width: '90%', maxWidth: '640px', disableClose: true, data: { career } });
         dialogRef.afterClosed().subscribe((reload = false) => reload ? this.careerService.findAll().then((careers) => this.careers = careers) : null);
     }
 
