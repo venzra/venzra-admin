@@ -1,5 +1,5 @@
 @Subscription @SubscriptionAddons
-Feature: Creation of a new subscription gateway
+Feature: Management of addons for a subscription
 
   @Seed
   Scenario: Setup test data seed for feature

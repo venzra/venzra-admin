@@ -32,6 +32,7 @@ export class SubscriptionController extends AuthenticationController {
         this.router.patch('/', this.validate.bind(this), this.updateSettings.bind(this), this.getSubscription.bind(this));
         this.router.get('/plans', this.validate.bind(this), this.getPlans.bind(this));
         this.router.patch('/add-ons', this.validate.bind(this), this.enableAddon.bind(this), this.getSubscription.bind(this));
+        this.router.post('/contact', this.validate.bind(this), this.createContact.bind(this), this.getSubscription.bind(this));
         this.router.post('/payment', this.validate.bind(this), this.attachPayment.bind(this), this.getSubscription.bind(this));
         this.router.post('/gateway', this.validate.bind(this), this.attachGateway.bind(this), this.getSubscription.bind(this));
     }
@@ -75,6 +76,19 @@ export class SubscriptionController extends AuthenticationController {
 
         subscription.save()
             .then(() => subscription.update({ $push: { addons: { $each: [], $sort: { name: 1 } } } }))
+            .then(() => next())
+            .catch((error) => next(error));
+    }
+
+    createContact(req: Request, res: Response, next: NextFunction) {
+        const subscription = this.account.subscription;
+
+        subscription.contact = {
+            recipient: req.body.recipient,
+            fields: req.body.fields
+        };
+
+        subscription.save()
             .then(() => next())
             .catch((error) => next(error));
     }

@@ -21,7 +21,7 @@ import { ContentCareersManageComponent } from './fragments/careers/manage/manage
 import { CareerRemoveDialogComponent } from './fragments/careers/remove/remove.dialog';
 
 import { ContentContactComponent } from './fragments/contact/contact.component';
-import { ContentContactManageComponent } from './fragments/contact/manage.component';
+import { ContentContactManageComponent } from './fragments/contact/manage/manage.component';
 
 import { ContentLocationComponent } from './fragments/location/location.component';
 import { ContentLocationCreateComponent } from './fragments/location/create/create.component';

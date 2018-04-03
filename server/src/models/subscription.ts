@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 import { AddonSchema, IAddonModel } from './objects/addons';
 import { GatewaySchema, IGatewayModel } from './objects/gateway';
 import { FeeSchema, IFeeModel } from './objects/transaction';
+import { ContactSchema, IContactModel } from './objects/contact';
 import { IThemeModel, ThemeSchema } from './objects/theme';
 import { ISubscriptionPaymentModel, SubscriptionPaymentSchema } from './objects/subscription-payment';
 
@@ -15,6 +16,7 @@ interface ISubscriptionModel extends Document {
     icon?: string;
     logo?: string;
     theme?: IThemeModel;
+    contact?: IContactModel;
     payment?: ISubscriptionPaymentModel;
     gateway?: IGatewayModel;
     transactions: IFeeModel;
@@ -50,6 +52,9 @@ const SubscriptionSchema: Schema = new Schema({
     logo: {
         type: Schema.Types.ObjectId,
         ref: 'images'
+    },
+    contact: {
+        type: ContactSchema
     },
     theme: {
         type: ThemeSchema

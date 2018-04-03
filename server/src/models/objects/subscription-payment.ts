@@ -11,13 +11,21 @@ interface ISubscriptionPaymentModel {
 }
 
 const SubscriptionPaymentSchema: Schema = new Schema({
-    package: String,
-    customer: String,
-    subscription: String,
+    package: {
+        type: String
+    },
+    customer: {
+        type: String
+    },
+    subscription: {
+        type: String
+    },
     price: {
         type: ChargesSchema
     },
-    term: Date,
+    term: {
+        type: Date
+    },
     status: {
         type: String,
         enum: ['TRIALING', 'ACTIVE', 'PAST_DUE', 'UNPAID', 'CANCELED'],

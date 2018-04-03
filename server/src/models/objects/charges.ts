@@ -7,9 +7,15 @@ interface IChargesModel {
 }
 
 const ChargesSchema: Schema = new Schema({
-    currency: String,
-    quantity: Number,
-    value: Number
+    currency: {
+        type: String
+    },
+    quantity: {
+        type: Number
+    },
+    value: {
+        type: Number
+    }
 }, { _id: false });
 
 export { IChargesModel, ChargesSchema };

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CareerListResolve, CareerRetrieveResolve, CareerService } from './services/career.service';
+import { ContactService } from './services/contact.service';
 import { ContentRetrieveResolve, ContentService } from './services/content.service';
 import { LocationListResolve, LocationRetrieveResolve, LocationService } from './services/location.service';
 import { SubscriptionRetrieveResolve } from './services/subscription.service';
@@ -12,7 +13,7 @@ import { ContentCareersComponent } from './fragments/careers/careers.component';
 import { ContentCareersCreateComponent } from './fragments/careers/create/create.component';
 import { ContentCareersManageComponent } from './fragments/careers/manage/manage.component';
 import { ContentContactComponent } from './fragments/contact/contact.component';
-import { ContentContactManageComponent } from './fragments/contact/manage.component';
+import { ContentContactManageComponent } from './fragments/contact/manage/manage.component';
 import { ContentLocationComponent } from './fragments/location/location.component';
 import { ContentLocationCreateComponent } from './fragments/location/create/create.component';
 import { ContentLocationManageComponent } from './fragments/location/manage/manage.component';
@@ -66,13 +67,13 @@ const routes: Routes = [
             subscription: SubscriptionRetrieveResolve
         }
     },
-    // {
-    //     path: 'contact/manage',
-    //     component: ContentContactManageComponent,
-    //     resolve: {
-    //         subscription: SubscriptionRetrieveResolve
-    //     }
-    // },
+    {
+        path: 'contact/manage',
+        component: ContentContactManageComponent,
+        resolve: {
+            subscription: SubscriptionRetrieveResolve
+        }
+    },
     {
         path: 'locations',
         component: ContentLocationComponent,
@@ -123,6 +124,7 @@ const routes: Routes = [
         CareerService,
         CareerRetrieveResolve,
         CareerListResolve,
+        ContactService,
         ContentService,
         ContentRetrieveResolve,
         LocationService,

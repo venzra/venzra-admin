@@ -75,7 +75,9 @@ export const errorHandler = (err: IVenzraError, req: Request, res: Response, nex
             logger.info(err.message);
             const detail = new Set();
             for (const key of Object.keys(err.errors)) {
-                detail.add(`${err.errors[key].path} ${err.errors[key].kind}`.trim());
+                if (err.errors[key].kind) {
+                    detail.add(`${err.errors[key].path} ${err.errors[key].kind}`.trim());
+                }
             }
             res.status(400).send({ message: 'Validation failed', detail: [...detail] });
             break;
