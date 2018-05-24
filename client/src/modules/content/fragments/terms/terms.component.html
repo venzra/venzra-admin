@@ -21,16 +21,16 @@
                     </mat-form-field>
                     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
                         <div>
-                            <button mat-icon-button [matMenuTriggerFor]="formatSize" matTooltip="Header text"><mat-icon>format_size</mat-icon></button>
+                            <button type="button" mat-icon-button [matMenuTriggerFor]="formatSize" matTooltip="Header text"><mat-icon>format_size</mat-icon></button>
                             <mat-menu #formatSize="matMenu">
-                                <button mat-menu-item venzraControl format="title"><span class="mat-headline">Title</span></button>
-                                <button mat-menu-item venzraControl format="heading"><span class="mat-title">Heading</span></button>
-                                <button mat-menu-item venzraControl format="subheading"><span class="mat-subheading-1">Sub-heading</span></button>
+                                <button type="button" mat-menu-item venzraControl format="title"><span class="mat-headline">Title</span></button>
+                                <button type="button" mat-menu-item venzraControl format="heading"><span class="mat-title">Heading</span></button>
+                                <button type="button" mat-menu-item venzraControl format="subheading"><span class="mat-subheading-1">Sub-heading</span></button>
                             </mat-menu>
-                            <button mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
-                            <button mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
-                            <button mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
-                            <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
+                            <button type="button" mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+                            <button type="button" mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
+                            <button type="button" mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
+                            <button type="button" mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
                         </div>
                     </div>
                 </venzra-markdown-editor>

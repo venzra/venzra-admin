@@ -27,8 +27,8 @@ Feature: Retrieve information for a locations
       | _id       | displayName          | description        | address | featureImage        | usage    | created   | updated   |
       | OBJECT_ID | Locations Retrieve A | Automated location | OBJECT  | {{ images[1]._id }} | BUSINESS | DATE_TIME | DATE_TIME |
     And the response path "address" from the "location" request contains:
-      | addressee        | street | county | postalCode | country |
-      | Location manager | Street | County | po573ox    | GB      |
+      | _id       | addressee        | street | county | postalCode | country |
+      | OBJECT_ID | Location manager | Street | County | PO573OX    | GB      |
 
   Scenario: Another subscription user cannot retrieve a record that does not belong to them
     Given I am logged in with the "locations-retrieve-two@venzra-test.io" account

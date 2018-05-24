@@ -18,6 +18,8 @@ interface IOrderModel extends Document {
     payment: IOrderPaymentModel;
     history?: IHistoryModel[];
     status?: string;
+    created: Date;
+    updated: Date;
 }
 
 const OrderSchema: Schema = new Schema({

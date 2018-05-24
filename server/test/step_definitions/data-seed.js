@@ -15,6 +15,7 @@ Given(/^there are the following "([^"]*)" records in the database(?: (in series)
         } else {
             return Promise
                 .all(dataset.map((row) => {
+                    Object.keys(row).forEach((key) => (row[key] === null || row[key] === '') && delete row[key]);
                     const creation = new mongoose.models[collection](row);
                     return creation.save();
                 }))

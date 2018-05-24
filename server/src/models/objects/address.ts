@@ -43,6 +43,7 @@ const AddressSchema: Schema = new Schema({
         type: String,
         required: true,
         trim: true,
+        uppercase: true,
         maxlength: 12
     },
     country: {
@@ -51,10 +52,12 @@ const AddressSchema: Schema = new Schema({
         trim: true,
         maxlength: 50
     }
-}, { _id: false });
+});
 
-AddressSchema.pre('validate', function (next) {
-    this.postalCode = this.postalCode.trim().replace(/\s+/g, '');
+AddressSchema.pre('validate', function (this: IAddressModel, next: any) {
+    if (this.postalCode) {
+        this.postalCode = this.postalCode.trim().replace(/\s+/g, '');
+    }
     next();
 });
 

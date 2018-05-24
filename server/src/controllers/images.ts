@@ -38,11 +38,11 @@ export class ImagesController extends AuthenticationController {
 
         switch (req.query.usage) {
             case 'feature':
-                image = image.resize(1024, 500).crop(sharp.gravity.center).jpeg({ quality: 60 });
+                image = image.resize(1024, 500).crop(sharp.gravity.center).jpeg({ quality: 60, progressive: true });
                 req.headers['content-type'] = 'image/jpeg';
                 break;
             case 'promotion':
-                image = image.resize(512, 512).crop(sharp.gravity.center).jpeg({ quality: 75 });
+                image = image.resize(512, 512).crop(sharp.gravity.center).jpeg({ quality: 75, progressive: true });
                 req.headers['content-type'] = 'image/jpeg';
                 break;
             case 'logo':

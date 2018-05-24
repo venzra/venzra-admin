@@ -12,6 +12,8 @@ interface ICartModel extends Document {
     items: ICartItem[];
     shipping: IShippingModel;
     value?: number;
+    created: Date;
+    updated: Date;
 }
 
 const CartSchema: Schema = new Schema({
@@ -55,8 +57,8 @@ const CartSchema: Schema = new Schema({
     }
 });
 
-CartSchema.pre('save', function (next) {
-    this.updated = Date.now();
+CartSchema.pre('save', function (this: ICartModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

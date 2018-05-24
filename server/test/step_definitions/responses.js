@@ -14,7 +14,7 @@ const checkValues = (expected, actual, exact = true) => {
     expectedKeys.map((key) => {
         let check;
         if (typeof expected[key] === 'string') {
-            check = expected[key].match(/\[(-?\d+)\]/) || expected[key];
+            check = expected[key].match(/\[([^\]]*)\]/) || expected[key];
             if (check instanceof Array) {
                 expected[key] = expected[key].replace(check[0], '');
             }
@@ -24,19 +24,19 @@ const checkValues = (expected, actual, exact = true) => {
 
         switch (expected[key]) {
             case 'YEAR':
-                date = moment().utc().add(check[1], 'hours').toDate();
+                date = moment().add(check[1], 'hours').toDate();
                 expect(actual[key]).to.equal(date.getFullYear());
                 break;
             case 'MONTH':
-                date = moment().utc().add(check[1], 'hours').toDate();
+                date = moment().add(check[1], 'hours').toDate();
                 expect(actual[key]).to.equal(date.getMonth() + 1);
                 break;
             case 'DAY':
-                date = moment().utc().add(check[1], 'hours').toDate();
+                date = moment().add(check[1], 'hours').toDate();
                 expect(actual[key]).to.equal(date.getDate());
                 break;
             case 'DATE':
-                date = moment().utc().endOf('day').add(check[1], 'hours').toDate();
+                date = moment().endOf('day').add(check[1], 'hours').toDate();
                 expect(actual[key]).to.equal(date.toISOString());
                 break;
             case 'OBJECT_ID':
@@ -45,12 +45,18 @@ const checkValues = (expected, actual, exact = true) => {
             case 'DATE_TIME':
                 expect(actual[key]).to.match(/^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/);
                 break;
+            case 'STRING':
+                expect(actual[key]).to.be.a('string');
+                break;
             case 'ARRAY':
                 expect(actual[key]).to.be.an.instanceof(Array);
                 expect(actual[key]).to.have.length(check[1]);
                 break;
             case 'OBJECT':
                 expect(actual[key]).to.be.an('object');
+                break;
+            case 'REGEX':
+                expect(actual[key]).to.match(new RegExp(check[1]));
                 break;
             default:
                 expect(actual[key]).to.deep.equal(expected[key]);

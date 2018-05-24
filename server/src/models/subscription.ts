@@ -2,25 +2,28 @@ import { Schema, Document, Model, model } from 'mongoose';
 import { v4 } from 'uuid';
 
 import { AddonSchema, IAddonModel } from './objects/addons';
+import { ContactSchema, IContactModel } from './objects/contact';
 import { GatewaySchema, IGatewayModel } from './objects/gateway';
 import { FeeSchema, IFeeModel } from './objects/transaction';
-import { ContactSchema, IContactModel } from './objects/contact';
 import { IThemeModel, ThemeSchema } from './objects/theme';
 import { ISubscriptionPaymentModel, SubscriptionPaymentSchema } from './objects/subscription-payment';
 
 interface ISubscriptionModel extends Document {
     storeName?: string;
-    addons: IAddonModel[];
+    features: string[];
+    addons?: IAddonModel[];
     strapline?: string;
     domainName?: string;
     icon?: string;
     logo?: string;
     theme?: IThemeModel;
-    contact?: IContactModel;
     payment?: ISubscriptionPaymentModel;
     gateway?: IGatewayModel;
     transactions: IFeeModel;
+    contact: IContactModel;
     status?: string;
+    created: Date;
+    updated: Date;
 }
 
 const SubscriptionSchema: Schema = new Schema({
@@ -53,9 +56,6 @@ const SubscriptionSchema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'images'
     },
-    contact: {
-        type: ContactSchema
-    },
     theme: {
         type: ThemeSchema
     },
@@ -68,6 +68,9 @@ const SubscriptionSchema: Schema = new Schema({
     transactions: {
         type: FeeSchema,
         default: FeeSchema
+    },
+    contact: {
+        type: ContactSchema
     },
     status: {
         type: String,
@@ -90,14 +93,14 @@ const SubscriptionSchema: Schema = new Schema({
 SubscriptionSchema.index({ storeName: 1 }, { unique: true });
 SubscriptionSchema.index({ domainName: 1 }, { unique: true });
 
-SubscriptionSchema.pre('validate', function (next) {
+SubscriptionSchema.pre('validate', function (this: ISubscriptionModel, next: any) {
     this.storeName = this.storeName || `store ${v4().substr(0, 8)}`;
     this.domainName = (this.storeName).replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
     next();
 });
 
-SubscriptionSchema.pre('save', function (next) {
-    this.updated = Date.now();
+SubscriptionSchema.pre('save', function (this: ISubscriptionModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

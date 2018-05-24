@@ -53,7 +53,7 @@ Feature: Creation of images to be used by subscriptions and stored on S3
       | 1024  | 512    | png    |
     Then there should be a 200 response from the "image" request that contains:
       | _id       | name         | usage   | size  |
-      | OBJECT_ID | test-one.png | feature | 49135 |
+      | OBJECT_ID | test-one.png | feature | 49058 |
 
   Scenario: Sending a valid request to create a "promotion" image will resize and save the image
     Given I am logged in with the "images-create-one@venzra-test.io" account
@@ -63,7 +63,7 @@ Feature: Creation of images to be used by subscriptions and stored on S3
       | 512   | 512    | png    |
     Then there should be a 200 response from the "image" request that contains:
       | _id       | name         | usage     | size  |
-      | OBJECT_ID | test-two.png | promotion | 33373 |
+      | OBJECT_ID | test-two.png | promotion | 32896 |
 
   Scenario: Sending a valid request to create a "logo" image will resize and save the image
     Given I am logged in with the "images-create-one@venzra-test.io" account

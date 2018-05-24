@@ -5,6 +5,8 @@ interface IImageModel extends Document {
     name: string;
     usage: string;
     size: number;
+    created: Date;
+    updated: Date;
 }
 
 const ImageSchema: Schema = new Schema({

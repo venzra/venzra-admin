@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const nock = require('nock');
+const querystring = require('querystring');
 
 const { Given, When, Then } = require('cucumber');
 const { expect } = require('chai');
@@ -43,6 +44,11 @@ const prepareMock = (uri, target, type, status, file, body) => {
 Given(/^there is a (HEAD|POST|PUT|GET) consumer at "([^"]*)"(?: for "([^"]*)")? that will return(?: "([^"]*)" with)? status (\d+)$/, function (type, uri, target, file, status) {
     target = target ? this.parseTemplateString(target) : target;
     return this.addMock(prepareMock(uri, target, type, status, file));
+});
+
+Given(/^there is a (POST|GET) consumer at "([^"]*)"(?: for "([^"]*)")? that will return(?: "([^"]*)" with)? status (\d+) when called with:$/, function (type, uri, target, file, status, requestData) {
+    requestData = querystring.stringify(this.getHashes(requestData)[0]);
+    return this.addMock(prepareMock(uri, target, type, status, file, requestData));
 });
 
 Given(/^I show the available history$/, function () {

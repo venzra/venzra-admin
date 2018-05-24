@@ -7,6 +7,8 @@ interface IShippingModel extends Document {
     cartMaximum: number;
     currentPrice: number;
     shipmentTime: number;
+    created: Date;
+    updated: Date;
 }
 
 const ShippingSchema: Schema = new Schema({
@@ -60,8 +62,8 @@ const ShippingSchema: Schema = new Schema({
     }
 });
 
-ShippingSchema.pre('save', function (next) {
-    this.updated = Date.now();
+ShippingSchema.pre('save', function (this: IShippingModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

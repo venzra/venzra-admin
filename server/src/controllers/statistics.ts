@@ -29,7 +29,7 @@ export class StatisticsController extends AuthenticationController {
     highlights(req: Request, res: Response, next: NextFunction) {
         const subscription = this.account.subscription._id;
         const numberOfDays = 30;
-        const startDate = moment().utc().startOf('day').subtract(numberOfDays - 1, 'days').toDate();
+        const startDate = moment().startOf('day').subtract(numberOfDays - 1, 'days').toDate();
 
         Promise
             .all([
@@ -78,7 +78,7 @@ export class StatisticsController extends AuthenticationController {
     orderVolume(req: Request, res: Response, next: NextFunction) {
         const subscription = this.account.subscription._id;
         const numberOfDays = 30;
-        const startDate = moment().utc().startOf('day').subtract(numberOfDays - 1, 'days').toDate();
+        const startDate = moment().startOf('day').subtract(numberOfDays - 1, 'days').toDate();
 
         OrderModel
             .aggregate([

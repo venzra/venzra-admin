@@ -39,14 +39,28 @@ class World {
     parseTemplateString(string) {
         let template = string.match(/{{\s?(\S*)\s?}}/);
         if (template !== null) {
+            let history;
             let target = template[1].split('.');
             let request = target.shift();
             let parts = request.match(/\[(\d+)\]/);
+
             if (parts) {
-                let history = this.getHistory(request.replace(parts[0], ''), parts[1] - 1);
-                target.forEach((field) => history = history[field]);
-                string = string.replace(template[0], history);
+                history = this.getHistory(request.replace(parts[0], ''), parts[1] - 1);
+            } else {
+                history = this.getHistory(request)['response'];
             }
+
+            target.forEach((field) => {
+                let subArray = field.match(/\[(\d+)\]/);
+                if(subArray) {
+                    field = field.replace(subArray[0], '');
+                    history = history[field][subArray[1] - 1];
+                } else {
+                    history = history[field]
+                }
+            });
+
+            string = string.replace(template[0], history);
             string = this.parseTemplateString(string);
         }
         return string;
@@ -70,7 +84,7 @@ class World {
 
                 switch (keyword) {
                     case 'DATE':
-                        row[hash] = moment().utc().add(keywords[2], 'hours').toISOString();
+                        row[hash] = moment().add(keywords[2], 'hours').toISOString();
                         break;
                     case 'DATETIME':
                         const date = new Date();
@@ -101,7 +115,7 @@ class World {
     }
 
     performGet(endpoint, storage) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             let request = this.agent.get(this.parseTemplateString(endpoint));
 
             this.headers.forEach((header) => {
@@ -131,12 +145,17 @@ class World {
                 }
             });
 
-            request.end(resolve);
+            request.end((err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(res);
+            });
         });
     }
 
     performPost(endpoint, data, storage) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             let request = this.agent.post(this.parseTemplateString(endpoint));
 
             this.headers.forEach((header) => {
@@ -168,12 +187,17 @@ class World {
                 }
             });
 
-            request.end(resolve);
+            request.end((err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(res);
+            });
         });
     }
 
     performPatch(endpoint, data, storage) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             let request = this.agent.patch(this.parseTemplateString(endpoint));
 
             this.headers.forEach((header) => {
@@ -205,12 +229,17 @@ class World {
                 }
             });
 
-            request.end(resolve);
+            request.end((err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(res);
+            });
         });
     }
 
     performDelete(endpoint, storage) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             let request = this.agent.delete(this.parseTemplateString(endpoint));
 
             this.headers.forEach((header) => {
@@ -240,7 +269,12 @@ class World {
                 }
             });
 
-            request.end(resolve);
+            request.end((err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(res);
+            });
         });
     }
 

@@ -3,6 +3,7 @@ import { ISubscriptionModel } from './subscription';
 import { AccountPasswordSchema } from './objects/password';
 import { AccountAccessSchema } from './objects/account-access';
 import { AccountBlockedSchema } from './objects/account-blocked';
+import { AddressSchema, IAddressModel } from './objects/address';
 
 const EMAIL_REGEX = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/;
 
@@ -28,9 +29,13 @@ interface ICustomerModel extends Document {
     subscription?: ISubscriptionModel;
     identity?: string;
     password?: ICustomerPassword;
+    addresses: Array<IAddressModel>;
+    primaryAddress: string;
     access?: ICustomerLogin;
     lock?: ICustomerFailure;
     status?: string;
+    created: Date;
+    updated: Date;
 }
 
 const CustomerSchema: Schema = new Schema({
@@ -50,6 +55,13 @@ const CustomerSchema: Schema = new Schema({
     },
     password: {
         type: AccountPasswordSchema
+    },
+    addresses: {
+        type: [AddressSchema],
+        default: []
+    },
+    primaryAddress: {
+        type: Schema.Types.ObjectId
     },
     access: {
         type: AccountAccessSchema
@@ -78,8 +90,8 @@ const CustomerSchema: Schema = new Schema({
 
 CustomerSchema.index({ subscription: 1, identity: 1 }, { unique: true });
 
-CustomerSchema.pre('save', function (next) {
-    this.updated = Date.now();
+CustomerSchema.pre('save', function (this: ICustomerModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

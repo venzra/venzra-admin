@@ -2,6 +2,9 @@ import { Schema, Document, Model, model } from 'mongoose';
 
 interface IContentModel extends Document {
     content: string;
+    usage: string;
+    created: Date;
+    updated: Date;
 }
 
 const ContentSchema: Schema = new Schema({
@@ -35,8 +38,8 @@ const ContentSchema: Schema = new Schema({
 
 ContentSchema.index({ subscription: 1, usage: 1 }, { unique: true });
 
-ContentSchema.pre('save', function (next) {
-    this.updated = Date.now();
+ContentSchema.pre('save', function (this: IContentModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

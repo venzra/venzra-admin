@@ -5,6 +5,7 @@ import { ICategoryModel } from './category';
 
 interface IProductModel extends Document {
     subscription?: string;
+    slug: string;
     code: string;
     displayName: string;
     previousPrice: number;
@@ -12,6 +13,8 @@ interface IProductModel extends Document {
     categories: ICategoryModel[];
     history?: IHistoryModel[];
     status?: string;
+    created: Date;
+    updated: Date;
 }
 
 const ProductSchema: Schema = new Schema({
@@ -103,15 +106,17 @@ ProductSchema.index({ displayName: 1 });
 ProductSchema.index({ currentPrice: 1 });
 ProductSchema.index({ status: 1 });
 
-ProductSchema.pre('validate', function (next) {
+ProductSchema.index({ code: 'text', displayName: 'text', description: 'text' }, { weights: { displayName: 10, description: 2 } });
+
+ProductSchema.pre('validate', function (this: IProductModel, next: any) {
     this.slug = (this.displayName || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
     this.previousPrice = this.previousPrice ? Math.floor(this.previousPrice) : this.previousPrice;
     this.currentPrice = this.currentPrice ? Math.floor(this.currentPrice) : this.currentPrice;
     next();
 });
 
-ProductSchema.pre('save', function (next) {
-    this.updated = Date.now();
+ProductSchema.pre('save', function (this: IProductModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

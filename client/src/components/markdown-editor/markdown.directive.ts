@@ -1,5 +1,4 @@
 import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Directive({
     selector: '[venzraMarkdown]',

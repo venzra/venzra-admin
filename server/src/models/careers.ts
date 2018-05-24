@@ -3,7 +3,11 @@ import moment = require('moment');
 import { Schema, Document, Model, model } from 'mongoose';
 
 interface ICareerModel extends Document {
-    content: string;
+    position: string;
+    description: string;
+    expires: Date;
+    created: Date;
+    updated: Date;
 }
 
 const CareerSchema: Schema = new Schema({
@@ -41,15 +45,15 @@ const CareerSchema: Schema = new Schema({
     }
 });
 
-CareerSchema.pre('validate', function (next) {
+CareerSchema.pre('validate', function (this: ICareerModel, next: any) {
     if (this.expires) {
-        this.expires = moment(this.expires).utc().endOf('day').toDate();
+        this.expires = moment(this.expires).endOf('day').toDate();
     }
     next();
 });
 
-CareerSchema.pre('save', function (next) {
-    this.updated = Date.now();
+CareerSchema.pre('save', function (this: ICareerModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

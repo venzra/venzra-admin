@@ -3,6 +3,8 @@ import { AddressSchema } from './objects/address';
 
 interface ILocationModel extends Document {
     content: string;
+    created: Date;
+    updated: Date;
 }
 
 const LocationSchema: Schema = new Schema({
@@ -50,8 +52,8 @@ const LocationSchema: Schema = new Schema({
     }
 });
 
-LocationSchema.pre('save', function (next) {
-    this.updated = Date.now();
+LocationSchema.pre('save', function (this: ILocationModel, next) {
+    this.updated = new Date();
     next();
 });
 

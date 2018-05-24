@@ -40,8 +40,8 @@ Feature: Update locations information for display and modification
       | _id       | displayName      | description         | address | featureImage        | usage | created   | updated   |
       | OBJECT_ID | Location updated | Updated description | OBJECT  | {{ images[1]._id }} | STORE | DATE_TIME | DATE_TIME |
     And the response path "address" from the "location" request contains:
-      | addressee         | street   | county   | postalCode | country |
-      | Regional director | P.O. Box | Province | te373od    | GB      |
+      | _id       | addressee         | street   | county   | postalCode | country |
+      | OBJECT_ID | Regional director | P.O. Box | Province | TE373OD    | GB      |
 
   Scenario: It is not possible for a user of another subscription to alter a location that does not belong to them
     Given I am logged in with the "locations-update-two@venzra-test.io" account

@@ -75,13 +75,13 @@ CategorySchema.index({ subscription: 1, slug: 1 }, { unique: true });
 
 CategorySchema.index({ name: 1 });
 
-CategorySchema.pre('validate', function (next) {
+CategorySchema.pre('validate', function (this: ICategoryModel, next: any) {
     this.slug = (this.name || '').replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-');
     next();
 });
 
-CategorySchema.pre('save', function (next) {
-    this.updated = Date.now();
+CategorySchema.pre('save', function (this: ICategoryModel, next: any) {
+    this.updated = new Date();
     next();
 });
 

@@ -14,7 +14,7 @@
                 <mat-checkbox formControlName="enabled">Enable this feature on your site.</mat-checkbox>
                 <p class="mat-caption">There is currently no cost to enable this feature, should we introduce a cost for this it would only apply when you choose to activate. If you have already activated we will not add any cost to your subscription unless you were to de-activate and then re-activate at a later date.</p>
 
-                <venzra-markdown-editor headers="simple">
+                <venzra-markdown-editor headers="full">
                     <mat-form-field>
                         <textarea matInput venzraMarkdownInput placeholder="Page content" formControlName="content" matTextareaAutosize matAutosizeMinRows="20" matAutosizeMaxRows="30" [required]="contentForm.controls['enabled'].value"></textarea>
                         <mat-error *ngIf="contentForm.controls['content'].hasError('required')">This field is required.</mat-error>
@@ -22,11 +22,16 @@
                     </mat-form-field>
                     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
                         <div>
-                            <button mat-icon-button venzraControl format="subheading" matTooltip="Header text"><mat-icon>format_size</mat-icon></button>
-                            <button mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
-                            <button mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
-                            <button mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
-                            <button mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
+                            <button type="button" mat-icon-button [matMenuTriggerFor]="formatSize" matTooltip="Header text"><mat-icon>format_size</mat-icon></button>
+                            <mat-menu #formatSize="matMenu">
+                                <button type="button" mat-menu-item venzraControl format="title"><span class="mat-headline">Title</span></button>
+                                <button type="button" mat-menu-item venzraControl format="heading"><span class="mat-title">Heading</span></button>
+                                <button type="button" mat-menu-item venzraControl format="subheading"><span class="mat-subheading-1">Sub-heading</span></button>
+                            </mat-menu>
+                            <button type="button" mat-icon-button venzraControl format="bold" matTooltip="Bold"><mat-icon>format_bold</mat-icon></button>
+                            <button type="button" mat-icon-button venzraControl format="italic" matTooltip="Italics"><mat-icon>format_italic</mat-icon></button>
+                            <button type="button" mat-icon-button venzraControl format="bullets" matTooltip="Bullet list"><mat-icon>format_list_bulleted</mat-icon></button>
+                            <button type="button" mat-icon-button venzraControl format="link" matTooltip="Page link"><mat-icon>insert_link</mat-icon></button>
                         </div>
                     </div>
                 </venzra-markdown-editor>
