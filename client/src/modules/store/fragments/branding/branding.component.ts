@@ -50,11 +50,7 @@ export class BrandingComponent implements OnInit {
         this.layout.title = 'Settings';
         this.subscription = this.route.snapshot.data.subscription;
 
-        if (!this.subscription.theme) {
-            this.subscription.theme = { color: 'indigo' };
-        } else if (!this.subscription.theme.color) {
-            this.subscription.theme.color = 'indigo';
-        }
+        this.loadTheme();
 
         this.settingsForm = this.forms.group({
             storeName: [this.subscription.storeName, [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
@@ -70,6 +66,14 @@ export class BrandingComponent implements OnInit {
         this.settingsForm.get('storeName').valueChanges.subscribe((value) => this.settingsForm.get('domain').reset(this.getDomain(value)));
     }
 
+    loadTheme(): void {
+        if (!this.subscription.theme) {
+            this.subscription.theme = { color: 'indigo' };
+        } else if (!this.subscription.theme.color) {
+            this.subscription.theme.color = 'indigo';
+        }
+    }
+
     getDomain(subDomain: string): string {
         return `https://${subDomain.replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-').toLowerCase()}.venzra.io`;
     }
@@ -77,7 +81,10 @@ export class BrandingComponent implements OnInit {
     updateSettings() {
         this.subscriptionService
             .updateSettings(this.settingsForm.controls)
-            .then((subscription) => this.settingsForm.reset(subscription))
+            .then((subscription) => this.subscription = subscription)
+            .then(() => this.loadTheme())
+            .then(() => this.settingsForm.reset(this.subscription))
+            .then(() => this.settingsForm.get('domain').reset(this.getDomain(this.subscription.storeName)))
             .then(() => this.settingsForm.markAsPristine())
             .catch((error: HttpErrorResponse) => {
                 error = JSON.parse(error.error);
