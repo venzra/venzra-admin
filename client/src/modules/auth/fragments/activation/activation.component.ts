@@ -7,8 +7,6 @@ import 'rxjs/add/operator/debounceTime';
 
 import { AccountService, Activation, LayoutService } from '@venzra/services';
 
-import { ServiceTermsComponent } from '@venzra/components/service-terms/service-terms.component';
-
 @Component({
     templateUrl: './activation.component.html',
     styleUrls: ['./activation.component.scss']
@@ -34,8 +32,7 @@ export class ActivationComponent implements OnInit {
         this.layout.title = 'Activation';
         this.activationForm = this.forms.group({
             activation: ['', [Validators.required, Validators.minLength(8)]],
-            confirmation: ['', [Validators.required]],
-            terms: [false, [Validators.requiredTrue]]
+            confirmation: ['', [Validators.required]]
         }, { validator: this.passwordMatch });
 
         this.activationForm.get('activation').valueChanges.debounceTime(500).subscribe((password) => {
@@ -59,10 +56,6 @@ export class ActivationComponent implements OnInit {
         if (password !== confirmation) {
             control.get('confirmation').setErrors({ match: true });
         }
-    }
-
-    viewServiceAgreement() {
-        this.dialog.open(ServiceTermsComponent, { width: '90%', maxWidth: '720px' });
     }
 
     activate(): void {

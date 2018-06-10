@@ -10,40 +10,32 @@ Feature: Activation of a registered users account
 
   Scenario: An incorrect account reference should return an error message
     Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
-      | _id                      | password     | token            | terms |
-      | 000000000000000000000000 | VenzraTest$1 | aaaabbbbccccdddd | true  |
+      | _id                      | password     | token            |
+      | 000000000000000000000000 | VenzraTest$1 | aaaabbbbccccdddd |
     Then there should be a 400 error from the "activation" request that contains:
       | message                     |
       | Invalid account credentials |
 
   Scenario: An expired token should no longer allow activation to occur
     Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
-      | _id                   | password     | token            | terms |
-      | {{ accounts[2]._id }} | VenzraTest$1 | aaaabbbbccccdddd | true  |
+      | _id                   | password     | token            |
+      | {{ accounts[2]._id }} | VenzraTest$1 | aaaabbbbccccdddd |
     Then there should be a 400 error from the "activation" request that contains:
       | message                     |
       | Invalid account credentials |
 
   Scenario: An incorrect validation token should not allow activation to occur
     Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
-      | _id                   | password     | token            | terms |
-      | {{ accounts[1]._id }} | VenzraTest$1 | ddddccccbbbbaaaa | true  |
+      | _id                   | password     | token            |
+      | {{ accounts[1]._id }} | VenzraTest$1 | ddddccccbbbbaaaa |
     Then there should be a 400 error from the "activation" request that contains:
       | message                     |
       | Invalid account credentials |
 
-  Scenario: Missing terms acceptance rejects activation of account
+  Scenario: Activate a registered user
     Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
       | _id                   | password     | token            |
       | {{ accounts[1]._id }} | VenzraTest$1 | aaaabbbbccccdddd |
-    Then there should be a 400 error from the "activation" request that contains:
-      | message           | detail             |
-      | Validation failed | ["terms required"] |
-
-  Scenario: Activate a registered user
-    Given I make a POST request to the API endpoint "/api/identity/activate" as "activation" using:
-      | _id                   | password     | token            | terms |
-      | {{ accounts[1]._id }} | VenzraTest$1 | aaaabbbbccccdddd | true  |
     Then the status returned from the "activation" request should be 202
     When I am logged in with the "identity-activation-one@venzra-test.io" account
     And I make a GET request to the API endpoint "/api/account" as "account"

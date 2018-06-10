@@ -2,7 +2,7 @@
     "id": "evt_xxxxxxxxxxxxxx",
     "object": "event",
     "account": "acct_xxxxxxxxxxxxxx",
-    "api_version": "2017-12-14",
+    "api_version": "2018-05-21",
     "created": 1600436220,
     "data": {
         "object": {

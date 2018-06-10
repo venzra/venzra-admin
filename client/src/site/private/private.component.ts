@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { Account, AccountService } from '../../services/account.service';
-import { ServiceTermsComponent } from '../../components/service-terms/service-terms.component';
 
 @Component({
     templateUrl: './private.component.html',
@@ -33,10 +32,6 @@ export class PrivateComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.mobileQuery.removeListener(this.mobileQueryListener);
-    }
-
-    viewServiceAgreement() {
-        this.dialog.open(ServiceTermsComponent, { width: '90%', maxWidth: '720px' });
     }
 
 }

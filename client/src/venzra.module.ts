@@ -10,7 +10,6 @@ import { VenzraRoutingModule } from './routing.module';
 import { AccountService, ErrorInterceptorModule, LayoutService, RouteReuseModule } from '@venzra/services';
 
 import { AccountModule } from './components/account/account.module';
-import { ServiceTermsModule } from './components/service-terms/service-terms.module';
 
 import { VenzraComponent } from './venzra.component';
 import { PublicComponent } from './site/public/public.component';
@@ -36,7 +35,6 @@ import { PrivateComponent } from './site/private/private.component';
         MatToolbarModule,
         FlexLayoutModule,
         AccountModule,
-        ServiceTermsModule,
         RouteReuseModule,
         ErrorInterceptorModule
     ],

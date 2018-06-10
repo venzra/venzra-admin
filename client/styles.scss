@@ -9,6 +9,31 @@ $venzra-app-theme:   mat-light-theme($venzra-app-primary, $venzra-app-accent, $v
 
 @include angular-material-theme($venzra-app-theme);
 
+$venzra-global-typography: mat-typography-config(
+    $font-family: 'Roboto',
+    $body-1: mat-typography-level(0.9rem, 1.5em, 400),
+    $body-2: mat-typography-level(0.9rem, 1.5em, 700)
+);
+
+@include angular-material-typography($venzra-global-typography);
+
+$venzra-base-typography: mat-typography-config(
+    $font-family: 'Roboto',
+    $display-4:mat-typography-level(2.6rem, 1.5em, 100),
+    $display-3:mat-typography-level(2.4rem, 1.5em, 100),
+    $display-2:mat-typography-level(2.2rem, 1.5em, 100),
+    $display-1:mat-typography-level(2.0rem, 1.5em, 100),
+    $headline: mat-typography-level(1.7rem, 1.5em, 300),
+    $title: mat-typography-level(1.4rem, 1.5em, 300),
+    $subheading-2: mat-typography-level(1.25rem, 1.5em, 300),
+    $subheading-1: mat-typography-level(1.1rem, 1.5em, 400),
+    $body-1: mat-typography-level(0.9rem, 1.5em, 400),
+    $body-2: mat-typography-level(0.9rem, 1.5em, 700),
+    $caption: mat-typography-level(0.7rem, 1.5em, 400)
+);
+
+@include mat-base-typography($venzra-base-typography);
+
 form {
     margin-bottom: 20px;
 }

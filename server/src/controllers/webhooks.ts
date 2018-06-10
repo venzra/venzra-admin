@@ -57,7 +57,7 @@ export class WebhookController {
                     case 'plan.created':
                         const planData = {
                             reference: payload.data.id,
-                            name: payload.data.name,
+                            name: payload.data.nickname,
                             currency: payload.data.currency,
                             price: payload.data.amount,
                             interval: payload.data.interval_count,

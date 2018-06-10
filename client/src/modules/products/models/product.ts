@@ -7,7 +7,6 @@ export interface Product {
     code: string;
     displayName: string;
     description: string;
-    featureImage: string;
     promotionalImage: string;
     previousPrice: number;
     currentPrice: number;

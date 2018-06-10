@@ -25,23 +25,23 @@ Feature: Updating product information
       | {{ categories[3]._id }} | {{ categories[1]._id }} | []                                                                                |
       | {{ categories[4]._id }} | {{ categories[1]._id }} | []                                                                                |
     And there are the following "images" records in the database
-      | subscription               | name                   | usage   | size |
-      | {{ subscriptions[1]._id }} | ProductsUpdate Image A | feature | 1024 |
-      | {{ subscriptions[1]._id }} | ProductsUpdate Image B | feature | 4096 |
-      | {{ subscriptions[2]._id }} | ProductsUpdate Image C | feature | 2048 |
+      | subscription               | name                   | usage     | size |
+      | {{ subscriptions[1]._id }} | ProductsUpdate Image A | promotion | 1024 |
+      | {{ subscriptions[1]._id }} | ProductsUpdate Image B | promotion | 4096 |
+      | {{ subscriptions[2]._id }} | ProductsUpdate Image C | promotion | 2048 |
     And there are the following "products" records in the database
-      | subscription               | code                | description           | displayName      | featureImage        | promotionalImage    | currentPrice |
-      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0001 | Automated Description | Product Update A | {{ images[1]._id }} | {{ images[2]._id }} | 9            |
-      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0002 | Automated Description | Product Update B | {{ images[1]._id }} | {{ images[2]._id }} | 99           |
-      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0003 | Automated Description | Product Update C | {{ images[2]._id }} | {{ images[1]._id }} | 999          |
-      | {{ subscriptions[2]._id }} | PRODUCT-UPDATE-0004 | Automated Description | Product Update D | {{ images[3]._id }} | {{ images[3]._id }} | 9999         |
+      | subscription               | code                | description           | displayName      | promotionalImage    | currentPrice |
+      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0001 | Automated Description | Product Update A | {{ images[2]._id }} | 9            |
+      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0002 | Automated Description | Product Update B | {{ images[2]._id }} | 99           |
+      | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0003 | Automated Description | Product Update C | {{ images[1]._id }} | 999          |
+      | {{ subscriptions[2]._id }} | PRODUCT-UPDATE-0004 | Automated Description | Product Update D | {{ images[3]._id }} | 9999         |
 
   Scenario: If no update information is provided then the request is ignored
     Given I am logged in with the "product-update-one@venzra-test.io" account
     When I make an empty PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product"
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code                | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
-      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | Product Update A | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 0             | 9            | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code                | displayName      | description           | promotionalImage    | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
+      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | Product Update A | Automated Description | {{ images[2]._id }} | 0             | 9            | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Attempting to update a product that does not belong to the account subscription is rejected
     Given I am logged in with the "product-update-two@venzra-test.io" account
@@ -58,14 +58,13 @@ Feature: Updating product information
       | replace | displayName      | Product Update PATCH |
       | replace | description      | Updated Description  |
       | replace | promotionalImage | {{ images[1]._id }}  |
-      | replace | featureImage     | {{ images[2]._id }}  |
       | replace | previousPrice    | 8                    |
       | replace | currentPrice     | 5                    |
       | replace | status           | ACTIVE               |
       | replace | slug             | updated-slug         |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
     And the "product" request that has a "history" field and row 1 contains:
       | account | field  | previous | next   | created   |
       | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
@@ -76,15 +75,12 @@ Feature: Updating product information
       | account | field         | previous | next | created   |
       | OBJECT  | previousPrice | "0"      | "8"  | DATE_TIME |
     And the "product" request that has a "history" field and row 4 contains:
-      | account | field        | previous            | next                | created   |
-      | OBJECT  | featureImage | {{ images[1]._id }} | {{ images[2]._id }} | DATE_TIME |
-    And the "product" request that has a "history" field and row 5 contains:
       | account | field            | previous            | next                | created   |
       | OBJECT  | promotionalImage | {{ images[2]._id }} | {{ images[1]._id }} | DATE_TIME |
-    And the "product" request that has a "history" field and row 6 contains:
+    And the "product" request that has a "history" field and row 5 contains:
       | account | field       | previous              | next                | created   |
       | OBJECT  | description | Automated Description | Updated Description | DATE_TIME |
-    And the "product" request that has a "history" field and row 7 contains:
+    And the "product" request that has a "history" field and row 6 contains:
       | account | field       | previous         | next                 | created   |
       | OBJECT  | displayName | Product Update A | Product Update PATCH | DATE_TIME |
 
@@ -94,8 +90,8 @@ Feature: Updating product information
       | op      | path       | value                   |
       | replace | categories | {{ categories[2]._id }} |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Assign categories to a product
     Given I am logged in with the "product-update-one@venzra-test.io" account
@@ -103,8 +99,8 @@ Feature: Updating product information
       | op      | path       | value                                                                                                         |
       | replace | categories | ["{{ categories[1]._id }}", "{{ categories[2]._id }}", "{{ categories[3]._id }}", "{{ categories[4]._id }}" ] |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[3]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[3]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
     And the response path "categories" from the "product" request contains:
       | _id                     | name              | parent                                                            |
       | {{ categories[2]._id }} | Products Update B | { "_id": "{{ categories[1]._id }}", "name": "Products Update A" } |
@@ -127,8 +123,8 @@ Feature: Updating product information
       | op      | path       | value                       |
       | replace | categories | ["{{ categories[3]._id }}"] |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[2]._id }} | {{ images[1]._id }} | 8             | 5            | ARRAY[1]   | ARRAY[7] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[1]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
     When I make a GET request to the API endpoint "/api/categories" as "category"
     Then there should be a 200 response from the "category" request that contains:
       | list     | total | skip | limit |

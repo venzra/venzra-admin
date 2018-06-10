@@ -38,7 +38,17 @@ export class ProductService extends RestfulService {
     }
 
     updateProduct(productId: string, formData: { [key: string]: AbstractControl }): void {
-        this.http.patch(`/api/products/${productId}`, this.preparePatch(formData))
+        const patch = this.preparePatch(formData);
+
+        patch.forEach((operation) => {
+            switch (operation.path) {
+                case 'previousPrice':
+                case 'currentPrice':
+                    operation.value *= 100;
+            }
+        });
+
+        this.http.patch(`/api/products/${productId}`, patch)
             .toPromise()
             .then(() => this.router.navigate(['/products', productId]))
             .catch((response) => this.snackbar.open(response.error.message || 'Update failed', 'OK', { duration: 5000 }));

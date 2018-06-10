@@ -21,22 +21,22 @@ Feature: Retrieve information for a product
       | {{ categories[1]._id }} | null                    | ["{{ categories[2]._id }}"] |
       | {{ categories[2]._id }} | {{ categories[1]._id }} | []                          |
     And there are the following "images" records in the database
-      | subscription               | name                     | usage   | size |
-      | {{ subscriptions[1]._id }} | ProductsRetrieve Image A | feature | 1024 |
-      | {{ subscriptions[1]._id }} | ProductsRetrieve Image B | feature | 4096 |
-      | {{ subscriptions[2]._id }} | ProductsRetrieve Image C | feature | 2048 |
+      | subscription               | name                     | usage     | size |
+      | {{ subscriptions[1]._id }} | ProductsRetrieve Image A | promotion | 1024 |
+      | {{ subscriptions[1]._id }} | ProductsRetrieve Image B | promotion | 4096 |
+      | {{ subscriptions[2]._id }} | ProductsRetrieve Image C | promotion | 2048 |
     And there are the following "products" records in the database in series
-      | subscription               | code            | displayName        | description           | featureImage        | promotionalImage    | currentPrice | categories                  | status |
-      | {{ subscriptions[1]._id }} | RETRIEVE-01-001 | Product Retrieve A | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 9            | ["{{ categories[2]._id }}"] | ACTIVE |
-      | {{ subscriptions[1]._id }} | RETRIEVE-01-002 | Product Retrieve B | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 99           | ["{{ categories[2]._id }}"] | ACTIVE |
-      | {{ subscriptions[2]._id }} | RETRIEVE-02-001 | Product Retrieve A | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 3            | []                          | ACTIVE |
+      | subscription               | code            | displayName        | description           | promotionalImage    | currentPrice | categories                  | status |
+      | {{ subscriptions[1]._id }} | RETRIEVE-01-001 | Product Retrieve A | Automated Description | {{ images[2]._id }} | 9            | ["{{ categories[2]._id }}"] | ACTIVE |
+      | {{ subscriptions[1]._id }} | RETRIEVE-01-002 | Product Retrieve B | Automated Description | {{ images[2]._id }} | 99           | ["{{ categories[2]._id }}"] | ACTIVE |
+      | {{ subscriptions[2]._id }} | RETRIEVE-02-001 | Product Retrieve A | Automated Description | {{ images[3]._id }} | 3            | []                          | ACTIVE |
 
   Scenario: Retrieval of a product contains correct data
     Given I am logged in with the "products-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/products/{{ products[1]._id }}" as "product"
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug               | code            | displayName        | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-retrieve-a | RETRIEVE-01-001 | Product Retrieve A | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 0             | 9            | ARRAY[1]   | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug               | code            | displayName        | description           | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-retrieve-a | RETRIEVE-01-001 | Product Retrieve A | Automated Description | {{ images[2]._id }} | 0             | 9            | ARRAY[1]   | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |
     And the response path "categories" from the "product" request contains:
       | _id                     | name                | parent                                                              |
       | {{ categories[2]._id }} | Products Retrieve B | { "_id": "{{ categories[1]._id }}", "name": "Products Retrieve A" } |

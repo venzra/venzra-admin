@@ -36,7 +36,6 @@ export class ProductsController extends AuthenticationController {
             code: req.body.code,
             displayName: req.body.displayName,
             description: req.body.description,
-            featureImage: req.body.featureImage,
             promotionalImage: req.body.promotionalImage,
             previousPrice: req.body.previousPrice,
             currentPrice: req.body.currentPrice,
@@ -81,7 +80,6 @@ export class ProductsController extends AuthenticationController {
                                 case 'displayName':
                                 case 'description':
                                 case 'promotionalImage':
-                                case 'featureImage':
                                 case 'previousPrice':
                                 case 'currentPrice':
                                 case 'status':
@@ -120,7 +118,7 @@ export class ProductsController extends AuthenticationController {
 
         ProductModel
             .findOne({ _id, subscription })
-            .select('slug code displayName description featureImage promotionalImage previousPrice currentPrice status created updated')
+            .select('slug code displayName description promotionalImage previousPrice currentPrice status created updated')
             .populate({
                 path: 'categories',
                 select: '_id name',

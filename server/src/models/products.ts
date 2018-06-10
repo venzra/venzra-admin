@@ -46,10 +46,6 @@ const ProductSchema: Schema = new Schema({
         trim: true,
         maxlength: 2000
     },
-    featureImage: {
-        type: Schema.Types.ObjectId,
-        ref: 'images'
-    },
     promotionalImage: {
         type: Schema.Types.ObjectId,
         ref: 'images',

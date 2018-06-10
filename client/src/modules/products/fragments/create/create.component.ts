@@ -31,7 +31,6 @@ export class ProductCreateComponent implements OnInit {
             code: ['', [Validators.required, Validators.maxLength(20)]],
             description: ['', [Validators.required, Validators.maxLength(2000)]],
             promotionalImage: ['', [Validators.required]],
-            featureImage: [null, []],
             previousPrice: [null, [Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
             currentPrice: ['', [Validators.required, Validators.pattern(/^(\d+)(\.\d{1,2})?$/), Validators.min(0), Validators.max(1000000)]],
             status: [true, []]

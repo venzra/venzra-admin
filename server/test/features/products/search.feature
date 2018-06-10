@@ -14,27 +14,27 @@ Feature: Creation of a new product entry
       | products-search-two@venzra-test.io   | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
       | products-search-three@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[3]._id }} |
     And there are the following "images" records in the database
-      | subscription               | name                   | usage   | size |
-      | {{ subscriptions[1]._id }} | ProductsSearch Image A | feature | 1024 |
-      | {{ subscriptions[1]._id }} | ProductsSearch Image B | feature | 4096 |
-      | {{ subscriptions[2]._id }} | ProductsSearch Image C | feature | 2048 |
+      | subscription               | name                   | usage     | size |
+      | {{ subscriptions[1]._id }} | ProductsSearch Image A | promotion | 1024 |
+      | {{ subscriptions[1]._id }} | ProductsSearch Image B | promotion | 4096 |
+      | {{ subscriptions[2]._id }} | ProductsSearch Image C | promotion | 2048 |
     And there are the following "products" records in the database in series
-      | subscription               | code          | displayName        | description           | featureImage        | promotionalImage    | currentPrice | status   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-001 | Product Search A   | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 9            | ACTIVE   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-002 | Product Search AA  | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 99           | ACTIVE   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-003 | Product Search AAA | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 999          | ACTIVE   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-004 | Product Search B   | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 6            | ACTIVE   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-005 | Product Search BB  | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 66           | ACTIVE   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-006 | Product Search C   | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 0            | INACTIVE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-007 | Product Search D   | Automated Description | {{ images[2]._id }} | {{ images[2]._id }} | 1000         | ACTIVE   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-008 | Product Search E   | Automated Description | {{ images[2]._id }} | {{ images[2]._id }} | 2000         | ACTIVE   |
-      | {{ subscriptions[1]._id }} | SEARCH-01-009 | Product Search F   | Automated Description | {{ images[2]._id }} | {{ images[2]._id }} | 3000         | INACTIVE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-010 | Product Search G   | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 5            | INACTIVE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-011 | Product Search GG  | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 50           | INACTIVE |
-      | {{ subscriptions[1]._id }} | SEARCH-01-012 | Product Search GGG | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 500          | ACTIVE   |
-      | {{ subscriptions[2]._id }} | SEARCH-02-001 | Product Search A   | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 3            | ACTIVE   |
-      | {{ subscriptions[2]._id }} | SEARCH-02-002 | Product Search B   | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 33           | ACTIVE   |
-      | {{ subscriptions[2]._id }} | SEARCH-02-003 | Product Search C   | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 333          | ACTIVE   |
+      | subscription               | code          | displayName        | description           | promotionalImage    | currentPrice | status   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-001 | Product Search A   | Automated Description | {{ images[2]._id }} | 9            | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-002 | Product Search AA  | Automated Description | {{ images[2]._id }} | 99           | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-003 | Product Search AAA | Automated Description | {{ images[2]._id }} | 999          | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-004 | Product Search B   | Automated Description | {{ images[2]._id }} | 6            | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-005 | Product Search BB  | Automated Description | {{ images[2]._id }} | 66           | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-006 | Product Search C   | Automated Description | {{ images[2]._id }} | 0            | INACTIVE |
+      | {{ subscriptions[1]._id }} | SEARCH-01-007 | Product Search D   | Automated Description | {{ images[2]._id }} | 1000         | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-008 | Product Search E   | Automated Description | {{ images[2]._id }} | 2000         | ACTIVE   |
+      | {{ subscriptions[1]._id }} | SEARCH-01-009 | Product Search F   | Automated Description | {{ images[2]._id }} | 3000         | INACTIVE |
+      | {{ subscriptions[1]._id }} | SEARCH-01-010 | Product Search G   | Automated Description | {{ images[1]._id }} | 5            | INACTIVE |
+      | {{ subscriptions[1]._id }} | SEARCH-01-011 | Product Search GG  | Automated Description | {{ images[1]._id }} | 50           | INACTIVE |
+      | {{ subscriptions[1]._id }} | SEARCH-01-012 | Product Search GGG | Automated Description | {{ images[1]._id }} | 500          | ACTIVE   |
+      | {{ subscriptions[2]._id }} | SEARCH-02-001 | Product Search A   | Automated Description | {{ images[3]._id }} | 3            | ACTIVE   |
+      | {{ subscriptions[2]._id }} | SEARCH-02-002 | Product Search B   | Automated Description | {{ images[3]._id }} | 33           | ACTIVE   |
+      | {{ subscriptions[2]._id }} | SEARCH-02-003 | Product Search C   | Automated Description | {{ images[3]._id }} | 333          | ACTIVE   |
 
   Scenario: Requesting a list of products should return only records for that subscription (subscription one)
     Given I am logged in with the "products-search-one@venzra-test.io" account

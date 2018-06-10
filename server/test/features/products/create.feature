@@ -12,13 +12,13 @@ Feature: Creation of a new product entry
       | products-create-one@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[1]._id }} |
       | products-create-two@venzra-test.io | PASSWORD | ACTIVE | {{ subscriptions[2]._id }} |
     And there are the following "images" records in the database
-      | subscription               | name                   | usage   | size |
-      | {{ subscriptions[1]._id }} | ProductsCreate Image A | feature | 1024 |
-      | {{ subscriptions[1]._id }} | ProductsCreate Image B | feature | 4096 |
-      | {{ subscriptions[2]._id }} | ProductsCreate Image C | feature | 2048 |
+      | subscription               | name                   | usage     | size |
+      | {{ subscriptions[1]._id }} | ProductsCreate Image A | promotion | 1024 |
+      | {{ subscriptions[1]._id }} | ProductsCreate Image B | promotion | 4096 |
+      | {{ subscriptions[2]._id }} | ProductsCreate Image C | promotion | 2048 |
     And there are the following "products" records in the database
-      | subscription               | code       | displayName      | description           | featureImage        | promotionalImage    | currentPrice | status |
-      | {{ subscriptions[1]._id }} | CREATE-001 | Product Create A | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 999          | ACTIVE |
+      | subscription               | code       | displayName      | description           | promotionalImage    | currentPrice | status |
+      | {{ subscriptions[1]._id }} | CREATE-001 | Product Create A | Automated Description | {{ images[2]._id }} | 999          | ACTIVE |
 
   Scenario: An empty request to create a product fails validation
     Given I am logged in with the "products-create-one@venzra-test.io" account
@@ -30,8 +30,8 @@ Feature: Creation of a new product entry
   Scenario: If the product already exists then the request should be rejected (based on product code)
     Given I am logged in with the "products-create-one@venzra-test.io" account
     When I make a POST request to the API endpoint "/api/products" as "product" using:
-      | code                   | displayName        | description           | featureImage        | promotionalImage    | currentPrice |
-      | {{ products[1].code }} | Product Create AAA | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 99           |
+      | code                   | displayName        | description           | promotionalImage    | currentPrice |
+      | {{ products[1].code }} | Product Create AAA | Automated Description | {{ images[2]._id }} | 99           |
     Then there should be a 400 response from the "product" request that contains:
       | message               |
       | Record already exists |
@@ -39,8 +39,8 @@ Feature: Creation of a new product entry
   Scenario: If the product already exists then the request should be rejected (based on product name)
     Given I am logged in with the "products-create-one@venzra-test.io" account
     When I make a POST request to the API endpoint "/api/products" as "product" using:
-      | code       | displayName                   | description           | featureImage        | promotionalImage    | currentPrice |
-      | CREATE-999 | {{ products[1].displayName }} | Automated Description | {{ images[1]._id }} | {{ images[2]._id }} | 99           |
+      | code       | displayName                   | description           | promotionalImage    | currentPrice |
+      | CREATE-999 | {{ products[1].displayName }} | Automated Description | {{ images[2]._id }} | 99           |
     Then there should be a 400 response from the "product" request that contains:
       | message               |
       | Record already exists |
@@ -48,17 +48,17 @@ Feature: Creation of a new product entry
   Scenario: A valid request to create a new product record is successful (also strips any decimal places on price)
     Given I am logged in with the "products-create-one@venzra-test.io" account
     When I make a POST request to the API endpoint "/api/products" as "product" using:
-      | code       | displayName      | description           | featureImage        | promotionalImage    | currentPrice |
-      | CREATE-002 | Product Create B | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 99.99        |
+      | code       | displayName      | description           | promotionalImage    | currentPrice |
+      | CREATE-002 | Product Create B | Automated Description | {{ images[1]._id }} | 99.99        |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code       | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
-      | OBJECT_ID | product-create-b | CREATE-002 | Product Create B | Automated Description | {{ images[2]._id }} | {{ images[1]._id }} | 0             | 99           | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code       | displayName      | description           | promotionalImage    | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
+      | OBJECT_ID | product-create-b | CREATE-002 | Product Create B | Automated Description | {{ images[1]._id }} | 0             | 99           | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: An account linked to another subscription can use the same product code and name already used by a different subscription, also allows for setting of status
     Given I am logged in with the "products-create-two@venzra-test.io" account
     When I make a POST request to the API endpoint "/api/products" as "product" using:
-      | code                   | displayName                   | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | status |
-      | {{ products[1].code }} | {{ products[1].displayName }} | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 104.99        | 99.49        | ACTIVE |
+      | code                   | displayName                   | description           | promotionalImage    | previousPrice | currentPrice | status |
+      | {{ products[1].code }} | {{ products[1].displayName }} | Automated Description | {{ images[3]._id }} | 104.99        | 99.49        | ACTIVE |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code       | displayName      | description           | featureImage        | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-create-a | CREATE-001 | Product Create A | Automated Description | {{ images[3]._id }} | {{ images[3]._id }} | 104           | 99           | ARRAY[0]   | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug             | code       | displayName      | description           | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-create-a | CREATE-001 | Product Create A | Automated Description | {{ images[3]._id }} | 104           | 99           | ARRAY[0]   | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |
