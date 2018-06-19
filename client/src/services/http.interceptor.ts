@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 
-import { environment } from '../../environments/environment';
+import { environment } from '@venzra/environment';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
