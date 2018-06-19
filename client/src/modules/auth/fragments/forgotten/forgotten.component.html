@@ -1,0 +1,19 @@
+<mat-card role="form">
+    <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="recover()" [formGroup]="recoveryForm">
+        <h3>Forgotten password</h3>
+        <p>This process will help recover your account credentials. Note that if your account exists in a valid state this form will send you an email with further instructions. Every time this form is completed updated instructions will be provided.</p>
+
+        <mat-form-field>
+            <input matInput placeholder="Your email address" formControlName="identity" required />
+            <mat-error *ngIf="recoveryForm.get('identity').hasError('required')">This field is required.</mat-error>
+            <mat-error *ngIf="recoveryForm.get('identity').hasError('pattern')">A valid email address is required.</mat-error>
+        </mat-form-field>
+
+        <div fxLayoutAlign="end">
+            <div fxLayout="row" fxLayoutGap="10px">
+                <a mat-button routerLink="/">Account login</a>
+                <button mat-raised-button color="primary" type="submit" [disabled]="recoveryForm.pristine || recoveryForm.invalid || saving">Recover</button>
+            </div>
+        </div>
+    </form>
+</mat-card>

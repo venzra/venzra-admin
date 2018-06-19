@@ -48,7 +48,9 @@ const AccountSchema: Schema = new Schema({
         type: AccountValidationSchema
     },
     terms: {
-        type: Date
+        type: Date,
+        required: true,
+        default: Date.now
     },
     status: {
         type: String,

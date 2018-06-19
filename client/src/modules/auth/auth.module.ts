@@ -11,6 +11,8 @@ import { AccountService } from '@venzra/services';
 import { ActivationComponent } from './fragments/activation/activation.component';
 import { LoginComponent } from './fragments/login/login.component';
 import { LogoutComponent } from './fragments/logout/logout.component';
+import { ForgottenComponent } from './fragments/forgotten/forgotten.component';
+import { ForgottenConfirmationComponent } from './fragments/forgotten-confirmation/forgotten-confirmation.component';
 import { RecoveryComponent } from './fragments/recovery/recovery.component';
 
 @NgModule({
@@ -18,6 +20,8 @@ import { RecoveryComponent } from './fragments/recovery/recovery.component';
         ActivationComponent,
         LoginComponent,
         LogoutComponent,
+        ForgottenComponent,
+        ForgottenConfirmationComponent,
         RecoveryComponent
     ],
     imports: [

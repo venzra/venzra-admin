@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
@@ -13,7 +15,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(req).do(null, (err) => {
+        const apiReq = req.clone({
+            url: req.url.startsWith('/api') ? req.url : `${environment.apiUri}${req.url}`
+        });
+
+        return next.handle(apiReq).do(null, (err) => {
             if (err instanceof HttpErrorResponse) {
                 switch (err.status) {
                     case 401:

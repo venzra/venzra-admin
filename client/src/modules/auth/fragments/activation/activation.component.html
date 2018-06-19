@@ -1,7 +1,7 @@
 <mat-card role="form">
     <form fxLayout="column" fxLayoutGap="20px" (ngSubmit)="activate()" [formGroup]="activationForm">
         <h3>Account Activation</h3>
-        <p class="mat-caption">Account activation is for newly registered accounts. If you are having problems with account activation please consider following the <a routerLink="/recovery">forgotten password</a> process as you may already have an activated account. Passwords need to meet our requirements on complexity, if the entered password in not accepted you will be informed why.</p>
+        <p>Account activation is for newly registered accounts. If you are having problems with account activation please consider following the <a routerLink="/forgotten">forgotten password</a> process as you may already have an activated account. Passwords need to meet our requirements on complexity, if the entered password in not accepted you will be informed why.</p>
 
         <mat-form-field>
             <input matInput type="password" placeholder="Set account password" formControlName="activation" required />

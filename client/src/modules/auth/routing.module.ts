@@ -5,6 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ActivationComponent } from './fragments/activation/activation.component';
 import { LoginComponent } from './fragments/login/login.component';
 import { LogoutComponent } from './fragments/logout/logout.component';
+import { ForgottenComponent } from './fragments/forgotten/forgotten.component';
+import { ForgottenConfirmationComponent } from './fragments/forgotten-confirmation/forgotten-confirmation.component';
 import { RecoveryComponent } from './fragments/recovery/recovery.component';
 
 const routes: Routes = [
@@ -17,12 +19,20 @@ const routes: Routes = [
         component: ActivationComponent
     },
     {
+        path: 'recovery/:account',
+        component: RecoveryComponent
+    },
+    {
         path: 'logout',
         component: LogoutComponent
     },
     {
-        path: 'recovery',
-        component: RecoveryComponent
+        path: 'forgotten',
+        component: ForgottenComponent
+    },
+    {
+        path: 'forgotten-confirmation',
+        component: ForgottenConfirmationComponent
     }
 ];
 

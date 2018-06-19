@@ -66,8 +66,7 @@ export class ActivationComponent implements OnInit {
         this.account = {
             _id: this.route.snapshot.params.account,
             password: activationData.activation,
-            token: this.route.snapshot.queryParams.token,
-            terms: activationData.terms
+            token: this.route.snapshot.queryParams.token
         };
 
         this.accountService

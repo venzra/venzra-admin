@@ -26,17 +26,15 @@ export class IdentityController extends AuthenticationController {
         this.router.use(parser.json({ type: 'application/json' }));
 
         this.router.post('/login', this.authorise.bind(this), this.tokenise.bind(this));
-        this.router.post('/recover', this.recover.bind(this));
         this.router.post('/activate', this.activation.bind(this));
         this.router.post('/logout', this.validate.bind(this), this.logout.bind(this));
     }
 
-    recover(req: Request, res: Response, next: NextFunction) {
-        res.status(200).send({ recovery: true });
-    }
-
     activation(req: Request, res: Response, next: NextFunction) {
         AccountModel.findById(req.body._id)
+            .populate({
+                path: 'subscription'
+            })
             .then((account: IAccountModel) => {
                 if (!account) {
                     throw new AccountAccessError('Account not found');

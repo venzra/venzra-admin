@@ -1,49 +1,80 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatSnackBar } from '@angular/material';
 
-import { AccountService, LayoutService, Recovery } from '@venzra/services';
+import 'rxjs/add/operator/debounceTime';
 
-const EMAIL_REGEX = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+import { AccountService, Activation, LayoutService } from '@venzra/services';
 
 @Component({
     templateUrl: './recovery.component.html',
     styleUrls: ['./recovery.component.scss']
 })
-export class RecoveryComponent {
+export class RecoveryComponent implements OnInit {
 
-    account: Recovery;
-    recoveryForm: FormGroup;
-    saving: Boolean = false;
+    public account: Activation;
+    public recoveryForm: FormGroup;
+    public saving: Boolean = false;
+    public suggestion = '';
 
     constructor(
         private forms: FormBuilder,
+        private route: ActivatedRoute,
+        private router: Router,
+        private dialog: MatDialog,
         private snackbar: MatSnackBar,
         private accountService: AccountService,
         private layout: LayoutService
-    ) {
-        this.layout.title = 'Recovery';
-        this.createForm();
-    }
+    ) { }
 
-    createForm(): void {
+    ngOnInit(): void {
+        this.layout.title = 'Recovery';
+
         this.recoveryForm = this.forms.group({
-            emailAddress: ['', [Validators.required, Validators.pattern(EMAIL_REGEX)]]
+            activation: ['', [Validators.required, Validators.minLength(8)]],
+            confirmation: ['', [Validators.required]]
+        }, { validator: this.passwordMatch });
+
+        this.recoveryForm.get('activation').valueChanges.debounceTime(500).subscribe((password) => {
+            if (this.recoveryForm.get('activation').invalid) {
+                return;
+            }
+
+            this.accountService.validatePassword(password).then((validation) => {
+                if (validation.score < 3) {
+                    this.recoveryForm.get('activation').setErrors({ strength: true });
+                    this.suggestion = validation.message;
+                }
+            });
         });
     }
 
-    recover(): void {
+    passwordMatch(control: AbstractControl) {
+        const password = control.get('activation').value;
+        const confirmation = control.get('confirmation').value;
+
+        if (password !== confirmation) {
+            control.get('confirmation').setErrors({ match: true });
+        }
+    }
+
+    activate(): void {
         this.saving = true;
 
         const recoveryData = this.recoveryForm.getRawValue();
 
         this.account = {
-            identity: recoveryData.emailAddress as string
+            _id: this.route.snapshot.params.account,
+            password: recoveryData.activation,
+            token: this.route.snapshot.queryParams.token
         };
 
         this.accountService
-            .performRecovery(this.account)
-            .catch(() => this.snackbar.open('Recovery failed, please try again', 'OK'))
+            .activateAccount(this.account)
+            .then(() => this.snackbar.open('Password reset successful, please login', 'OK', { duration: 5000 }))
+            .then(() => this.router.navigate(['/'], { replaceUrl: true }))
+            .catch(() => this.snackbar.open('Password reset failed, please try again', 'OK'))
             .then(() => this.saving = false);
     }
 }

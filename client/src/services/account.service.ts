@@ -23,7 +23,6 @@ export interface Activation {
     _id: string;
     password: string;
     token: string;
-    terms: boolean;
 }
 
 export interface PasswordStrength {
@@ -72,7 +71,7 @@ export class AccountService {
     }
 
     performRecovery(forgottenData: Recovery): Promise<any> {
-        return this.http.post('/api/identity/recovery', forgottenData, { responseType: 'text' })
+        return this.http.post('/accounts/forgotten', forgottenData, { responseType: 'text' })
             .toPromise();
     }
 
