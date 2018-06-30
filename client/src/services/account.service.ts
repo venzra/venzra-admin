@@ -71,7 +71,7 @@ export class AccountService {
     }
 
     performRecovery(forgottenData: Recovery): Promise<any> {
-        return this.http.post('/accounts/forgotten', forgottenData, { responseType: 'text' })
+        return this.http.post('/admin/identity', forgottenData, { responseType: 'text' })
             .toPromise();
     }
 
