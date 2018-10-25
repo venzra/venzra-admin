@@ -49,8 +49,14 @@ Feature: Updating a new subscription via patch requests
       | replace | logo      | {{ images[2]._id }}         |
       | replace | theme     | { "color": "Orange" }       |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName                  | storeName                   | strapline                  | icon                | logo                | theme  | transactions                  | addons   | status |
-      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | {{ images[1]._id }} | {{ images[2]._id }} | OBJECT | { "base": 10, "rate": 0.046 } | ARRAY[0] | TRIAL  |
+      | _id       | domainName                  | storeName                   | strapline                  | icon                        | logo                        | theme  | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-update-updated | Subscription Update Updated | Updated subscription entry | OBJECT[_id,name,usage,path] | OBJECT[_id,name,usage,path] | OBJECT | { "base": 10, "rate": 0.046 } | ARRAY[0] | TRIAL  |
+    And the response path "icon" from the "subscription" request contains:
+      | _id                 | name                       | usage | path                                                    |
+      | {{ images[1]._id }} | SubscriptionUpdate Image A | icon  | {{ subscriptions[1]._id }}/icon/{{ images[1]._id }}.png |
+    And the response path "logo" from the "subscription" request contains:
+      | _id                 | name                       | usage | path                                                    |
+      | {{ images[2]._id }} | SubscriptionUpdate Image B | logo  | {{ subscriptions[1]._id }}/logo/{{ images[2]._id }}.png |
     And the response path "theme" from the "subscription" request contains:
       | color  |
       | orange |

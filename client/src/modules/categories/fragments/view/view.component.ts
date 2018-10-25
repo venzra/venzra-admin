@@ -10,6 +10,8 @@ import { CategoryService } from '../../services/category.service';
 
 import { RemoveCategoryDialogComponent } from './remove/remove.dialog';
 
+import { environment } from '@venzra/environment';
+
 @Component({
     templateUrl: './view.component.html',
     styleUrls: ['./view.component.scss']
@@ -33,7 +35,7 @@ export class CategoryViewComponent implements OnInit {
         this.category = this.route.snapshot.data.categoryData;
 
         if (this.category.featureImage) {
-            this.image = this.sanitizer.bypassSecurityTrustStyle(`url(/api/images/${this.category.featureImage})`);
+            this.image = this.sanitizer.bypassSecurityTrustStyle(`url(${environment.cdnUri}/${this.category.featureImage.path})`);
         }
     }
 

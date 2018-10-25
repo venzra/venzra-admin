@@ -58,8 +58,8 @@ Feature: Creation of a new category
       | parent                  | name              | description           | featureImage        |
       | {{ categories[1]._id }} | Category Create D | Automated description | {{ images[1]._id }} |
     Then there should be a 200 response from the "category" request that contains:
-      | _id       | slug              | name              | description           | featureImage        | primary | parent | children | products | created   | updated   |
-      | OBJECT_ID | category-create-d | Category Create D | Automated description | {{ images[1]._id }} | false   | OBJECT | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
+      | _id       | slug              | name              | description           | featureImage                | primary | parent | children | products | created   | updated   |
+      | OBJECT_ID | category-create-d | Category Create D | Automated description | OBJECT[_id,name,usage,path] | false   | OBJECT | ARRAY[0] | ARRAY[0] | DATE_TIME | DATE_TIME |
     When I make a GET request to the API endpoint "/api/categories/{{ categories[1]._id }}" as "check"
     Then there should be a 200 response from the "check" request that contains:
       | _id       | slug              | name              | description           | primary | children | products | created   | updated   |

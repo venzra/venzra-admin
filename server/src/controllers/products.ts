@@ -10,6 +10,7 @@ import { ProductModel } from '../models/products';
 import { ProductHistoryModel } from '../models/product-history';
 import { IRestOperation } from '../models/rest';
 import { CategoryModel } from '../models/category';
+import { ImageModel } from '../models/images';
 
 export class ProductsController extends AuthenticationController {
 
@@ -83,7 +84,12 @@ export class ProductsController extends AuthenticationController {
                                 case 'previousPrice':
                                 case 'currentPrice':
                                 case 'status':
-                                    const history = new ProductHistoryModel({ account: this.account._id, field: operation.path, previous: product.get(operation.path), next: operation.value });
+                                    const history = new ProductHistoryModel({
+                                        account: this.account._id,
+                                        field: operation.path,
+                                        previous: product.get(operation.path),
+                                        next: operation.value
+                                    });
                                     promise = promise
                                         .then(() => history.save())
                                         .then(() => product.history.unshift(history))
@@ -96,7 +102,11 @@ export class ProductsController extends AuthenticationController {
                                             .then(() => Promise.all(removeCategories.map((category) => category.update({ $pull: { products: product._id } }))))
                                             .then(() => Promise.all(
                                                 operation.value
-                                                    .map((categoryId) => CategoryModel.findOneAndUpdate({ _id: categoryId, subscription, parent: { $ne: null } }, { $addToSet: { products: product._id } })
+                                                    .map((categoryId) => CategoryModel.findOneAndUpdate({
+                                                        _id: categoryId,
+                                                        subscription,
+                                                        parent: { $ne: null }
+                                                    }, { $addToSet: { products: product._id } })
                                                         .then((category) => category ? category._id : false))
                                                 )
                                             )
@@ -119,6 +129,10 @@ export class ProductsController extends AuthenticationController {
         ProductModel
             .findOne({ _id, subscription })
             .select('slug code displayName description promotionalImage previousPrice currentPrice status created updated')
+            .populate({
+                path: 'promotionalImage',
+                select: '_id name usage path'
+            })
             .populate({
                 path: 'categories',
                 select: '_id name',
@@ -170,8 +184,22 @@ export class ProductsController extends AuthenticationController {
                         { $sort: order },
                         { $skip: skip },
                         { $limit: limit },
-                        { $project: { slug: 1, code: 1, displayName: 1, promotionalImage: 1, currentPrice: 1, status: 1, created: 1 } }
+                        {
+                            $project: {
+                                slug: 1,
+                                code: 1,
+                                displayName: 1,
+                                promotionalImage: 1,
+                                currentPrice: 1,
+                                status: 1,
+                                created: 1
+                            }
+                        }
                     ])
+                    .then((result) => ImageModel.populate(result, {
+                        path: 'promotionalImage',
+                        select: '_id name usage path'
+                    }))
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )
             .catch((productError) => next(productError));

@@ -8,6 +8,7 @@ import { AuthenticationController } from './authentication';
 
 import { IRestOperation } from '../models/rest';
 import { CategoryModel } from '../models/category';
+import { ImageModel } from '../models/images';
 
 export class CategoryController extends AuthenticationController {
 
@@ -167,16 +168,32 @@ export class CategoryController extends AuthenticationController {
             .findOne({ _id, subscription })
             .select('slug name description featureImage parent primary created updated')
             .populate({
+                path: 'featureImage',
+                select: '_id name usage path'
+            })
+            .populate({
                 path: 'parent',
-                select: 'slug name featureImage primary created updated'
+                select: 'slug name featureImage primary created updated',
+                populate: {
+                    path: 'featureImage',
+                    select: '_id name usage path'
+                }
             })
             .populate({
                 path: 'children',
-                select: 'slug name featureImage primary created updated'
+                select: 'slug name featureImage primary created updated',
+                populate: {
+                    path: 'featureImage',
+                    select: '_id name usage path'
+                }
             })
             .populate({
                 path: 'products',
-                select: '_id code displayName promotionalImage status created updated'
+                select: '_id code displayName promotionalImage status created updated',
+                populate: {
+                    path: 'promotionalImage',
+                    select: '_id name usage path'
+                }
             })
             .then((category) => category ? res.status(200).send(category) : next(new NotFoundError()))
             .catch((error) => next(error));
@@ -216,6 +233,10 @@ export class CategoryController extends AuthenticationController {
                         { $limit: limit },
                         { $project: { slug: 1, name: 1, featureImage: 1, primary: 1, parent: 1, children: { $size: { '$ifNull': ['$children', []] } }, products: { $size: { '$ifNull': ['$products', []] } }, created: 1 } }
                     ])
+                    .then((result) => ImageModel.populate(result, {
+                        path: 'featureImage',
+                        select: '_id name usage path'
+                    }))
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )
             .catch((error) => next(error));

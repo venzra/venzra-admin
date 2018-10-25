@@ -43,8 +43,8 @@ Feature: Creation of a new product entry
       | list      | total | skip | limit |
       | ARRAY[12] | 12    | 0    | 20    |
     And the "product" request that has a "list" field and row 1 contains:
-      | _id       | slug               | code          | displayName        | promotionalImage    | currentPrice | status | created   |
-      | OBJECT_ID | product-search-ggg | SEARCH-01-012 | Product Search GGG | {{ images[1]._id }} | 500          | ACTIVE | DATE_TIME |
+      | _id       | slug               | code          | displayName        | promotionalImage            | currentPrice | status | created   |
+      | OBJECT_ID | product-search-ggg | SEARCH-01-012 | Product Search GGG | OBJECT[_id,name,usage,path] | 500          | ACTIVE | DATE_TIME |
 
   Scenario: Requesting a list of products should return only records for that subscription (subscription two)
     Given I am logged in with the "products-search-two@venzra-test.io" account
@@ -53,8 +53,8 @@ Feature: Creation of a new product entry
       | list     | total | skip | limit |
       | ARRAY[3] | 3     | 0    | 20    |
     And the "product" request that has a "list" field and row 1 contains:
-      | _id       | slug             | code          | displayName      | promotionalImage    | currentPrice | status | created   |
-      | OBJECT_ID | product-search-c | SEARCH-02-003 | Product Search C | {{ images[3]._id }} | 333          | ACTIVE | DATE_TIME |
+      | _id       | slug             | code          | displayName      | promotionalImage            | currentPrice | status | created   |
+      | OBJECT_ID | product-search-c | SEARCH-02-003 | Product Search C | OBJECT[_id,name,usage,path] | 333          | ACTIVE | DATE_TIME |
 
   Scenario: Requesting a list of products adheres to pagination values for skip and limit
     Given I am logged in with the "products-search-one@venzra-test.io" account
@@ -63,8 +63,8 @@ Feature: Creation of a new product entry
       | list     | total | skip | limit |
       | ARRAY[3] | 12    | 2    | 3     |
     And the "product" request that has a "list" field and row 1 contains:
-      | _id       | slug             | code          | displayName      | promotionalImage    | currentPrice | status   | created   |
-      | OBJECT_ID | product-search-g | SEARCH-01-010 | Product Search G | {{ images[1]._id }} | 5            | INACTIVE | DATE_TIME |
+      | _id       | slug             | code          | displayName      | promotionalImage            | currentPrice | status   | created   |
+      | OBJECT_ID | product-search-g | SEARCH-01-010 | Product Search G | OBJECT[_id,name,usage,path] | 5            | INACTIVE | DATE_TIME |
 
   Scenario: Filtering product results by code returns based on partial matching
     Given I am logged in with the "products-search-one@venzra-test.io" account
@@ -72,7 +72,7 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 3     | 0    | 20    |
-    And the response from the "product" request has a "list" that contains rows:
+    And the response from the "product" request has a "list" field that contains rows:
       | _id                    | code          |
       | {{ products[12]._id }} | SEARCH-01-012 |
       | {{ products[11]._id }} | SEARCH-01-011 |
@@ -84,7 +84,7 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[4] | 4     | 0    | 20    |
-    And the response from the "product" request has a "list" that contains rows:
+    And the response from the "product" request has a "list" field that contains rows:
       | _id                    | code          | status   |
       | {{ products[11]._id }} | SEARCH-01-011 | INACTIVE |
       | {{ products[10]._id }} | SEARCH-01-010 | INACTIVE |
@@ -97,7 +97,7 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list      | total | skip | limit |
       | ARRAY[12] | 12    | 0    | 20    |
-    And the response from the "product" request has a "list" that contains rows:
+    And the response from the "product" request has a "list" field that contains rows:
       | _id                   | code          |
       | {{ products[1]._id }} | SEARCH-01-001 |
       | {{ products[2]._id }} | SEARCH-01-002 |
@@ -109,7 +109,7 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 3     | 0    | 20    |
-    And the response from the "product" request has a "list" that contains rows:
+    And the response from the "product" request has a "list" field that contains rows:
       | _id                    | code          | displayName      |
       | {{ products[13]._id }} | SEARCH-02-001 | Product Search A |
       | {{ products[14]._id }} | SEARCH-02-002 | Product Search B |
@@ -121,7 +121,7 @@ Feature: Creation of a new product entry
     Then there should be a 200 response from the "product" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 3     | 0    | 20    |
-    And the response from the "product" request has a "list" that contains rows:
+    And the response from the "product" request has a "list" field that contains rows:
       | _id                    | code          | currentPrice |
       | {{ products[15]._id }} | SEARCH-02-003 | 333          |
       | {{ products[14]._id }} | SEARCH-02-002 | 33           |

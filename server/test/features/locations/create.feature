@@ -37,5 +37,8 @@ Feature: Creation of a new location entry
       | displayName        | description        | address                                                                                                                | featureImage        | usage |
       | Locations Create A | Automated location | { "addressee": "Location manager", "street": "Street", "county": "County", "postalCode": "po57 3ox", "country": "GB" } | {{ images[1]._id }} | store |
     Then there should be a 200 response from the "location" request that contains:
-      | _id       | displayName        | description        | address | featureImage        | usage | created   | updated   |
-      | OBJECT_ID | Locations Create A | Automated location | OBJECT  | {{ images[1]._id }} | STORE | DATE_TIME | DATE_TIME |
+      | _id       | displayName        | description        | address | featureImage                | usage | created   | updated   |
+      | OBJECT_ID | Locations Create A | Automated location | OBJECT  | OBJECT[_id,name,usage,path] | STORE | DATE_TIME | DATE_TIME |
+    And the response path "featureImage" from the "location" request contains:
+      | _id                 | name                      | usage   | path                                                       |
+      | {{ images[1]._id }} | LocationsRetrieve Image A | feature | {{ subscriptions[1]._id }}/feature/{{ images[1]._id }}.jpg |

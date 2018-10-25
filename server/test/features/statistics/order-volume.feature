@@ -57,7 +57,7 @@ Feature: Statistical information about orders placed and the volumes achieved
     Then there should be a 200 response from the "statistics" request that contains:
       | list      | total |
       | ARRAY[30] | 30    |
-    And the response from the "statistics" request has a "list" that contains rows:
+    And the response from the "statistics" request has a "list" field that contains rows:
       | year       | month       | day       | value | refund | count |
       | YEAR[-696] | MONTH[-696] | DAY[-696] | 0     | 0      | 0     |
       | YEAR[-672] | MONTH[-672] | DAY[-672] | 0     | 0      | 0     |

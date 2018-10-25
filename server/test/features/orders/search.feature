@@ -57,8 +57,8 @@ Feature: Browsing of orders that have been placed by customers
       | list     | total | skip | limit |
       | ARRAY[2] | 2     | 0    | 20    |
     And the "order" request that has a "list" field and row 2 contains:
-      | _id       | customer                                                                 | reference    | items                                                                                                                                                                                                                      | shipping                              | destination | payment                                                                                                                                                                                                  | status     | created   |
-      | OBJECT_ID | { "identity": "orders-search-three@venzra-test.io", "status": "ACTIVE" } | "7777777890" | [{ "price": 350, "product": { "code": "SEARCH-02-001", "slug": "orders-search-a", "displayName": "Orders Search A", "promotionalImage": "{{ images[1]._id }}", "currentPrice": 999, "status": "ACTIVE" }, "quantity": 2 }] | { "name": "Example G", "price": 400 } | OBJECT      | { "name": "Example Seven", "card": "6789", "brand": "MasterCard", "fee": { "venzra": { "amount": 33, "currency": "gbp" }, "gateway": { "amount": 52, "currency": "gbp" }, "total": 85 }, "value": 1100 } | PROCESSING | DATE_TIME |
+      | _id       | customer                                                                 | reference    | items                                                                                                                                                                                                                                                                                                                                                               | shipping                              | destination | payment                                                                                                                                                                                                  | status     | created   |
+      | OBJECT_ID | { "identity": "orders-search-three@venzra-test.io", "status": "ACTIVE" } | "7777777890" | [{ "price": 350, "product": { "code": "SEARCH-02-001", "slug": "orders-search-a", "displayName": "Orders Search A", "promotionalImage": { "_id": "{{ images[1]._id }}", "name": "OrdersSearch Image A", "usage": "promotion", "path": "{{ subscriptions[1]._id }}/promotion/{{ images[1]._id }}.jpg" }, "currentPrice": 999, "status": "ACTIVE" }, "quantity": 2 }] | { "name": "Example G", "price": 400 } | OBJECT      | { "name": "Example Seven", "card": "6789", "brand": "MasterCard", "fee": { "venzra": { "amount": 33, "currency": "gbp" }, "gateway": { "amount": 52, "currency": "gbp" }, "total": 85 }, "value": 1100 } | PROCESSING | DATE_TIME |
 
   Scenario: Requesting a list of orders adheres to pagination values for skip and limit
     Given I am logged in with the "orders-search-one@venzra-test.io" account
@@ -76,7 +76,7 @@ Feature: Browsing of orders that have been placed by customers
     Then there should be a 200 response from the "order" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 3     | 0    | 20    |
-    And the response from the "order" request has a "list" that contains rows:
+    And the response from the "order" request has a "list" field that contains rows:
       | _id                 | reference    |
       | {{ orders[4]._id }} | "4444444567" |
       | {{ orders[3]._id }} | "3333333456" |
@@ -88,7 +88,7 @@ Feature: Browsing of orders that have been placed by customers
     Then there should be a 200 response from the "order" request that contains:
       | list     | total | skip | limit |
       | ARRAY[1] | 1     | 0    | 20    |
-    And the response from the "order" request has a "list" that contains rows:
+    And the response from the "order" request has a "list" field that contains rows:
       | _id                 | status     |
       | {{ orders[4]._id }} | PROCESSING |
 
@@ -98,7 +98,7 @@ Feature: Browsing of orders that have been placed by customers
     Then there should be a 200 response from the "order" request that contains:
       | list     | total | skip | limit |
       | ARRAY[6] | 6     | 0    | 20    |
-    And the response from the "order" request has a "list" that contains rows:
+    And the response from the "order" request has a "list" field that contains rows:
       | _id                 | reference    |
       | {{ orders[1]._id }} | "1111111234" |
       | {{ orders[2]._id }} | "2222222345" |
@@ -110,7 +110,7 @@ Feature: Browsing of orders that have been placed by customers
     Then there should be a 200 response from the "order" request that contains:
       | list     | total | skip | limit |
       | ARRAY[6] | 6     | 0    | 20    |
-    And the response from the "order" request has a "list" that contains rows:
+    And the response from the "order" request has a "list" field that contains rows:
       | _id                 | reference    |
       | {{ orders[2]._id }} | "2222222345" |
       | {{ orders[3]._id }} | "3333333456" |

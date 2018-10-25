@@ -7,6 +7,7 @@ import { AuthenticationController } from './authentication';
 import { NotFoundError } from '../middleware/error-handler';
 import { LocationModel } from '../models/locations';
 import { IRestOperation } from '../models/rest';
+import { ImageModel } from '../models/images';
 
 export class LocationController extends AuthenticationController {
 
@@ -103,6 +104,10 @@ export class LocationController extends AuthenticationController {
         LocationModel
             .findOne({ _id, subscription })
             .select('displayName description address featureImage usage created updated')
+            .populate({
+                path: 'featureImage',
+                select: '_id name usage path'
+            })
             .then((content) => {
                 if (!content) {
                     throw new NotFoundError();
@@ -125,6 +130,10 @@ export class LocationController extends AuthenticationController {
                         { $sort: order },
                         { $project: { displayName: 1, address: 1, featureImage: 1, usage: 1, created: 1 } }
                     ])
+                    .then((result) => ImageModel.populate(result, {
+                        path: 'featureImage',
+                        select: '_id name usage path'
+                    }))
                     .then((list) => res.status(200).send({ list, total }))
             )
             .catch((error) => next(error));

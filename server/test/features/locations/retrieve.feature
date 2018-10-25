@@ -24,8 +24,11 @@ Feature: Retrieve information for a locations
     Given I am logged in with the "locations-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/locations/{{ locations[1]._id }}" as "location"
     Then there should be a 200 response from the "location" request that contains:
-      | _id       | displayName          | description        | address | featureImage        | usage    | created   | updated   |
-      | OBJECT_ID | Locations Retrieve A | Automated location | OBJECT  | {{ images[1]._id }} | BUSINESS | DATE_TIME | DATE_TIME |
+      | _id       | displayName          | description        | address | featureImage                | usage    | created   | updated   |
+      | OBJECT_ID | Locations Retrieve A | Automated location | OBJECT  | OBJECT[_id,name,usage,path] | BUSINESS | DATE_TIME | DATE_TIME |
+    And the response path "featureImage" from the "location" request contains:
+      | _id                 | name                      | usage   | path                                                       |
+      | {{ images[1]._id }} | LocationsRetrieve Image A | feature | {{ subscriptions[1]._id }}/feature/{{ images[1]._id }}.jpg |
     And the response path "address" from the "location" request contains:
       | _id       | addressee        | street | county | postalCode | country |
       | OBJECT_ID | Location manager | Street | County | PO573OX    | GB      |

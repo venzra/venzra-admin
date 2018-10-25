@@ -27,7 +27,7 @@
             <ng-container matColumnDef="image">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
                 <mat-cell class="table-image" *matCellDef="let row">
-                    <ng-container *ngIf="row.featureImage"><img [src]="'/api/images/' + row.featureImage" /></ng-container>
+                    <ng-container *ngIf="row.featureImage"><img [venzraImage]="row.featureImage" /></ng-container>
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="name">

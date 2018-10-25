@@ -35,8 +35,11 @@ Feature: Retrieve information for a product
     Given I am logged in with the "products-retrieve-one@venzra-test.io" account
     When I make a GET request to the API endpoint "/api/products/{{ products[1]._id }}" as "product"
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug               | code            | displayName        | description           | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-retrieve-a | RETRIEVE-01-001 | Product Retrieve A | Automated Description | {{ images[2]._id }} | 0             | 9            | ARRAY[1]   | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug               | code            | displayName        | description           | promotionalImage            | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-retrieve-a | RETRIEVE-01-001 | Product Retrieve A | Automated Description | OBJECT[_id,name,usage,path] | 0             | 9            | ARRAY[1]   | ARRAY[0] | ACTIVE | DATE_TIME | DATE_TIME |
+    And the response path "promotionalImage" from the "product" request contains:
+      | _id                 | name                     | usage     | path                                                         |
+      | {{ images[2]._id }} | ProductsRetrieve Image B | promotion | {{ subscriptions[1]._id }}/promotion/{{ images[2]._id }}.jpg |
     And the response path "categories" from the "product" request contains:
       | _id                     | name                | parent                                                              |
       | {{ categories[2]._id }} | Products Retrieve B | { "_id": "{{ categories[1]._id }}", "name": "Products Retrieve A" } |

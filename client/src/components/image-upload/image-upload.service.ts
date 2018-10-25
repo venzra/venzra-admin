@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-export class Image {
-    _id?: string;
-}
+import { VenzraImage } from '@venzra/models';
 
 @Injectable()
 export class ImageService {
 
     public progress: BehaviorSubject<number> = new BehaviorSubject(0);
-    public image: Subject<Image> = new Subject();
+    public image: Subject<VenzraImage> = new Subject();
     public result: Subject<{ status: Number, text: String }> = new Subject();
 
     constructor(

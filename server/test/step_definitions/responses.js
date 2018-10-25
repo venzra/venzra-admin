@@ -1,6 +1,5 @@
 const cookieParser = require('cookie');
 const moment = require('moment');
-const sharp = require('sharp');
 
 const { Given, When, Then } = require('cucumber');
 const { expect } = require('chai');
@@ -36,7 +35,7 @@ const checkValues = (expected, actual, exact = true) => {
                 expect(actual[key]).to.equal(date.getDate());
                 break;
             case 'DATE':
-                date = moment().endOf('day').add(check[1], 'hours').toDate();
+                date = moment().add(check[1], 'hours').endOf('day').toDate();
                 expect(actual[key]).to.equal(date.toISOString());
                 break;
             case 'OBJECT_ID':
@@ -54,6 +53,9 @@ const checkValues = (expected, actual, exact = true) => {
                 break;
             case 'OBJECT':
                 expect(actual[key]).to.be.an('object');
+                if (check instanceof Array) {
+                    expect(actual[key]).to.have.keys(check[1].split(','));
+                }
                 break;
             case 'REGEX':
                 expect(actual[key]).to.match(new RegExp(check[1]));
@@ -74,18 +76,6 @@ Then(/^the status returned from the "([^"]*)" request should be a (401|403|404|5
         .then((history) => expect(history.status).to.equal(parseInt(statusCode)));
 });
 
-Then(/^there should be a 200 response from the "([^"]*)" request with an "([^"]*)" binary containing:$/, function (historyName, expectedType, expectedData) {
-    expectedData = this.getHashes(expectedData);
-
-    return Promise.resolve(this.getHistory(historyName))
-        .then((history) => Promise.all([
-                expect(history.status).to.equal(parseInt(200)),
-                expect(history.headers['content-type']).to.equal(expectedType),
-                sharp(history.response).metadata().then((metadata) => checkValues(expectedData[0], metadata, false))
-            ])
-        );
-});
-
 Then(/^(?:there should be a (200|400|413) (?:response|error) from )?the "([^"]*)" request that(?: has (?:a|an) "([^"]*)" field and row (\d+))? contains:$/, function (statusCode, historyName, expectedField, expectedRecord, expectedData) {
     expectedData = this.getHashes(expectedData);
 
@@ -97,7 +87,7 @@ Then(/^(?:there should be a (200|400|413) (?:response|error) from )?the "([^"]*)
         );
 });
 
-Then(/^the response from the "([^"]*)" request has a "([^"]*)" that contains rows:$/, function (historyName, expectedField, expectedData) {
+Then(/^the response from the "([^"]*)" request has (?:a|an) "([^"]*)" field that contains rows:$/, function (historyName, expectedField, expectedData) {
     expectedData = this.getHashes(expectedData);
 
     return Promise.resolve(this.getHistory(historyName))

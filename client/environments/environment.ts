@@ -7,5 +7,6 @@ export const environment = {
     production: false,
     stripe: 'pk_test_f4W7kfQd1Ow7UC8A9T8Ch7xY',
     stripeGateway: 'ca_5EKpUYPlhme8oWVJD8QXRaA1iAn0A408',
-    apiUri: 'http://localhost:3000'
+    apiUri: 'http://localhost:3000',
+    cdnUri: 'https://s3-eu-west-1.amazonaws.com/images.venzra-test.com'
 };

@@ -30,7 +30,7 @@ Feature: Searching of available career positions
     Then there should be a 200 response from the "career" request that contains:
       | list     | total |
       | ARRAY[6] | 6     |
-    And the response from the "career" request has a "list" that contains rows:
+    And the response from the "career" request has a "list" field that contains rows:
       | _id                  | position                    | expires    | created   |
       | {{ careers[3]._id }} | Careers Search Position AAA | DATE[-120] | DATE_TIME |
       | {{ careers[2]._id }} | Careers Search Position AA  | DATE[0]    | DATE_TIME |

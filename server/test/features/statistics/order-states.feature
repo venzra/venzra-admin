@@ -57,7 +57,7 @@ Feature: Statistical information about orders placed and the status achieved
     Then there should be a 200 response from the "statistics" request that contains:
       | list     | total |
       | ARRAY[4] | 4     |
-    And the response from the "statistics" request has a "list" that contains rows:
+    And the response from the "statistics" request has a "list" field that contains rows:
       | status     | value | count |
       | AUTHORISED | 3796  | 4     |
       | CREATED    | 175   | 1     |

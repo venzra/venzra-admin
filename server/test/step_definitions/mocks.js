@@ -7,7 +7,7 @@ const querystring = require('querystring');
 const { Given, When, Then } = require('cucumber');
 const { expect } = require('chai');
 
-const prepareMock = (uri, target, type, status, file, body) => {
+const prepareMock = (uri, target, type, status, file) => {
     let mock = nock(uri).log((message, actual, separator, expected) => {
         message = message.trim();
         switch (message) {
@@ -29,11 +29,7 @@ const prepareMock = (uri, target, type, status, file, body) => {
     }
 
     if (file) {
-        if (type === 'HEAD') {
-            mock = mock.reply(status, null, JSON.parse(fs.readFileSync(path.join(__dirname, '../mocks', file), 'utf8')));
-        } else {
-            mock = mock.replyWithFile(status, path.join(__dirname, '../mocks', file));
-        }
+        mock = mock.replyWithFile(status, path.join(__dirname, '../mocks', file));
     } else {
         mock = mock.reply(status);
     }
@@ -41,14 +37,9 @@ const prepareMock = (uri, target, type, status, file, body) => {
     return mock;
 };
 
-Given(/^there is a (HEAD|POST|PUT|GET) consumer at "([^"]*)"(?: for "([^"]*)")? that will return(?: "([^"]*)" with)? status (\d+)$/, function (type, uri, target, file, status) {
+Given(/^there is a (POST|PUT|GET) consumer at "([^"]*)"(?: for "([^"]*)")? that will return(?: "([^"]*)" with)? status (\d+)$/, function (type, uri, target, file, status) {
     target = target ? this.parseTemplateString(target) : target;
     return this.addMock(prepareMock(uri, target, type, status, file));
-});
-
-Given(/^there is a (POST|GET) consumer at "([^"]*)"(?: for "([^"]*)")? that will return(?: "([^"]*)" with)? status (\d+) when called with:$/, function (type, uri, target, file, status, requestData) {
-    requestData = querystring.stringify(this.getHashes(requestData)[0]);
-    return this.addMock(prepareMock(uri, target, type, status, file, requestData));
 });
 
 Given(/^I show the available history$/, function () {

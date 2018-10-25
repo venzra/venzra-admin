@@ -1,6 +1,4 @@
 import * as parser from 'body-parser';
-import * as stream from 'stream';
-
 import * as sharp from 'sharp';
 
 import { Request, Response, NextFunction, Router } from 'express';
@@ -9,7 +7,7 @@ import { S3 } from 'aws-sdk';
 import { AuthenticationController } from './authentication';
 
 import { ImageModel } from '../models/images';
-import { ThirdPartyError, ValidationError } from '../middleware/error-handler';
+import { NotFoundError, ThirdPartyError, ValidationError } from '../middleware/error-handler';
 
 import { environment } from '../config';
 
@@ -75,23 +73,29 @@ export class ImagesController extends AuthenticationController {
             return next(new ValidationError(errors));
         }
 
+        const binary = Buffer.from(req.body, 'base64');
         const image = new ImageModel({
             subscription: this.account.subscription._id,
             name: req.query.name,
-            usage: req.query.usage
+            usage: req.query.usage,
+            size: binary.length
         });
 
-        const ACL = 'private';
-        const Bucket = environment.imageBucket;
-        const Key = `${image.subscription}/${image.usage}/${image._id}`;
-        const Body = Buffer.from(req.body, 'base64');
-        const ContentType = req.headers['content-type'];
+        image.save()
+            .then((result) => {
+                req.params.imageId = result._id;
 
-        const params: S3.PutObjectRequest = { ACL, Bucket, Key, Body, ContentType };
+                const ACL = 'private';
+                const Bucket = environment.imageBucket;
+                const Key = image.path;
+                const Body = binary;
+                const ContentType = req.headers['content-type'];
+                const CacheControl = 'max-age=31536000, public';
 
-        this.awsClient.putObject(params).promise()
-            .then(() => image.set('size', Body.length))
-            .then(() => image.save().then((result) => req.params.imageId = result._id))
+                const params: S3.PutObjectRequest = { ACL, Bucket, Key, Body, ContentType, CacheControl };
+
+                return this.awsClient.putObject(params).promise();
+            })
             .then(() => {
                 req.headers['content-type'] = 'application/json';
                 next();
@@ -102,31 +106,12 @@ export class ImagesController extends AuthenticationController {
     findOne(req: Request, res: Response, next: NextFunction) {
         ImageModel
             .findOne({ _id: req.params.imageId, subscription: this.account.subscription._id })
-            .select('_id name usage size')
+            .select('_id name usage path size')
             .then((image) => {
-                if (req.get('content-type') === 'application/json') {
-                    res.status(200).send(image);
-                } else {
-                    return Promise.resolve()
-                        .then(() => {
-                            const Bucket = environment.imageBucket;
-                            const Key = `${this.account.subscription._id}/${image.usage}/${image._id}`;
-
-                            const params = { Bucket, Key };
-
-                            return this.awsClient.headObject(params).promise();
-                        })
-                        .then((meta) => res.setHeader('content-type', meta.ContentType))
-                        .then(() => {
-                            const Bucket = environment.imageBucket;
-                            const Key = `${this.account.subscription._id}/${image.usage}/${image._id}`;
-
-                            const params = { Bucket, Key };
-
-                            return this.awsClient.getObject(params).createReadStream();
-                        })
-                        .then((result: stream.Readable) => result.pipe(res));
+                if (!image) {
+                    throw new NotFoundError();
                 }
+                res.status(200).send(image);
             })
             .catch((error) => next(error));
     }

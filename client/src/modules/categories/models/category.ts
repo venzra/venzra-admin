@@ -1,3 +1,5 @@
+import { VenzraImage } from '@venzra/models';
+
 import { Product } from './product';
 
 export interface CategoryChild {
@@ -5,7 +7,7 @@ export interface CategoryChild {
     slug: string;
     name: string;
     description: string;
-    featureImage: string;
+    featureImage: VenzraImage;
     parent?: Category | string;
     products?: Product[];
     created: Date;

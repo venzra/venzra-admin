@@ -1,8 +1,12 @@
 import { AfterContentInit, Component, ContentChild, ElementRef, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { VenzraImage } from '@venzra/models';
+
 import { ImageInputControl } from './image-input.control';
 import { ImageService } from './image-upload.service';
+
+import { environment } from '@venzra/environment';
 
 @Component({
     selector: 'venzra-image-upload',
@@ -19,7 +23,7 @@ export class ImageUploadComponent implements AfterContentInit {
     public touched = false;
     public state: 'info' | 'success' | 'error' = 'info';
     public detail: any;
-    public image: string;
+    public image: VenzraImage;
     public mode: string;
     public progress: number;
     public background: any;
@@ -59,10 +63,10 @@ export class ImageUploadComponent implements AfterContentInit {
             }
         });
 
-        this.imageService.image.subscribe((image) => {
-            if (image && image._id) {
-                this.setValue(image._id);
-                this.showImage(image._id);
+        this.imageService.image.subscribe((image: VenzraImage) => {
+            if (image) {
+                this.setValue(image);
+                this.showImage(image);
             } else {
                 this.showImage(null);
             }
@@ -78,10 +82,10 @@ export class ImageUploadComponent implements AfterContentInit {
         }
     }
 
-    showImage(reference) {
-        if (reference) {
-            this.image = `/api/images/${reference}`;
-            this.background = this.sanitizer.bypassSecurityTrustStyle(`url(${this.image})`);
+    showImage(image: VenzraImage) {
+        if (image) {
+            this.image = image;
+            this.background = this.sanitizer.bypassSecurityTrustStyle(`url(${environment.cdnUri}/${image.path})`);
         } else {
             this.image = null;
             this.background = null;
@@ -89,7 +93,7 @@ export class ImageUploadComponent implements AfterContentInit {
         this.state = 'success';
     }
 
-    setValue(value: string) {
+    setValue(value: VenzraImage) {
         this.control.ngControl.reset(value);
 
         if (value) {

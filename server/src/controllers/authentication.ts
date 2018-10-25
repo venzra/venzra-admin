@@ -29,6 +29,14 @@ export class AuthenticationController {
         SubscriptionModel
             .findById(this.account.subscription._id)
             .select('storeName domainName strapline icon logo theme payment gateway.account gateway.modified transactions addons contact status')
+            .populate({
+                path: 'icon',
+                select: '_id name usage path'
+            })
+            .populate({
+                path: 'logo',
+                select: '_id name usage path'
+            })
             .sort({ addons: 1 })
             .then((subscription) => res.status(200).send(subscription));
     }

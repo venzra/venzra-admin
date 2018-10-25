@@ -38,7 +38,7 @@
         <mat-table #table [dataSource]="dataSource" matSort matSortDisableClear matSortActive="created" matSortDirection="desc">
             <ng-container matColumnDef="image">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                <mat-cell class="table-image" *matCellDef="let row"><img [src]="'/api/images/' + row.promotionalImage" /></mat-cell>
+                <mat-cell class="table-image" *matCellDef="let row"><img [venzraImage]="row.promotionalImage" /></mat-cell>
             </ng-container>
             <ng-container matColumnDef="code">
                 <mat-header-cell *matHeaderCellDef>Code</mat-header-cell>

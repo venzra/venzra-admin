@@ -65,7 +65,7 @@
         <mat-card-content>
             <div fxLayout="row" fxLayoutGap="20px">
                 <div fxLayoutAlign="center center" fxFlex="40%">
-                    <img [src]="'/api/images/' + product.promotionalImage" style="max-width: 100%" />
+                    <img [venzraImage]="product.promotionalImage" style="max-width: 100%" />
                 </div>
                 <div fxLayout="column">
                     <h2>{{ product.displayName }}</h2>

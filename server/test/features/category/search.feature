@@ -41,8 +41,8 @@ Feature: Search information for a category
       | list     | total | skip | limit |
       | ARRAY[7] | 7     | 0    | 20    |
     And the "category" request that has a "list" field and row 1 contains:
-      | _id       | slug              | name              | featureImage        | primary | children | products | created   |
-      | OBJECT_ID | category-search-a | Category Search A | {{ images[1]._id }} | true    | 2        | 0        | DATE_TIME |
+      | _id       | slug              | name              | featureImage                | primary | children | products | created   |
+      | OBJECT_ID | category-search-a | Category Search A | OBJECT[_id,name,usage,path] | true    | 2        | 0        | DATE_TIME |
     And the "category" request that has a "list" field and row 2 contains:
       | _id       | slug               | name               | primary | children | products | created   |
       | OBJECT_ID | category-search-aa | Category Search AA | true    | 0        | 0        | DATE_TIME |
@@ -73,7 +73,7 @@ Feature: Search information for a category
     Then there should be a 200 response from the "category" request that contains:
       | list     | total | skip | limit |
       | ARRAY[4] | 4     | 0    | 20    |
-    And the response from the "category" request has a "list" that contains rows:
+    And the response from the "category" request has a "list" field that contains rows:
       | _id                     | name                |
       | {{ categories[1]._id }} | Category Search A   |
       | {{ categories[2]._id }} | Category Search AA  |
@@ -87,8 +87,8 @@ Feature: Search information for a category
       | list     | total | skip | limit |
       | ARRAY[5] | 5     | 0    | 20    |
     And the "category" request that has a "list" field and row 1 contains:
-      | _id       | slug              | name              | featureImage        | primary | children | products | created   |
-      | OBJECT_ID | category-search-a | Category Search A | {{ images[1]._id }} | true    | 2        | 0        | DATE_TIME |
+      | _id       | slug              | name              | featureImage                | primary | children | products | created   |
+      | OBJECT_ID | category-search-a | Category Search A | OBJECT[_id,name,usage,path] | true    | 2        | 0        | DATE_TIME |
 
   Scenario: Sorting category results in reverse
     Given I am logged in with the "category-search-one@venzra-test.io" account
@@ -96,7 +96,7 @@ Feature: Search information for a category
     Then there should be a 200 response from the "category" request that contains:
       | list     | total | skip | limit |
       | ARRAY[7] | 7     | 0    | 20    |
-    And the response from the "category" request has a "list" that contains rows:
+    And the response from the "category" request has a "list" field that contains rows:
       | _id                     | name                |
       | {{ categories[6]._id }} | Category Search D   |
       | {{ categories[5]._id }} | Category Search C   |
@@ -109,7 +109,7 @@ Feature: Search information for a category
     Then there should be a 200 response from the "category" request that contains:
       | list     | total | skip | limit |
       | ARRAY[7] | 7     | 0    | 20    |
-    And the response from the "category" request has a "list" that contains rows:
+    And the response from the "category" request has a "list" field that contains rows:
       | _id                     | name                |
       | {{ categories[1]._id }} | Category Search A   |
       | {{ categories[2]._id }} | Category Search AA  |
@@ -122,7 +122,7 @@ Feature: Search information for a category
     Then there should be a 200 response from the "category" request that contains:
       | list     | total | skip | limit |
       | ARRAY[7] | 7     | 0    | 20    |
-    And the response from the "category" request has a "list" that contains rows:
+    And the response from the "category" request has a "list" field that contains rows:
       | _id                     | name                |
       | {{ categories[7]._id }} | Category Search ABC |
       | {{ categories[6]._id }} | Category Search D   |

@@ -36,19 +36,19 @@ Feature: Updating product information
       | {{ subscriptions[1]._id }} | PRODUCT-UPDATE-0003 | Automated Description | Product Update C | {{ images[1]._id }} | 999          |
       | {{ subscriptions[2]._id }} | PRODUCT-UPDATE-0004 | Automated Description | Product Update D | {{ images[3]._id }} | 9999         |
 
-  Scenario: If no update information is provided then the request is ignored
-    Given I am logged in with the "product-update-one@venzra-test.io" account
-    When I make an empty PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product"
-    Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug             | code                | displayName      | description           | promotionalImage    | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
-      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | Product Update A | Automated Description | {{ images[2]._id }} | 0             | 9            | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
-
   Scenario: Attempting to update a product that does not belong to the account subscription is rejected
     Given I am logged in with the "product-update-two@venzra-test.io" account
     When I make a PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product" using:
       | op      | path   | value  |
       | replace | status | ACTIVE |
     Then the status returned from the "product" request should be a 404 error
+
+  Scenario: If no update information is provided then the request is ignored
+    Given I am logged in with the "product-update-one@venzra-test.io" account
+    When I make an empty PATCH request to the API endpoint "/api/products/{{ products[1]._id }}" as "product"
+    Then there should be a 200 response from the "product" request that contains:
+      | _id       | slug             | code                | displayName      | description           | promotionalImage            | previousPrice | currentPrice | categories | history  | status   | created   | updated   |
+      | OBJECT_ID | product-update-a | PRODUCT-UPDATE-0001 | Product Update A | Automated Description | OBJECT[_id,name,usage,path] | 0             | 9            | ARRAY[0]   | ARRAY[0] | INACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Update product information with values provided which can be altered
     Given I am logged in with the "product-update-one@venzra-test.io" account
@@ -63,8 +63,11 @@ Feature: Updating product information
       | replace | status           | ACTIVE               |
       | replace | slug             | updated-slug         |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage            | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | OBJECT[_id,name,usage,path] | 8             | 5            | ARRAY[0]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
+    And the response path "promotionalImage" from the "product" request contains:
+      | _id                 | name                   | usage     | path                                                         |
+      | {{ images[1]._id }} | ProductsUpdate Image A | promotion | {{ subscriptions[1]._id }}/promotion/{{ images[1]._id }}.jpg |
     And the "product" request that has a "history" field and row 1 contains:
       | account | field  | previous | next   | created   |
       | OBJECT  | status | INACTIVE | ACTIVE | DATE_TIME |
@@ -90,8 +93,8 @@ Feature: Updating product information
       | op      | path       | value                   |
       | replace | categories | {{ categories[2]._id }} |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[0]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage            | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | OBJECT[_id,name,usage,path] | 8             | 5            | ARRAY[0]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Assign categories to a product
     Given I am logged in with the "product-update-one@venzra-test.io" account
@@ -99,8 +102,8 @@ Feature: Updating product information
       | op      | path       | value                                                                                                         |
       | replace | categories | ["{{ categories[1]._id }}", "{{ categories[2]._id }}", "{{ categories[3]._id }}", "{{ categories[4]._id }}" ] |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[3]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage            | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | OBJECT[_id,name,usage,path] | 8             | 5            | ARRAY[3]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
     And the response path "categories" from the "product" request contains:
       | _id                     | name              | parent                                                            |
       | {{ categories[2]._id }} | Products Update B | { "_id": "{{ categories[1]._id }}", "name": "Products Update A" } |
@@ -110,7 +113,7 @@ Feature: Updating product information
     Then there should be a 200 response from the "category" request that contains:
       | list     | total | skip | limit |
       | ARRAY[4] | 4     | 0    | 20    |
-    And the response from the "category" request has a "list" that contains rows:
+    And the response from the "category" request has a "list" field that contains rows:
       | _id                     | name              | products |
       | {{ categories[1]._id }} | Products Update A | 0        |
       | {{ categories[2]._id }} | Products Update B | 1        |
@@ -123,13 +126,13 @@ Feature: Updating product information
       | op      | path       | value                       |
       | replace | categories | ["{{ categories[3]._id }}"] |
     Then there should be a 200 response from the "product" request that contains:
-      | _id       | slug                 | code                | displayName          | description         | promotionalImage    | previousPrice | currentPrice | categories | history  | status | created   | updated   |
-      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | {{ images[1]._id }} | 8             | 5            | ARRAY[1]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | slug                 | code                | displayName          | description         | promotionalImage            | previousPrice | currentPrice | categories | history  | status | created   | updated   |
+      | OBJECT_ID | product-update-patch | PRODUCT-UPDATE-0001 | Product Update PATCH | Updated Description | OBJECT[_id,name,usage,path] | 8             | 5            | ARRAY[1]   | ARRAY[6] | ACTIVE | DATE_TIME | DATE_TIME |
     When I make a GET request to the API endpoint "/api/categories" as "category"
     Then there should be a 200 response from the "category" request that contains:
       | list     | total | skip | limit |
       | ARRAY[4] | 4     | 0    | 20    |
-    And the response from the "category" request has a "list" that contains rows:
+    And the response from the "category" request has a "list" field that contains rows:
       | _id                     | name              | products |
       | {{ categories[1]._id }} | Products Update A | 0        |
       | {{ categories[2]._id }} | Products Update B | 0        |

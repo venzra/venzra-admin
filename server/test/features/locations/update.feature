@@ -37,8 +37,11 @@ Feature: Update locations information for display and modification
       | replace | featureImage | {{ images[1]._id }}                                                                                                         |
       | replace | usage        | store                                                                                                                       |
     Then there should be a 200 response from the "location" request that contains:
-      | _id       | displayName      | description         | address | featureImage        | usage | created   | updated   |
-      | OBJECT_ID | Location updated | Updated description | OBJECT  | {{ images[1]._id }} | STORE | DATE_TIME | DATE_TIME |
+      | _id       | displayName      | description         | address | featureImage                | usage | created   | updated   |
+      | OBJECT_ID | Location updated | Updated description | OBJECT  | OBJECT[_id,name,usage,path] | STORE | DATE_TIME | DATE_TIME |
+    And the response path "featureImage" from the "location" request contains:
+      | _id                 | name                    | usage   | path                                                       |
+      | {{ images[1]._id }} | LocationsUpdate Image A | feature | {{ subscriptions[1]._id }}/feature/{{ images[1]._id }}.jpg |
     And the response path "address" from the "location" request contains:
       | _id       | addressee         | street   | county   | postalCode | country |
       | OBJECT_ID | Regional director | P.O. Box | Province | TE373OD    | GB      |

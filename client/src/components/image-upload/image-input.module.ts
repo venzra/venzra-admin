@@ -3,12 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule, MatProgressBarModule } from '@angular/material';
 
+import { VenzraImageDirective } from '@venzra/components/image-upload/image.directive';
+
 import { ImageInputDirective } from './image-input.directive';
 import { ImageUploadComponent } from './image-upload.component';
 
 @NgModule({
     declarations: [
         ImageInputDirective,
+        VenzraImageDirective,
         ImageUploadComponent
     ],
     imports: [
@@ -19,6 +22,7 @@ import { ImageUploadComponent } from './image-upload.component';
     ],
     exports: [
         ImageInputDirective,
+        VenzraImageDirective,
         ImageUploadComponent
     ]
 })

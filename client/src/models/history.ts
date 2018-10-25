@@ -3,5 +3,6 @@ export interface HistoryModel {
     field: string;
     previous: string;
     next: string;
+    created: Date;
     updated: Date;
 }

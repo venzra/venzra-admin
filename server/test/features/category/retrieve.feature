@@ -37,9 +37,9 @@ Feature: Retrieve information for a category
       | _id       | slug                | name                | description           | primary | children | products | created   | updated   |
       | OBJECT_ID | category-retrieve-a | Category Retrieve A | Automated description | true    | ARRAY[0] | ARRAY[2] | DATE_TIME | DATE_TIME |
     And the response path "products" from the "category" request contains:
-      | _id       | code            | displayName         | promotionalImage    | status | created   | updated   |
-      | OBJECT_ID | RETRIEVE-01-001 | Category Retrieve A | {{ images[2]._id }} | ACTIVE | DATE_TIME | DATE_TIME |
-      | OBJECT_ID | RETRIEVE-01-002 | Category Retrieve B | {{ images[2]._id }} | ACTIVE | DATE_TIME | DATE_TIME |
+      | _id       | code            | displayName         | promotionalImage            | status | created   | updated   |
+      | OBJECT_ID | RETRIEVE-01-001 | Category Retrieve A | OBJECT[_id,name,usage,path] | ACTIVE | DATE_TIME | DATE_TIME |
+      | OBJECT_ID | RETRIEVE-01-002 | Category Retrieve B | OBJECT[_id,name,usage,path] | ACTIVE | DATE_TIME | DATE_TIME |
 
   Scenario: Retrieval of a category contains correct data
     Given I am logged in with the "category-retrieve-one@venzra-test.io" account

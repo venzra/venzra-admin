@@ -32,14 +32,14 @@ Feature: Searching of available locations options
     Then there should be a 200 response from the "location" request that contains:
       | list     | total |
       | ARRAY[6] | 6     |
-    And the response from the "location" request has a "list" that contains rows:
-      | _id                    | displayName          | address | featureImage        | usage    | created   |
-      | {{ locations[3]._id }} | Locations Search A   | OBJECT  | {{ images[1]._id }} | BUSINESS | DATE_TIME |
-      | {{ locations[2]._id }} | Locations Search AA  | OBJECT  | {{ images[1]._id }} | STORE    | DATE_TIME |
-      | {{ locations[1]._id }} | Locations Search AAA | OBJECT  | {{ images[1]._id }} | BUSINESS | DATE_TIME |
-      | {{ locations[4]._id }} | Locations Search B   | OBJECT  | {{ images[1]._id }} | BUSINESS | DATE_TIME |
-      | {{ locations[5]._id }} | Locations Search C   | OBJECT  | {{ images[1]._id }} | STORE    | DATE_TIME |
-      | {{ locations[6]._id }} | Locations Search D   | OBJECT  | {{ images[1]._id }} | STORE    | DATE_TIME |
+    And the response from the "location" request has a "list" field that contains rows:
+      | _id                    | displayName          | address | featureImage                | usage    | created   |
+      | {{ locations[3]._id }} | Locations Search A   | OBJECT  | OBJECT[_id,name,usage,path] | BUSINESS | DATE_TIME |
+      | {{ locations[2]._id }} | Locations Search AA  | OBJECT  | OBJECT[_id,name,usage,path] | STORE    | DATE_TIME |
+      | {{ locations[1]._id }} | Locations Search AAA | OBJECT  | OBJECT[_id,name,usage,path] | BUSINESS | DATE_TIME |
+      | {{ locations[4]._id }} | Locations Search B   | OBJECT  | OBJECT[_id,name,usage,path] | BUSINESS | DATE_TIME |
+      | {{ locations[5]._id }} | Locations Search C   | OBJECT  | OBJECT[_id,name,usage,path] | STORE    | DATE_TIME |
+      | {{ locations[6]._id }} | Locations Search D   | OBJECT  | OBJECT[_id,name,usage,path] | STORE    | DATE_TIME |
 
   Scenario: Requesting a list of locations should be empty when there are none for that subscription
     Given I am logged in with the "locations-search-three@venzra-test.io" account

@@ -4,5 +4,6 @@ export interface CategoryChild {
 }
 
 export interface Category extends CategoryChild {
+    parent: Category;
     children: CategoryChild[];
 }

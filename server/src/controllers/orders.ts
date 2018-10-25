@@ -95,7 +95,11 @@ export class OrdersController extends AuthenticationController {
             })
             .populate({
                 path: 'items.product',
-                select: '-_id slug code displayName promotionalImage currentPrice status'
+                select: '-_id slug code displayName promotionalImage currentPrice status',
+                populate: {
+                    path: 'promotionalImage',
+                    select: '_id name usage path'
+                }
             })
             .populate({
                 path: 'history',
@@ -147,7 +151,11 @@ export class OrdersController extends AuthenticationController {
                     }))
                     .then((result) => ProductModel.populate(result, {
                         path: 'items.product',
-                        select: '-_id slug code displayName promotionalImage currentPrice status'
+                        select: '-_id slug code displayName promotionalImage currentPrice status',
+                        populate: {
+                            path: 'promotionalImage',
+                            select: '_id name usage path'
+                        }
                     }))
                     .then((list) => res.status(200).send({ list, total, skip, limit }))
             )

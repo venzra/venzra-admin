@@ -28,7 +28,7 @@ Feature: Searching of available shipping options
     Then there should be a 200 response from the "shipment" request that contains:
       | list     | total | skip | limit |
       | ARRAY[6] | 6     | 0    | 20    |
-    And the response from the "shipment" request has a "list" that contains rows:
+    And the response from the "shipment" request has a "list" field that contains rows:
       | _id                   | displayName | currentPrice | shipmentTime |
       | {{ shipping[3]._id }} | Shipping C  | 200          | 48           |
       | {{ shipping[6]._id }} | Shipping F  | 200          | 168          |
@@ -43,7 +43,7 @@ Feature: Searching of available shipping options
     Then there should be a 200 response from the "shipment" request that contains:
       | list     | total | skip | limit |
       | ARRAY[3] | 6     | 2    | 3     |
-    And the response from the "shipment" request has a "list" that contains rows:
+    And the response from the "shipment" request has a "list" field that contains rows:
       | _id                   | displayName | currentPrice | shipmentTime |
       | {{ shipping[2]._id }} | Shipping B  | 450          | 72           |
       | {{ shipping[5]._id }} | Shipping E  | 500          | 36           |
@@ -55,7 +55,7 @@ Feature: Searching of available shipping options
     Then there should be a 200 response from the "shipment" request that contains:
       | list     | total | skip | limit |
       | ARRAY[6] | 6     | 0    | 20    |
-    And the response from the "shipment" request has a "list" that contains rows:
+    And the response from the "shipment" request has a "list" field that contains rows:
       | _id                   | displayName | currentPrice | shipmentTime |
       | {{ shipping[4]._id }} | Shipping D  | 2000         | 12           |
       | {{ shipping[1]._id }} | Shipping A  | 900          | 24           |
