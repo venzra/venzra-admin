@@ -26,6 +26,8 @@ export class ImageUploadComponent implements AfterContentInit {
     public progress: number;
     public background: any;
 
+    private EXIF = (<any>window).EXIF;
+
     @Input() target = '';
 
     @Input() usage = '';
@@ -155,22 +157,84 @@ export class ImageUploadComponent implements AfterContentInit {
         return canvas;
     }
 
-    resizeOnCanvas(imageSrc: string, targetWidth: number, targetHeight: number): Promise<HTMLCanvasElement> {
-        const image = new Image();
+    rotateImage(image: HTMLCanvasElement | HTMLImageElement, orientation: number): HTMLCanvasElement {
+        const canvas = <HTMLCanvasElement>document.createElement('canvas');
+        const context: CanvasRenderingContext2D = canvas.getContext('2d');
+
+        canvas.width = image.width;
+        canvas.height = image.height;
+
+        let rotation = 0;
+        let flip = false;
+        switch (orientation) {
+            case 2:
+                flip = true;
+                break;
+            case 3:
+                rotation = 180;
+                break;
+            case 4:
+                rotation = 180;
+                flip = true;
+                break;
+            case 5:
+                rotation = 90;
+                flip = true;
+                break;
+            case 6:
+                rotation = 90;
+                break;
+            case 7:
+                flip = true;
+                rotation = 270;
+                break;
+            case 8:
+                rotation = 270;
+                break;
+        }
+
+        const x = image.width / 2;
+        const y = image.height / 2;
+        context.translate(x, y);
+        context.rotate(rotation * Math.PI / 180);
+
+        if (flip) {
+            context.scale(1, -1);
+        }
+
+        context.drawImage(image, -x, -y);
+
+        return canvas;
+    }
+
+    optimiseOnCanvas(imageSrc: string, orientation: number, targetWidth: number, targetHeight: number): Promise<HTMLCanvasElement> {
+        const originalImage = new Image();
         const canvas = <HTMLCanvasElement>document.createElement('canvas');
         const context: CanvasRenderingContext2D = canvas.getContext('2d');
 
         return new Promise<HTMLCanvasElement>((resolve) => {
-            image.onload = () => {
-                const imageCanvas = this.scaleDown(image, targetWidth, targetHeight);
-                canvas.width = imageCanvas.width;
-                canvas.height = imageCanvas.height;
-                context.drawImage(imageCanvas, 0, 0);
+            originalImage.onload = () => {
+                const scaledImage = this.scaleDown(originalImage, targetWidth, targetHeight);
+                const rotatedImage = this.rotateImage(scaledImage, orientation);
+                canvas.width = rotatedImage.width;
+                canvas.height = rotatedImage.height;
+                context.drawImage(rotatedImage, 0, 0);
                 resolve(canvas);
             };
 
-            image.src = imageSrc;
+            originalImage.src = imageSrc;
         });
+    }
+
+    base64ToArrayBuffer(base64) {
+        base64 = base64.replace(/^data\:([^\;]+)\;base64,/gmi, '');
+        const binaryString = atob(base64);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes.buffer;
     }
 
     @HostListener('dragenter', ['$event'])
@@ -207,7 +271,10 @@ export class ImageUploadComponent implements AfterContentInit {
             const usage = this.usage;
             const type = meta.type;
 
-            this.resizeOnCanvas(reader.result, meta.width, meta.height).then((canvas) => canvas.toBlob((data) => this.imageService.create(data, { name, type, usage }), type));
+            const exif = this.EXIF.readFromBinaryFile(this.base64ToArrayBuffer(reader.result));
+
+            this.optimiseOnCanvas(reader.result, exif.Orientation, meta.width, meta.height)
+                .then((canvas) => canvas.toBlob((data) => this.imageService.create(data, { name, type, usage }), type));
         });
         reader.readAsDataURL(file);
 
