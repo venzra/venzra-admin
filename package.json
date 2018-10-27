@@ -69,6 +69,7 @@
         "@types/uuid": "3.4.3",
         "@types/winston": "2.3.8",
         "@types/zxcvbn": "4.4.0",
+        "blueimp-canvas-to-blob": "3.14.0",
         "chai": "4.1.2",
         "classlist.js": "1.1.20150312",
         "codelyzer": "4.2.1",
