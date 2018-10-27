@@ -17,8 +17,6 @@ import { environment } from '@venzra/environment';
 })
 export class ImageUploadComponent implements AfterContentInit {
 
-    protected _accept: Array<string> = [];
-
     public name = 'media';
     public touched = false;
     public state: 'info' | 'success' | 'error' = 'info';
@@ -31,10 +29,6 @@ export class ImageUploadComponent implements AfterContentInit {
     @Input() target = '';
 
     @Input() usage = '';
-
-    @Input()
-    get accept() { return this._accept.join(', '); }
-    set accept(value: any) { this._accept = value.split(',').map((option) => option.trim()); }
 
     @ContentChild(ImageInputControl) control: ImageInputControl;
 
@@ -120,15 +114,15 @@ export class ImageUploadComponent implements AfterContentInit {
         const meta = this.getMeta();
 
         return [
-            meta.mode === 'crop' ? `${meta.width} * ${meta.height}px` : `${meta.width}px wide or ${meta.height}px high`,
-            this.accept
+            meta.mode === 'crop' ? `${meta.width} * ${meta.height}px` : `${meta.width}px wide or ${meta.height}px high`
         ];
     }
 
     validate(data): File | boolean {
+        const validTypes = ['image/png', 'image/jpg', 'image/jpeg'];
         const file = data ? data.files[0] : null;
-        if (file && this._accept.length > 0) {
-            if (this._accept.indexOf(file.type) === -1) {
+        if (file) {
+            if (!validTypes.includes(file.type)) {
                 this.detail = file.type;
                 return false;
             }

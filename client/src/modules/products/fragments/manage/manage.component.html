@@ -48,7 +48,7 @@
             <mat-card-subtitle>Manage any imagery that you want to show for this product</mat-card-subtitle>
 
             <mat-card-content fxLayout="column" fxLayoutGap="40px">
-                <venzra-image-upload target="/api/images" usage="promotion" accept="image/png,image/jpeg">
+                <venzra-image-upload target="/api/images" usage="promotion">
                     <p class="mat-caption">This image is the primary image customers will see of the product, used on product listing and view pages.</p>
                     <input venzraImage placeholder="Promotional image" formControlName="promotionalImage" required />
                 </venzra-image-upload>

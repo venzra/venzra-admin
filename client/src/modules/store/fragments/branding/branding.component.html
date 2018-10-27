@@ -46,11 +46,11 @@
                 </ng-container>
 
                 <mat-card-content fxLayout="column" fxLayout.gt-xs="row" fxLayoutGap="40px">
-                    <venzra-image-upload target="/api/images" usage="icon" accept="image/png,image/jpeg" fxFlex.gt-xs="40%" fxFlex="initial">
+                    <venzra-image-upload target="/api/images" usage="icon" fxFlex.gt-xs="40%" fxFlex="initial">
                         <input venzraImage placeholder="Brand icon" formControlName="icon" />
                     </venzra-image-upload>
 
-                    <venzra-image-upload target="/api/images" usage="logo" accept="image/png,image/jpeg" fxFlex.gt-xs="60%" fxFlex="initial">
+                    <venzra-image-upload target="/api/images" usage="logo" fxFlex.gt-xs="60%" fxFlex="initial">
                         <input venzraImage placeholder="Store logo" formControlName="logo" />
                     </venzra-image-upload>
                 </mat-card-content>
