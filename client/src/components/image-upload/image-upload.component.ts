@@ -106,13 +106,13 @@ export class ImageUploadComponent implements AfterContentInit {
     getMeta() {
         switch (this.usage) {
             case 'feature':
-                return { limit: 1000 * 1000, width: 1024, height: 500, mode: 'crop' };
+                return { width: 1024, height: 500, mode: 'crop', type: 'image/jpeg' };
             case 'promotion':
-                return { limit: 1000 * 1000, width: 512, height: 512, mode: 'crop' };
+                return { width: 512, height: 512, mode: 'crop', type: 'image/jpeg' };
             case 'icon':
-                return { limit: 400 * 1000, width: 180, height: 180, mode: 'crop' };
+                return { width: 180, height: 180, mode: 'crop', type: 'image/png' };
             case 'logo':
-                return { limit: 1000 * 1000, width: 400, height: 100, mode: 'ratio' };
+                return { width: 400, height: 100, mode: 'ratio', type: 'image/png' };
         }
     }
 
@@ -134,6 +134,49 @@ export class ImageUploadComponent implements AfterContentInit {
             }
         }
         return file || true;
+    }
+
+    scaleDown(image: HTMLCanvasElement | HTMLImageElement, width: number, height: number): HTMLCanvasElement {
+        let reductionRate = 0.5;
+
+        while (image.width / 2 > width && image.height / 2 > height) {
+            image = this.reduceSize(image, reductionRate);
+        }
+
+        reductionRate = image.width > image.height ? height / image.height : width / image.width;
+        image = this.reduceSize(image, reductionRate);
+
+        return <HTMLCanvasElement>image;
+    }
+
+    reduceSize(image: HTMLCanvasElement | HTMLImageElement, reduction = 0.5): HTMLCanvasElement {
+        const canvas = <HTMLCanvasElement>document.createElement('canvas');
+        const context: CanvasRenderingContext2D = canvas.getContext('2d');
+
+        canvas.width = (image.width * reduction);
+        canvas.height = (image.height * reduction);
+        context.scale(reduction, reduction);
+        context.drawImage(image, 0, 0);
+
+        return canvas;
+    }
+
+    resizeOnCanvas(imageSrc: string, targetWidth: number, targetHeight: number): Promise<HTMLCanvasElement> {
+        const image = new Image();
+        const canvas = <HTMLCanvasElement>document.createElement('canvas');
+        const context: CanvasRenderingContext2D = canvas.getContext('2d');
+
+        return new Promise<HTMLCanvasElement>((resolve) => {
+            image.onload = () => {
+                const imageCanvas = this.scaleDown(image, targetWidth, targetHeight);
+                canvas.width = imageCanvas.width;
+                canvas.height = imageCanvas.height;
+                context.drawImage(imageCanvas, 0, 0);
+                resolve(canvas);
+            };
+
+            image.src = imageSrc;
+        });
     }
 
     @HostListener('dragenter', ['$event'])
@@ -164,24 +207,15 @@ export class ImageUploadComponent implements AfterContentInit {
         }
 
         const meta = this.getMeta();
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            const name = file.name;
+            const usage = this.usage;
+            const type = meta.type;
 
-        if (file.size > meta.limit && this.state !== 'success') {
-            this.state = 'error';
-            this.detail = '413: Payload Too Large';
-        }
-
-        if (file.size <= meta.limit) {
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-                const name = file.name;
-                const usage = this.usage;
-                const type = file.type;
-                const data = reader.result;
-
-                this.imageService.create(data, { name, type, usage });
-            });
-            reader.readAsArrayBuffer(file);
-        }
+            this.resizeOnCanvas(reader.result, meta.width, meta.height).then((canvas) => canvas.toBlob((data) => this.imageService.create(data, { name, type, usage }), type));
+        });
+        reader.readAsDataURL(file);
 
     }
 

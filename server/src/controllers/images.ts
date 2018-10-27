@@ -25,7 +25,7 @@ export class ImagesController extends AuthenticationController {
 
     registerRoutes() {
         this.router = Router();
-        this.router.use(parser.raw({ type: 'image/*', limit: '1mb' }));
+        this.router.use(parser.raw({ type: 'image/*', limit: '2mb' }));
 
         this.router.post('/', this.validate.bind(this), this.processImage.bind(this), this.createImage.bind(this), this.findOne.bind(this));
         this.router.get('/:imageId', this.validate.bind(this), this.findOne.bind(this));

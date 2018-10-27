@@ -35,7 +35,7 @@ Feature: Creation of images to be used by subscriptions and stored on S3
       | 2048  | 2048   | png    |
     Then there should be a 413 error from the "image" request that contains:
       | message                    | detail                 |
-      | Request limit is: 1024 KiB | ["Received: 2819 KiB"] |
+      | Request limit is: 2048 KiB | ["Received: 2819 KiB"] |
 
   Scenario: Sending a valid request to create a "feature" image will resize and save the image
     Given I am logged in with the "images-create-one@venzra-test.io" account
