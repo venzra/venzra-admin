@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatChipInputEvent, MatSnackBar } from '@angular/material';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { LayoutService } from '@venzra/services';
 
@@ -17,6 +18,7 @@ export class BrandingComponent implements OnInit {
 
     public subscription: Subscription;
     public settingsForm: FormGroup;
+    separatorKeysCodes: number[] = [ENTER, COMMA];
     public colorOptions = [
         { name: 'Amber', value: 'amber' },
         { name: 'Blue', value: 'blue' },
@@ -44,7 +46,8 @@ export class BrandingComponent implements OnInit {
         private snackbar: MatSnackBar,
         private subscriptionService: SubscriptionService,
         private layout: LayoutService
-    ) { }
+    ) {
+    }
 
     ngOnInit(): void {
         this.layout.title = 'Settings';
@@ -55,6 +58,7 @@ export class BrandingComponent implements OnInit {
         this.settingsForm = this.forms.group({
             storeName: [this.subscription.storeName, [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
             domain: [{ value: this.getDomain(this.subscription.storeName), disabled: true }, []],
+            additionalDomains: [this.subscription.additionalDomains.pop(), [Validators.pattern(/^(!http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/)]],
             strapline: [this.subscription.strapline, [Validators.maxLength(120)]],
             icon: [this.subscription.icon, []],
             logo: [this.subscription.logo, []],
@@ -78,7 +82,36 @@ export class BrandingComponent implements OnInit {
         return `https://${subDomain.replace(/[^a-z|0-9\-\s]/gi, ' ').trim().replace(/\s+/g, '-').toLowerCase()}.venzra.io`;
     }
 
+    addDomain(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = (event.value || '').trim();
+        const domains = this.settingsForm.get('additionalDomains').value;
+
+        console.log(value.trim());
+        if (value) {
+            domains.push(value.trim());
+        }
+
+        if (input) {
+            input.value = '';
+        }
+
+        this.settingsForm.get('additionalDomains').setValue(domains);
+    }
+
+    removeDomain(index: number): void {
+        const domains = this.settingsForm.get('additionalDomains').value;
+
+        if (index >= 0) {
+            domains.splice(index, 1);
+        }
+
+        this.settingsForm.get('additionalDomains').setValue(domains);
+    }
+
     updateSettings() {
+        console.log(this.settingsForm.controls);
+
         this.subscriptionService
             .updateSettings(this.settingsForm.controls)
             .then((subscription) => this.subscription = subscription)

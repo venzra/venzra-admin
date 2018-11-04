@@ -32,8 +32,8 @@ Feature: Creation of a new subscription gateway
       | reference                           |
       | ac_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
     Then there should be a 200 response from the "gateway" request that contains:
-      | _id       | domainName              | storeName               | gateway | transactions                  | addons   | status |
-      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ARRAY[0] | ACTIVE |
+      | _id       | domainName              | additionalDomains | storeName               | gateway | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-create-one | []                | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ARRAY[0] | ACTIVE |
     And the response path "gateway" from the "gateway" request contains:
       | account               | modified  |
       | acct_xxxxxxxxxxxxxxxx | DATE_TIME |
@@ -44,8 +44,8 @@ Feature: Creation of a new subscription gateway
       | reference                           |
       | ac_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
     Then there should be a 200 response from the "gateway" request that contains:
-      | _id       | domainName              | storeName               | gateway | transactions                  | addons   | status |
-      | OBJECT_ID | subscription-create-one | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ARRAY[0] | ACTIVE |
+      | _id       | domainName              | additionalDomains | storeName               | gateway | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-create-one | []                | Subscription Create One | OBJECT  | { "base": 10, "rate": 0.046 } | ARRAY[0] | ACTIVE |
     And the response path "gateway" from the "gateway" request contains:
       | account               | modified  |
       | acct_xxxxxxxxxxxxxxxx | DATE_TIME |

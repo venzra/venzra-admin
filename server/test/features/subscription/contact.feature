@@ -23,8 +23,8 @@ Feature: Management of customer contact requirements
       | recipient               | fields                     |
       | no-reply@venzra-test.io | ["NAME", "EMAIL", "PHONE"] |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName               | storeName                | transactions                  | addons   | contact | status |
-      | OBJECT_ID | subscription-contact-one | Subscription Contact One | { "base": 10, "rate": 0.046 } | ARRAY[0] | OBJECT  | ACTIVE |
+      | _id       | domainName               | additionalDomains | storeName                | transactions                  | addons   | contact | status |
+      | OBJECT_ID | subscription-contact-one | []                | Subscription Contact One | { "base": 10, "rate": 0.046 } | ARRAY[0] | OBJECT  | ACTIVE |
     And the response path "contact" from the "subscription" request contains:
       | recipient               | fields                     |
       | no-reply@venzra-test.io | ["NAME", "EMAIL", "PHONE"] |
@@ -35,8 +35,8 @@ Feature: Management of customer contact requirements
       | recipient                | fields                                                                |
       | automated@venzra-test.io | ["NAME", "COMPANY", "EMAIL", "PHONE", "SUBJECT", "REASON", "MESSAGE"] |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName               | storeName                | transactions                  | addons   | contact | status |
-      | OBJECT_ID | subscription-contact-one | Subscription Contact One | { "base": 10, "rate": 0.046 } | ARRAY[0] | OBJECT  | ACTIVE |
+      | _id       | domainName               | additionalDomains | storeName                | transactions                  | addons   | contact | status |
+      | OBJECT_ID | subscription-contact-one | []                | Subscription Contact One | { "base": 10, "rate": 0.046 } | ARRAY[0] | OBJECT  | ACTIVE |
     And the response path "contact" from the "subscription" request contains:
       | recipient                | fields                                                                |
       | automated@venzra-test.io | ["NAME", "COMPANY", "EMAIL", "PHONE", "SUBJECT", "REASON", "MESSAGE"] |

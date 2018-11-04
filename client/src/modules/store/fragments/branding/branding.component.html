@@ -26,6 +26,11 @@
                 </mat-form-field>
 
                 <mat-form-field>
+                    <input matInput placeholder="Additional domains" formControlName="additionalDomains" />
+                    <mat-error *ngIf="settingsForm.controls['additionalDomains'].hasError('pattern')">A valid domain URL is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
                     <input matInput placeholder="Strapline" formControlName="strapline" />
                     <mat-error *ngIf="settingsForm.controls['strapline'].hasError('maxlength')">Entered text is too long.</mat-error>
                 </mat-form-field>

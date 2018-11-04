@@ -14,6 +14,7 @@ interface ISubscriptionModel extends Document {
     addons?: IAddonModel[];
     strapline?: string;
     domainName?: string;
+    additionalDomains: string[];
     icon?: string;
     logo?: string;
     theme?: IThemeModel;
@@ -47,6 +48,11 @@ const SubscriptionSchema: Schema = new Schema({
         type: String,
         lowercase: true,
         required: true
+    },
+    additionalDomains: {
+        type: [String],
+        lowercase: true,
+        default: []
     },
     icon: {
         type: Schema.Types.ObjectId,

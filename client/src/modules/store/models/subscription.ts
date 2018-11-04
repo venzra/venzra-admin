@@ -2,6 +2,7 @@ export interface Subscription {
     _id: string;
     storeName: string;
     strapline: string;
+    additionalDomains: Array<string>;
     icon: string;
     logo: string;
     theme: { color: string };

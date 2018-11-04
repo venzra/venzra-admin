@@ -14,8 +14,8 @@ Feature: Management of addons for a subscription
     Given I am logged in with the "subscription-addons-one@venzra-test.io" account
     When I make an empty PATCH request to the API endpoint "/api/subscription/add-ons" as "subscription"
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | transactions                  | addons   | status |
-      | OBJECT_ID | subscription-addons-one | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[0] | TRIAL  |
+      | _id       | domainName              | additionalDomains | storeName               | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-addons-one | []                | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[0] | TRIAL  |
 
   Scenario: If adding an addon to the subscription record
     Given I am logged in with the "subscription-addons-one@venzra-test.io" account
@@ -26,8 +26,8 @@ Feature: Management of addons for a subscription
       | add | name | CONTACT   |
       | add | name | LOCATIONS |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | transactions                  | addons   | status |
-      | OBJECT_ID | subscription-addons-one | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[4] | TRIAL  |
+      | _id       | domainName              | additionalDomains | storeName               | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-addons-one | []                | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[4] | TRIAL  |
     And the response path "addons" from the "subscription" request contains:
       | name      | activated | value |
       | ABOUT     | DATE_TIME | 0     |
@@ -42,8 +42,8 @@ Feature: Management of addons for a subscription
       | remove | name | ABOUT   |
       | remove | name | CONTACT |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | transactions                  | addons   | status |
-      | OBJECT_ID | subscription-addons-one | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[2] | TRIAL  |
+      | _id       | domainName              | additionalDomains | storeName               | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-addons-one | []                | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[2] | TRIAL  |
     And the response path "addons" from the "subscription" request contains:
       | name      | activated | value |
       | CAREERS   | DATE_TIME | 0     |
@@ -61,8 +61,8 @@ Feature: Management of addons for a subscription
       | remove | name | LOCATIONS |
       | add    | name | ABOUT     |
     Then there should be a 200 response from the "subscription" request that contains:
-      | _id       | domainName              | storeName               | transactions                  | addons   | status |
-      | OBJECT_ID | subscription-addons-one | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[3] | TRIAL  |
+      | _id       | domainName              | additionalDomains | storeName               | transactions                  | addons   | status |
+      | OBJECT_ID | subscription-addons-one | []                | Subscription Addons One | { "base": 10, "rate": 0.046 } | ARRAY[3] | TRIAL  |
     And the response path "addons" from the "subscription" request contains:
       | name    | activated | value |
       | ABOUT   | DATE_TIME | 0     |
